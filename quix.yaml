@@ -1,0 +1,34 @@
+# Quix Project Descriptor
+# This file describes the data pipeline and configuration of resources of a Quix Project.
+
+metadata:
+  version: 1.0
+
+# This section describes the Deployments of the data pipeline
+deployments:
+  - name: Sentiment Demo UI
+    application: Sentiment Demo UI
+    deploymentType: Service
+    version: 2ad2a8d400d4a0f6555165f3fc5758b570201d44
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: sentiment-ui
+    desiredStatus: Running
+    variables:
+      - name: sentiment
+        inputType: FreeText
+        description: The topic to read from
+        required: true
+        value: sentiment
+      - name: messages
+        inputType: FreeText
+        description: The topic to read from
+        required: true
+        value: messages
+
+# This section describes the Topics of the data pipeline
+topics: []
