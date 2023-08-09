@@ -1,0 +1,15 @@
+name: Sentiment Demo UI
+language: nodejs
+variables:
+  - name: sentiment
+    inputType: FreeText
+    description: The topic to read from
+    defaultValue: sentiment
+    required: true
+  - name: messages
+    inputType: FreeText
+    description: The topic to read from
+    defaultValue: messages
+    required: true
+dockerfile: src/build/dockerfile
+defaultFile: src/app/services/quix.service.ts
