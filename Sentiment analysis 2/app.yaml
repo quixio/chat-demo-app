@@ -1,7 +1,7 @@
 name: Sentiment analysis 2
 language: python
 variables:
-  - name: drafts
+  - name: input
     inputType: InputTopic
     description: 'Unsent draft messages '
     defaultValue: ''
