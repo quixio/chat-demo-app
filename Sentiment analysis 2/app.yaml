@@ -1,9 +1,9 @@
 name: Sentiment analysis 2
 language: python
 variables:
-  - name: input
+  - name: drafts
     inputType: InputTopic
-    description: This is the raw data input topic
+    description: 'Unsent draft messages '
     defaultValue: ''
     required: true
   - name: output
