@@ -1,16 +1,6 @@
-name: Sentiment analysis 2
+name: Drafts sentiment analysis
 language: python
-variables:
-  - name: input
-    inputType: InputTopic
-    description: 'Users draft (unsent) messages '
-    defaultValue: drafts
-    required: true
-  - name: output
-    inputType: OutputTopic
-    description: This is the output for the Hugging Face model score
-    defaultValue: drafts_sentiment
-    required: true
+variables: []
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: quix_function.py
