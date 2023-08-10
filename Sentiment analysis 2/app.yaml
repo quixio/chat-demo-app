@@ -4,7 +4,7 @@ variables:
   - name: input
     inputType: InputTopic
     description: 'Unsent draft messages '
-    defaultValue: ''
+    defaultValue: drafts
     required: true
   - name: output
     inputType: OutputTopic
