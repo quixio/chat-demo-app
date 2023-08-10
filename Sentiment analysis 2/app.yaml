@@ -3,7 +3,7 @@ language: python
 variables:
   - name: input
     inputType: InputTopic
-    description: 'Unsent draft messages '
+    description: 'Users draft (unsent) messages '
     defaultValue: drafts
     required: true
   - name: output
