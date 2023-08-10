@@ -29,17 +29,38 @@ deployments:
         description: The topic to read from
         required: true
         value: messages
+  - name: Sentiment analysis
+    application: Sentiment analysis
+    deploymentType: Service
+    version: 9ef9b6dd97d615e19f0f151ed45b24ce5099bc5e
+    resources:
+      cpu: 1000
+      memory: 2000
+      replicas: 1
+    libraryItemId: g207b9ff-3d52-4adb-b99f-e5e46b2642e9
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the raw data input topic
+        required: true
+        value: messages
+      - name: output
+        inputType: OutputTopic
+        description: This is the output for the Hugging Face model score
+        required: true
+        value: sentiment
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: messages
+  - name: sentiment
     persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
-  - name: sentiment
+  - name: messages
     persisted: false
     configuration:
       partitions: 2
