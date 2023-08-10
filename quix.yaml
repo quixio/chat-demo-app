@@ -49,6 +49,26 @@ deployments:
         description: This is the output for the Hugging Face model score
         required: true
         value: sentiment
+  - name: Drafts sentiment analysis
+    application: Sentiment analysis 2
+    deploymentType: Service
+    version: 8ddd5a4b83111b134e586cfbcfdc68ebedd549b0
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: 'Users draft (unsent) messages '
+        required: true
+        value: drafts
+      - name: output
+        inputType: OutputTopic
+        description: This is the output for the Hugging Face model score
+        required: true
+        value: drafts_sentiment
 
 # This section describes the Topics of the data pipeline
 topics:
