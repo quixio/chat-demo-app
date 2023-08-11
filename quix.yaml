@@ -37,7 +37,6 @@ deployments:
       cpu: 1000
       memory: 2000
       replicas: 1
-    libraryItemId: g207b9ff-3d52-4adb-b99f-e5e46b2642e9
     desiredStatus: Running
     variables:
       - name: input
@@ -50,17 +49,51 @@ deployments:
         description: This is the output for the Hugging Face model score
         required: true
         value: sentiment
+  - name: Drafts sentiment analysis
+    application: Sentiment analysis 2
+    deploymentType: Service
+    version: 8ddd5a4b83111b134e586cfbcfdc68ebedd549b0
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Stopped
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: 'Users draft (unsent) messages '
+        required: true
+        value: drafts
+      - name: output
+        inputType: OutputTopic
+        description: This is the output for the Hugging Face model score
+        required: true
+        value: drafts_sentiment
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: sentiment
+  - name: drafts_sentiment
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 262144000
+  - name: drafts
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 262144000
+  - name: messages
     persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
-  - name: messages
+  - name: sentiment
     persisted: false
     configuration:
       partitions: 2
