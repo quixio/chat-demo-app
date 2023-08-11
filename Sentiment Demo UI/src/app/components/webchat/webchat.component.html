@@ -5,42 +5,49 @@
       <mat-chip-list aria-label="Fish selection">
         <mat-chip class="status-chip">
           <mat-icon fontIcon="circle" class="icon14" 
-            [ngClass]="readerConnected && writerConnected ? 'text-success' : 'text-warning'"></mat-icon>
-          <strong [style.marginLeft.px]="5">{{ readerConnected && writerConnected ? 'Connected' : 'Reconnecting' }}</strong>
+          [class.text-success]="readerConnectionStatus === connectionState.Connected"
+          [class.text-warning]="readerConnectionStatus === connectionState.Reconnecting"
+          [class.text-danger]="readerConnectionStatus === connectionState.Offline"></mat-icon>
+          <strong [style.marginLeft.px]="5">{{ readerConnectionStatus }}</strong>
         </mat-chip>
-      </mat-chip-list>
+      </mat-chip-list> 
     </mat-card-header>
-    <mat-card-content fxFlex #chatWrapper>
-      <div class="message" *ngFor="let message of messages">
-        <div fxLayout="row">
-          <span class="text-grey-light mat-caption" [style.marginRight.px]="5">
-            {{ getDateFromTimestamp(message.timestamp) | date:'hh:mm:ss' }}
-          </span>
-          <mat-chip-list *ngIf="message.sentiment">
-            <mat-chip class="text-success sentiment-chip" *ngIf="message.sentiment > 0.5">
-              <mat-icon fontIcon="sentiment_satisfied" class="material-icons-outlined icon14"></mat-icon>
-              <strong [style.marginLeft.px]="5">{{ message.name }}</strong>
-            </mat-chip>
-            <mat-chip class="text-danger sentiment-chip" *ngIf="message.sentiment < -0.5">
-              <mat-icon fontIcon="sentiment_dissatisfied" class="material-icons-outlined icon14"></mat-icon>
-              <strong [style.marginLeft.px]="5">{{ message.name }}</strong>
-            </mat-chip>
-            <mat-chip class="text-grey sentiment-chip" *ngIf="(message.sentiment < 0.5 && message.sentiment > -0.5)">
-              <mat-icon fontIcon="sentiment_neutral" class="material-icons-outlined icon14"></mat-icon>
-              <strong [style.marginLeft.px]="5">{{ message.name }}</strong>
-            </mat-chip>
-          </mat-chip-list>
-          <mat-chip-list *ngIf="!message.sentiment">
-            <mat-chip class="text-grey-light sentiment-chip">
-              <strong [style.marginLeft.px]="2">{{ message.name }}</strong>
-            </mat-chip>
-          </mat-chip-list>
-        </div>
-        <span>{{ message.value }}</span>
-      </div>        
+    <mat-card-content fxFlex fxLayout="column" #chatWrapper>
+      <div fxFlex>
+        <div class="message" *ngFor="let message of messages">
+          <div fxLayout="row">
+            <span class="text-grey-light mat-caption" [style.marginRight.px]="5">
+              {{ getDateFromTimestamp(message.timestamp) | date:'hh:mm:ss' }}
+            </span>
+            <mat-chip-list *ngIf="message.sentiment">
+              <mat-chip class="text-success sentiment-chip" *ngIf="message.sentiment > 0.5">
+                <mat-icon fontIcon="sentiment_satisfied" class="material-icons-outlined icon14"></mat-icon>
+                <strong [style.marginLeft.px]="5">{{ message.name }}</strong>
+              </mat-chip>
+              <mat-chip class="text-danger sentiment-chip" *ngIf="message.sentiment < -0.5">
+                <mat-icon fontIcon="sentiment_dissatisfied" class="material-icons-outlined icon14"></mat-icon>
+                <strong [style.marginLeft.px]="5">{{ message.name }}</strong>
+              </mat-chip>
+              <mat-chip class="text-grey sentiment-chip" *ngIf="(message.sentiment < 0.5 && message.sentiment > -0.5)">
+                <mat-icon fontIcon="sentiment_neutral" class="material-icons-outlined icon14"></mat-icon>
+                <strong [style.marginLeft.px]="5">{{ message.name }}</strong>
+              </mat-chip>
+            </mat-chip-list>
+            <mat-chip-list *ngIf="!message.sentiment">
+              <mat-chip class="text-grey-light sentiment-chip">
+                <strong [style.marginLeft.px]="2">{{ message.name }}</strong>
+              </mat-chip>
+            </mat-chip-list>
+          </div>
+          <span>{{ message.value }}</span>
+        </div>        
+      </div>
+      <div *ngIf="getTypingMessage() as message" class="mat-caption typing">
+        {{ message }}
+      </div>
     </mat-card-content>
     <mat-card-footer>
-      <form [formGroup]="chatForm" fxLayout="row" fxLayoutGap="10" autocomplete="off" (ngSubmit)="send()">
+      <form [formGroup]="chatForm" fxLayout="row" fxLayoutGap="10" autocomplete="off" (ngSubmit)="submit()">
         <mat-form-field appearance="outline" fxFlex>
           <input matInput placeholder="Type your message" formControlName="message">
         </mat-form-field>

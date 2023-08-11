@@ -1,10 +1,17 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder, IHttpConnectionOptions } from '@microsoft/signalr';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MessagePayload } from '../models/messagePayload';
 import { ParameterData } from '../models/parameterData';
+import { EventData } from '../models/eventData';
+
+export enum ConnectionStatus {
+  Connected = 'Connected',
+  Reconnecting = 'Reconnecting',
+  Offline = 'Offline'
+}
 
 @Injectable({
   providedIn: 'root'
@@ -13,34 +20,53 @@ export class QuixService {
 
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
   /*WORKING LOCALLY? UPDATE THESE!*/
-  private workingLocally = false; // set to true if working locally
+  private workingLocally = true; // set to true if working locally
   private token: string = ''; // Create a token in the Tokens menu and paste it here
-  public workspaceId: string = ''; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
-  public messagesTopic: string = ''; // get topic name from the Topics page
-  public sentimentTopic: string = ''; // get topic name from the Topics page
+  public workspaceId: string = 'demo-chatappdemo-istypingservice'; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
+  public messagesTopic: string = 'messages'; // get topic name from the Topics page
+  public draftsTopic: string = 'drafts'; // get topic from the Topics page
+  public sentimentTopic: string = 'sentiment'; // get topic name from the Topics page
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
 
-  private subdomain = ''; // leave as 'platform'
+  private subdomain = 'platform'; // leave as 'platform'
   readonly server = ''; // leave blank
 
-  public readerConnection: HubConnection;
-  public readerConnectionPromise: Promise<void>;
-  public writerConnection: HubConnection;
-  public writerConnectionPromise: Promise<void>;
-  public loaded: BehaviorSubject<any> = new BehaviorSubject<any>(false);
-  private domainRegex = new RegExp("^https:\\/\\/portal-api\\.([a-zA-Z]+)\\.quix\\.ai")
+  private readerReconnectAttempts: number = 0;
+  private writerReconnectAttempts: number = 0;
+  private maxReconnectAttempts: number = 3;
+  private reconnectInterval: number = 5000;
+
+  public readerHubConnection: HubConnection;
+  public writerHubConnection: HubConnection;
+
+  private readerConnStatusChanged = new Subject<ConnectionStatus>();
+  readerConnStatusChanged$ = this.readerConnStatusChanged.asObservable();
+  private writerConnStatusChanged = new Subject<ConnectionStatus>();
+  writerConnStatusChanged$ = this.writerConnStatusChanged.asObservable();
+
+  paramDataReceived = new Subject<ParameterData>();
+  paramDataReceived$ = this.paramDataReceived.asObservable();
+
+  eventDataReceived = new Subject<EventData>();
+  eventDataReceived$ = this.eventDataReceived.asObservable();
+
+  private domainRegex = new RegExp(
+    "^https:\\/\\/portal-api\\.([a-zA-Z]+)\\.quix\\.ai"
+  );
 
   constructor(private httpClient: HttpClient) {
 
     if(this.workingLocally){
       this.messagesTopic = this.workspaceId + '-' + this.messagesTopic;
+      this.draftsTopic = this.workspaceId + '-' + this.draftsTopic;
       this.sentimentTopic = this.workspaceId + '-' + this.sentimentTopic;
-      this.ConnectToQuix(this.workspaceId);
+      this.setUpHubConnections(this.workspaceId);
     }
     else {
       const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
       let workspaceId$ = this.httpClient.get(this.server + 'workspace_id', {headers, responseType: 'text'});
       let messagesTopic$ = this.httpClient.get(this.server + 'messages_topic', {headers, responseType: 'text'});
+      let draftTopic$ = this.httpClient.get(this.server + 'drafts_topic', {headers, responseType: 'text'});
       let sentimentTopic$ = this.httpClient.get(this.server + 'sentiment_topic', {headers, responseType: 'text'});
       let token$ = this.httpClient.get(this.server + 'sdk_token', {headers, responseType: 'text'});
       let portalApi$ = this.httpClient.get(this.server + "portal_api", {headers, responseType: 'text'})
@@ -48,21 +74,22 @@ export class QuixService {
       let value$ = combineLatest([
         workspaceId$,
         messagesTopic$,
+        draftTopic$,
         sentimentTopic$,
         token$,
         portalApi$
-      ]).pipe(map(([workspaceId, messagesTopic, sentimentTopic, token, portalApi]) => {
-        return {workspaceId, messagesTopic, sentimentTopic, token, portalApi};
+      ]).pipe(map(([workspaceId, messagesTopic, draftTopic, sentimentTopic, token, portalApi]) => {
+        return {workspaceId, messagesTopic, draftTopic, sentimentTopic, token, portalApi};
       }));
 
-      value$.subscribe((vals) => {
-		console.log(vals);
-        this.workspaceId = this.stripLineFeed(vals.workspaceId);
-        this.messagesTopic = this.stripLineFeed(this.workspaceId + '-' + vals.messagesTopic);
-        this.sentimentTopic = this.stripLineFeed(this.workspaceId + '-' + vals.sentimentTopic);
-        this.token = vals.token.replace('\n', '');
+      value$.subscribe(({ workspaceId, messagesTopic, draftTopic, sentimentTopic, token, portalApi }) => {
+        this.workspaceId = this.stripLineFeed(workspaceId);
+        this.messagesTopic = this.stripLineFeed(this.workspaceId + '-' + messagesTopic);
+        this.draftsTopic = this.stripLineFeed(this.workspaceId + '-' + draftTopic);
+        this.sentimentTopic = this.stripLineFeed(this.workspaceId + '-' + sentimentTopic);
+        this.token = token.replace('\n', '');
 
-        let portalApi = vals.portalApi.replace("\n", "");
+        portalApi = portalApi.replace("\n", "");
         let matches = portalApi.match(this.domainRegex);
         if(matches) {
           this.subdomain = matches[1];
@@ -71,37 +98,134 @@ export class QuixService {
           this.subdomain = "platform"; // default to prod
         }
 
-        this.ConnectToQuix(this.workspaceId);
+        this.setUpHubConnections(this.workspaceId);
       });
     }
   }
 
-  private stripLineFeed(s: string): string {
-    return s.replace('\n', '');
-  }
-
-  private ConnectToQuix(workspaceId: string): void {
-
+  private setUpHubConnections(workspaceId: string): void {
     const options: IHttpConnectionOptions = {
       accessTokenFactory: () => this.token,
     };
 
-    this.readerConnection = new HubConnectionBuilder()
-      .withUrl(`https://reader-${workspaceId}.${this.subdomain}.quix.ai/hub`, options)
-      .withAutomaticReconnect()
+    this.readerHubConnection = this.createHubConnection(`https://reader-${workspaceId}.${this.subdomain}.quix.ai/hub`, options, true);
+    this.startConnection(true, this.readerReconnectAttempts);
+  
+    this.writerHubConnection = this.createHubConnection(`https://writer-${workspaceId}.${this.subdomain}.quix.ai/hub`, options, false);
+    this.startConnection(false, this.writerReconnectAttempts);
+  }
+
+  private createHubConnection(url: string, options: IHttpConnectionOptions, isReader: boolean): HubConnection {
+    const hubConnection = new HubConnectionBuilder()
+      .withUrl(url,options)
       .build();
 
-    this.readerConnectionPromise = this.readerConnection.start();
+    const hubName = isReader ? 'Reader' : 'Writer';
+    hubConnection.onclose((error) => {
+      console.log(`Quix Service - ${hubName} | Connection closed. Reconnecting... `, error);
+      this.tryReconnect(isReader, isReader ? this.readerReconnectAttempts : this.writerReconnectAttempts);
+    })
+    return hubConnection;
+  }
 
-    this.writerConnection = new HubConnectionBuilder()
-      .withUrl(`https://writer-${workspaceId}.${this.subdomain}.quix.ai/hub`, options)
-      .withAutomaticReconnect()
-      .build();
+  private startConnection(isReader: boolean, reconnectAttempts: number): void {
+    const hubConnection = isReader ? this.readerHubConnection : this.writerHubConnection;
+    const subject = isReader ? this.readerConnStatusChanged : this.writerConnStatusChanged;
+    const hubName = isReader ? 'Reader' : 'Writer';
 
-    this.loaded.next(true);
-    console.log('CONNECTED TO QUIX....');
+    if (!hubConnection || hubConnection.state === 'Disconnected') {
 
-    this.writerConnectionPromise = this.writerConnection.start();
+      hubConnection.start()
+        .then(() => {
+          console.log(`QuixService - ${hubName} | Connection established!`);
+          reconnectAttempts = 0; // Reset reconnect attempts on successful connection
+          subject.next(ConnectionStatus.Connected);
+
+          // If it's reader hub connection then we create listeners for data
+          if (isReader) this.setupReaderHubListeners(hubConnection);
+        })
+        .catch(err => {
+          console.error(`QuixService - ${hubName} | Error while starting connection!`, err);
+          subject.next(ConnectionStatus.Reconnecting)
+          this.tryReconnect(isReader, reconnectAttempts);
+        });
+    }
+  }
+
+  private setupReaderHubListeners(hubConnection: HubConnection): void {
+    // Listen for parameter data and emit
+    hubConnection.on("ParameterDataReceived", (payload: ParameterData) => {
+      this.paramDataReceived.next(payload);
+    });
+    
+    // Listen for event data and emit
+    hubConnection.on("EventDataReceived", (payload: EventData) => {
+      this.eventDataReceived.next(payload);
+    });
+  }
+
+  private tryReconnect(isReader: boolean, reconnectAttempts: number) {
+    const subject = isReader ? this.readerConnStatusChanged : this.writerConnStatusChanged;
+    const hubName = isReader ? 'Reader' : 'Writer';
+
+    if (reconnectAttempts < this.maxReconnectAttempts) {
+      reconnectAttempts++;
+      setTimeout(() => {
+        console.log(`QuixService - ${hubName} | Attempting reconnection... (${reconnectAttempts})`);
+        this.startConnection(isReader, reconnectAttempts)
+      },this.reconnectInterval);
+    } else {
+      console.log(`QuixService - ${hubName} | Max reconnection attempts reached. Connection failed.`);
+      subject.next(ConnectionStatus.Offline);
+    }
+  }
+
+  public subscribeToParameter(topic: string, streamId: string, parameterId: string) {
+    // console.log('QuixService Reader | Subscribing to parameter - ' + parameterId);
+    this.readerHubConnection.invoke("SubscribeToParameter", topic, streamId, parameterId);
+  }
+
+  public unsubscribeFromParameter(topic: string, streamId: string, parameterId: string) {
+    // console.log('QuixService Reader | Unsubscribing from parameter - ' + parameterId);
+    this.readerHubConnection.invoke("UnsubscribeFromParameter", topic, streamId, parameterId);
+  }
+  
+  public sendMessage(
+    room: string,
+    role: string,
+    name: string,
+    message: string,
+    isDraft: boolean,
+    phone: string,
+    email: string
+  ) {
+    const payload = {
+      timestamps: [new Date().getTime() * 1000000],
+      tagValues: {
+        room: [room],
+        role: [role],
+        name: [name],
+        phone: [phone],
+        email: [email],
+      },
+      stringValues: {
+        "chat-message": [message],
+      },
+    };
+
+    const topic = isDraft ? this.draftsTopic : this.messagesTopic;
+    console.log("QuixService Sending parameter data!", topic, room, payload);
+    this.writerHubConnection.invoke(
+      "SendParameterData",
+      topic,
+      room,
+      payload
+    );
+  
+  }
+
+  private stripLineFeed(s: string): string {
+    return s.replace('\n', '');
   }
 
   public getLastMessages(room: string): Observable<MessagePayload[]> {
@@ -151,29 +275,5 @@ export class QuixService {
       })
       return result;
     }));
-  }
-
-  public async sendMessage(room: string, role: string, name: string, message: string, phone: string, email: string) {
-    let payload =
-        {
-          'timestamps': [new Date().getTime() * 1000000],
-          'tagValues': {
-            'room': [room],
-            'role': [role],
-            'name': [name],
-            'phone': [phone],
-            'email': [email]
-          },
-          'stringValues': {
-            'chat-message': [message]
-          }
-        };
-
-    try {
-
-    await this.writerConnection.invoke('SendParameterData', this.messagesTopic, room, payload);
-  } catch (e) {
-        console.log(e);
-    }
   }
 }
