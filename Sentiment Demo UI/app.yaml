@@ -11,5 +11,10 @@ variables:
     description: The topic to read from
     defaultValue: messages
     required: true
+  - name: drafts
+    inputType: FreeText
+    description: ''
+    defaultValue: drafts
+    required: true
 dockerfile: src/build/dockerfile
 defaultFile: src/app/services/quix.service.ts
