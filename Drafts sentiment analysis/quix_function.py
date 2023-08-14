@@ -4,7 +4,7 @@ import pandas as pd
 
 
 class QuixFunction:
-    def __init__(self, consumer_stream: qx.StreamConsumer, producer_stream: qx.StreamProducer, classifier: Pipeline):
+    def __init__(self, consumer_stream: qx.StreamConsumer, producer_stream: qx.StreamProducer, classifier: Pipeline, state: qx.DictStreamState):
         self.consumer_stream = consumer_stream
         self.producer_stream = producer_stream
         self.classifier = classifier
@@ -33,7 +33,7 @@ class QuixFunction:
             df.loc[i, "sentiment"] = row["score"] if row["label"] == "POSITIVE" else - row["score"]
 
             # Add average sentiment (and update memory)
-            self.count = self.count + 1
+            
             self.sum = self.sum + df.loc[i, "sentiment"]
             df.loc[i, "average_sentiment"] = self.sum/self.count
 
