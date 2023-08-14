@@ -1,0 +1,16 @@
+name: Drafts sentiment analysis 3
+language: python
+variables:
+  - name: input
+    inputType: InputTopic
+    description: This is the raw data input topic
+    defaultValue: drafts
+    required: true
+  - name: output
+    inputType: OutputTopic
+    description: This is the output for the Hugging Face model score
+    defaultValue: drafts_sentiment
+    required: true
+dockerfile: build/dockerfile
+runEntryPoint: main.py
+defaultFile: quix_function.py
