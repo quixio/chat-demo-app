@@ -1,5 +1,4 @@
 import quixstreams as qx
-from quixstreams import AutoOffsetReset, StreamConsumer, StreamEndType
 from quix_function import QuixFunction
 from transformers import pipeline
 import os
@@ -13,12 +12,12 @@ client = qx.QuixStreamingClient()
 # Change consumer group to a different constant if you want to run model locally.
 print("Opening input and output topics")
 
-consumer_topic = client.get_topic_consumer(os.environ["input"], auto_offset_reset = AutoOffsetReset.Latest)
+consumer_topic = client.get_topic_consumer(os.environ["input"], auto_offset_reset = qx.AutoOffsetReset.Latest)
 producer_topic = client.get_topic_producer(os.environ["output"])
 
 
 # Callback called for each incoming stream
-def read_stream(consumer_stream: StreamConsumer):
+def read_stream(consumer_stream: qx.StreamConsumer):
 
     # Create a new stream to output data
     producer_stream = producer_topic.get_or_create_stream(consumer_stream.stream_id)
