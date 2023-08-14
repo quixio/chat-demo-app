@@ -57,10 +57,10 @@ deployments:
   - name: Drafts sentiment analysis
     application: Drafts sentiment analysis
     deploymentType: Job
-    version: 2a7f18f2da0ec081d9b4da3871b3908057c52fe9
+    version: bffd826a39641ab9d9318eb9b6ebafae36c95576
     resources:
-      cpu: 2000
-      memory: 2000
+      cpu: 9200
+      memory: 15600
       replicas: 1
     libraryItemId: g207b9ff-3d52-4adb-b99f-e5e46b2642e9
     variables:
