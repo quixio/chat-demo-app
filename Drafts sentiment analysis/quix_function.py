@@ -18,6 +18,9 @@ class QuixFunction:
     # Callback triggered for each new parameter data.
     def on_dataframe_handler(self, consumer_stream: qx.StreamConsumer, df_all_messages: pd.DataFrame):
 
+        print(df_all_messages)
+        name = df_all_messages['TagValues.name'][0][0]
+        print(name)
         # Use the model to predict sentiment label and confidence score on received messages
         model_response = self.classifier(list(df_all_messages["chat-message"]))
 
