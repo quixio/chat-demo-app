@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class DraftMessage:
-    draft_id: int
+    draft_id: str
     created_at_ns: int
 
     DIVIDER = "|"
@@ -28,7 +28,7 @@ class DraftMessage:
         draft_id, created_at = message_str.split(DraftMessage.DIVIDER)
         
         return DraftMessage(
-            int(draft_id), 
+            str(draft_id), 
             int(created_at)
         )
 
