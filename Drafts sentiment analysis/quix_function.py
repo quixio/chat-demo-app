@@ -1,7 +1,7 @@
 import quixstreams as qx
 from transformers import Pipeline
 import pandas as pd
-from draft_messsage import DraftMessage
+from draft_message import DraftMessage
 
 
 class QuixFunction:
