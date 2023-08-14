@@ -35,4 +35,3 @@ class DraftMessage:
     def __str__(self) -> str:
         """Returns the string representation of the DraftMessage."""
         return f"{self.draft_id}{DraftMessage.DIVIDER}{self._started_writing_ms}"
-        
