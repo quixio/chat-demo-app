@@ -1,6 +1,0 @@
-name: Drafts sentiment analysis
-language: python
-variables: []
-dockerfile: build/dockerfile
-runEntryPoint: main.py
-defaultFile: quix_function.py
