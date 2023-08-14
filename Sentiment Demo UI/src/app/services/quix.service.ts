@@ -192,27 +192,9 @@ export class QuixService {
   
   public sendMessage(
     room: string,
-    role: string,
-    name: string,
-    message: string,
-    isDraft: boolean,
-    phone: string,
-    email: string
+    payload: any,
+    isDraft?: boolean
   ) {
-    const payload = {
-      timestamps: [new Date().getTime() * 1000000],
-      tagValues: {
-        room: [room],
-        role: [role],
-        name: [name],
-        phone: [phone],
-        email: [email],
-      },
-      stringValues: {
-        "chat-message": [message],
-      },
-    };
-
     const topic = isDraft ? this.draftsTopic : this.messagesTopic;
     console.log("QuixService Sending parameter data!", topic, room, payload);
     this.writerHubConnection.invoke(

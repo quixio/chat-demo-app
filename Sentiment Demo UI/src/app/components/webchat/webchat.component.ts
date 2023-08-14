@@ -6,7 +6,6 @@ import { Chart, ChartDataset, ChartOptions, Legend, LinearScale, LineController,
 import 'chartjs-adapter-luxon';
 import ChartStreaming, { RealTimeScale } from 'chartjs-plugin-streaming';
 import { Subject, Subscription, debounceTime, takeUntil, timer } from 'rxjs';
-import { EventData } from 'src/app/models/eventData';
 import { MessagePayload } from 'src/app/models/messagePayload';
 import { ParameterData } from 'src/app/models/parameterData';
 import { ConnectionStatus, QuixService } from '../../services/quix.service';
@@ -35,7 +34,8 @@ export class WebchatComponent implements OnInit, OnDestroy {
   usersTyping: Map<string, Subscription> = new Map();
   typingTimeout: number = 4000;
   typingDebounce: number = 300;
-  messageSent: boolean = false;
+  messageSent: string | undefined;
+  draftGuid: string | undefined;
 
   room: string;
   name: string;
@@ -111,11 +111,16 @@ export class WebchatComponent implements OnInit, OnDestroy {
     this.phone = paramMap.get('phone') || '';
     this.email = paramMap.get('email') || '';
 
-    this.messageFC.valueChanges.pipe(debounceTime(300), takeUntil(this.unsubscribe$)).subscribe(() => {
-      if (this.messageSent) {
-        this.messageSent = false;
+    this.messageFC.valueChanges.pipe(debounceTime(300), takeUntil(this.unsubscribe$)).subscribe((value) => {
+      // Prevents it triggering when they send message and debounce is triggered
+      if (this.messageSent === value) {
+        this.messageSent = undefined;
         return;
       }
+      
+      // Generate a new GUID if there isn't one already or if they clear the input
+      if (!this.draftGuid || value === '') this.draftGuid = this.generateGUID();
+      
       this.sendMessage(true);
     });
 
@@ -137,13 +142,30 @@ export class WebchatComponent implements OnInit, OnDestroy {
 
   public submit() {
     this.sendMessage(false);
-    this.messageSent = true;
+    this.messageSent = this.messageFC.value!;
     this.messageFC.reset("", { emitEvent: false });
   }
 
   private sendMessage(isDraft: boolean): void {
     const message: string = this.messageFC.value || "";
-    this.quixService.sendMessage(this.room, "Customer", this.name, message, isDraft, this.phone, this.email);
+    if (!isDraft) this.draftGuid = undefined;
+
+    const payload = {
+      timestamps: [new Date().getTime() * 1000000],
+      tagValues: {
+        room: [this.room],
+        role: ['Customer'],
+        name: [this.name],
+        phone: [this.phone],
+        email: [this.email],
+        draft_id: [this.draftGuid]
+      },
+      stringValues: {
+        "chat-message": [message],
+      }
+    };
+
+    this.quixService.sendMessage(this.room, payload, isDraft);
   }
 
   private subscribeToParams() {
@@ -231,6 +253,14 @@ export class WebchatComponent implements OnInit, OnDestroy {
   public getDateFromTimestamp(timestamp: number) {
     return new Date(timestamp / 1000000)
   }
+
+  private generateGUID(): string {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
 
   ngOnDestroy(): void {
      // Unsubscribe from all the parameters
