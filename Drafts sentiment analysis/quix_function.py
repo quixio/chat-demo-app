@@ -24,7 +24,7 @@ class QuixFunction:
             draft_msg = DraftMessage(draft_id=draft_id, created_at_ns=timestamp)
             self.state[user] = str(draft_msg)
         else:
-            draft_msg = DraftMessage.from_string(self.state[user])
+            draft_msg = last_draft_msg
 
 
         # Use the model to predict sentiment label and confidence score on received messages
