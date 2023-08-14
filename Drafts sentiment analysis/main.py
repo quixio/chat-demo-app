@@ -23,8 +23,11 @@ def read_stream(consumer_stream: qx.StreamConsumer):
     producer_stream = producer_topic.get_or_create_stream(consumer_stream.stream_id)
     producer_stream.properties.parents.append(consumer_stream.stream_id)
 
+    # Create a stream state
+    state = consumer_stream.get_dict_state("user_meta", lambda key: 0)
+
     # handle the data in a function to simplify the example
-    quix_function = QuixFunction(consumer_stream, producer_stream, classifier)
+    quix_function = QuixFunction(consumer_stream, producer_stream, classifier, state)
 
     # React to new data received from input topic.
     consumer_stream.events.on_data_received = quix_function.on_event_data_handler
