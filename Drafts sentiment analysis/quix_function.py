@@ -11,11 +11,6 @@ class QuixFunction:
         self.classifier = classifier
         self.state = state
 
-    # Callback triggered for each new event.
-    def on_event_data_handler(self, stream_consumer: qx.StreamConsumer, data: qx.EventData):
-        print(data.value)
-        print("events")
-
     # Callback triggered for each new parameter data.
     def on_dataframe_handler(self, consumer_stream: qx.StreamConsumer, df_all_messages: pd.DataFrame):
 
