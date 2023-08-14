@@ -4,7 +4,7 @@ import pandas as pd
 
 
 class QuixFunction:
-    def __init__(self, consumer_stream: qx.StreamConsumer, producer_stream: qx.StreamProducer, classifier: Pipeline, state: qx.DictStreamState):
+    def __init__(self, consumer_stream: qx.StreamConsumer, producer_stream: qx.StreamProducer, classifier: Pipeline, state: qx.StreamState):
         self.consumer_stream = consumer_stream
         self.producer_stream = producer_stream
         self.classifier = classifier
