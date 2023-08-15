@@ -18,11 +18,11 @@ class QuixFunction:
         draft_id = df_all_messages['TAG__draft_id'][0]
         timestamp = df_all_messages['timestamp'][0]
 
-        last_draft_msg = DraftMessage.from_string(self.state[user]) if self.state[user] is not None else None
+        last_draft_msg = self.state[user]
     
         if last_draft_msg is None or last_draft_msg.draft_id != draft_id:
             draft_msg = DraftMessage(draft_id=draft_id, created_at_ns=timestamp)
-            self.state[user] = str(draft_msg) 
+            self.state[user] = draft_msg 
         else:
             draft_msg = last_draft_msg
 
