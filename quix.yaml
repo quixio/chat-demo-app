@@ -9,7 +9,7 @@ deployments:
   - name: Sentiment Demo UI
     application: Sentiment Demo UI
     deploymentType: Service
-    version: 730df81a09ac1e3ecb4689dbed72952e363dc28a
+    version: 07048a085863ebf04108ab9a1123113075e0ba01
     resources:
       cpu: 200
       memory: 500
@@ -57,10 +57,10 @@ deployments:
   - name: Drafts sentiment analysis
     application: Drafts sentiment analysis
     deploymentType: Service
-    version: 62cd6ef9fedb30ec17f49859655cb765d3175562
+    version: 115badbb91fde6f7ddfb8e287e0e8f06ef52f94f
     resources:
-      cpu: 1000
-      memory: 2000
+      cpu: 2000
+      memory: 4000
       replicas: 1
     state:
       enabled: true
