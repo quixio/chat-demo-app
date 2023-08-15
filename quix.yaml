@@ -56,7 +56,7 @@ deployments:
         value: sentiment
   - name: Drafts sentiment analysis
     application: Drafts sentiment analysis
-    deploymentType: Job
+    deploymentType: Service
     version: 4f774964d090971ae43f39fcbc88e4a4a6839a6b
     resources:
       cpu: 8400
