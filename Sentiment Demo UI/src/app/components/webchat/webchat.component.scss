@@ -52,7 +52,7 @@
   }
 }
 
-.text-success {
+::ng-deep.text-success {
   color: #13a963;
 
   &.mat-chip {
@@ -60,7 +60,7 @@
   }
 }
 
-.text-danger {
+::ng-deep.text-danger {
   color: #c23131;
 
   &.mat-chip {
@@ -68,7 +68,7 @@
   }
 }
 
-.text-grey {
+::ng-deep.text-grey {
   color: #646471;
 
   &.mat-chip {
@@ -76,7 +76,7 @@
   }
 }
 
-.text-grey-light {
+::ng-deep.text-grey-light {
   color: #a2a2b0;
 
   &.mat-chip {

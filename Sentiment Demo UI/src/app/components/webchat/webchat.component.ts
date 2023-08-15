@@ -11,6 +11,11 @@ import { ParameterData } from 'src/app/models/parameterData';
 import { ConnectionStatus, QuixService } from '../../services/quix.service';
 import { TitleCasePipe } from '@angular/common';
 
+export class UserTyping {
+  timeout?: Subscription;
+  sentiment?: number;
+}
+
 @Component({
   selector: 'app-webchat',
   templateUrl: './webchat.component.html',
@@ -31,7 +36,7 @@ export class WebchatComponent implements OnInit, OnDestroy {
 
   messages: MessagePayload[] = [];
 
-  usersTyping: Map<string, Subscription> = new Map();
+  usersTyping: Map<string, UserTyping> = new Map();
   typingTimeout: number = 4000;
   typingDebounce: number = 300;
   messageSent: string | undefined;
@@ -169,11 +174,10 @@ export class WebchatComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToParams() {
-    this.quixService.subscribeToParameter(this.quixService.messagesTopic, this.room, "chat-message");
-    this.quixService.subscribeToParameter(this.quixService.draftsTopic, this.room, "chat-message");
-    this.quixService.subscribeToParameter(this.quixService.sentimentTopic, this.room, "sentiment");
-    this.quixService.subscribeToParameter(this.quixService.sentimentTopic, this.room,"chat-message");
-    this.quixService.subscribeToParameter(this.quixService.sentimentTopic, this.room, "average_sentiment");
+    this.quixService.subscribeToParameter(this.quixService.messagesTopic, this.room, "*");
+    this.quixService.subscribeToParameter(this.quixService.draftsTopic, this.room, "*");
+    this.quixService.subscribeToParameter(this.quixService.sentimentTopic, this.room, "*");
+    this.quixService.subscribeToParameter(this.quixService.draftsSentimentTopic, this.room, "*");
 
     let host = window.location.host;
     this.qrValue = `${window.location.protocol}//${host}/lobby?room=${this.room}`;
@@ -187,6 +191,7 @@ export class WebchatComponent implements OnInit, OnDestroy {
   }
 
   private messageReceived(payload: ParameterData): void {
+    
     console.log("Receiving parameter data - ", payload);
 
     let topicId = payload.topicId;
@@ -195,79 +200,141 @@ export class WebchatComponent implements OnInit, OnDestroy {
     let sentiment = payload.numericValues["sentiment"]?.at(0) || 0;
     let averageSentiment = payload.numericValues["average_sentiment"]?.at(0) || 0;
     let message = this.messages.find((f) => f.timestamp === timestamp && f.name === name);
+    let user = this.usersTyping.get(name);
+
 
     if (topicId === this.quixService.draftsTopic) {
       const timer$ = timer(3000);
-
       // If they were already tying
-      if (this.usersTyping.get(name)) {
-        this.usersTyping.get(name)?.unsubscribe();
-      }
+      if (user) this.usersTyping.get(name)?.timeout?.unsubscribe();
       // When it finishes, removes the user from typing list
-      const subscription = timer$.subscribe(() => {
-        this.usersTyping.delete(name);
-        // console.log("Clearing user from map", this.usersTyping);
+      const subscription = timer$.subscribe(() => this.usersTyping.delete(name));
+      // Add the subscription to the object
+      this.usersTyping.set(name, {
+        ...user,
+        timeout: subscription
       });
-      this.usersTyping.set(name, subscription);
+    }
+
+    if (topicId === this.quixService.draftsSentimentTopic) {
+      user = { ...user, sentiment };
+      this.usersTyping.set(name, user);
     }
 
     if (topicId === this.quixService.messagesTopic) {
-      // If its in the typing map then remove it
-      const userTyping = this.usersTyping.get(name);
-      if (userTyping) {
-        userTyping.unsubscribe();
-        this.usersTyping.delete(name);
-      }
-
-      // Now handle the message sent
-      if (!message) {
-        this.messages.push({timestamp, name, sentiment, value: payload.stringValues["chat-message"][0]});
-      } else {
-        message.sentiment = sentiment;
-        message.value = payload.stringValues["chat-message"]?.at(0);
-      }
+       // If the user is in the typing map then remove them
+       if (user) {
+        user?.timeout?.unsubscribe();
+         this.usersTyping.delete(name);
+       } 
+       // Push the new message
+       this.messages.push({timestamp, name, sentiment, value: payload.stringValues["chat-message"]?.at(0)});
     }
 
+    if (topicId === this.quixService.sentimentTopic) {
+      if (!message) return;
+      // Update existing message with the sentiment
+      message.sentiment = sentiment;
+    }
+ 
+    // Update chart with the average sentiment
     if (averageSentiment) {
       let row = { x: timestamp / 1000000, y: averageSentiment };
       this.datasets[0].data.push(row as any);
     }
 
+    // Scroll to the button of the chart
     const el = this.chatWrapper.nativeElement;
     const isScrollToBottom = el.offsetHeight + el.scrollTop >= el.scrollHeight;
-
     if (isScrollToBottom) setTimeout(() => (el.scrollTop = el.scrollHeight));
   }
 
-  public getTypingMessage(): string | undefined {
-    const users = Array.from(this.usersTyping.keys())
-      .filter((f) => f !== this.name)
-      .map((userName) => this.titleCasePipe.transform(userName));
-    if (users.length === 1) return `${users[0]} is Typing...`;
-    else if (users.length > 1) {
-      const lastUser = users.pop();
-      return `${users.join(", ")} and ${lastUser} are typing...`;
-    } else return undefined;
+  /**
+   * Based on how many users are typing, it generates the appropriate
+   * isTyping message to be displayed in the template.
+   * @returns The Html message.
+   */
+  public getTypingMessage(): string | undefined {  
+    const users = Array.from(this.usersTyping.entries())
+    .filter(([key]) => this.name !== key)
+    .map(([key, value]) => ({
+      name: this.titleCasePipe.transform(key),
+      sentiment: value.sentiment!,
+    }));
+
+    if (users.length === 1) {
+      const [user] = users;
+      return `${this.getNameHtml(user)} is Typing`;
+    } else if (users.length > 1) {
+      const lastUser = users.pop()!;
+      const allUsersHtml = users.map(user => this.getNameHtml(user)).join(", ");
+      const lastUserHtml = this.getNameHtml(lastUser);
+      return `${allUsersHtml} and ${lastUserHtml} are typing...`;
+    } else {
+      return undefined;
+    }
   }
 
+  /**
+   * Takes the name and sentiment and creates a span with the
+   * appropriate color.
+   * @param name The name of the user.
+   * @param sentiment The sentiment of the message.
+   * @returns The Html span with the correct color.
+   */
+  private getNameHtml({ name, sentiment}: { name: string, sentiment: number }) {
+    const color = this.getColor(sentiment);
+    return `<span class="${color}">${name}</span>`;
+  }
+
+  /**
+   * Takes the sentiment value of a message and returns the
+   * appropriate color to be rendered in the template.
+   * @param sentiment The sentiment of the message.
+   * @returns The Html class.
+   */
+  private getColor(sentiment: number): string {
+    const POSITIVE_THRESHOLD = 0.5;
+    const NEGATIVE_THRESHOLD = -0.5;
+    
+    if (sentiment > POSITIVE_THRESHOLD) {
+      return 'text-success';
+    } else if (sentiment < NEGATIVE_THRESHOLD) {
+      return 'text-danger';
+    } else if (sentiment < POSITIVE_THRESHOLD && sentiment > NEGATIVE_THRESHOLD) {
+      return 'text-grey';
+    } else {
+      return 'text-grey-light';
+    }
+  }
+
+  /**
+   * Takes the date timestamp, divides it by 1000000
+   * and then creates a JS date from it to be used in the template.
+   * @param timestamp The date timestamp.
+   * @returns The new Date. 
+   */
   public getDateFromTimestamp(timestamp: number) {
     return new Date(timestamp / 1000000)
   }
 
+  /**
+   * Util method for generating a v4 GUID.
+   * @returns The generated GUID.
+   */
   private generateGUID(): string {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         const r = Math.random() * 16 | 0;
         const v = c === 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
-}
+  }
 
   ngOnDestroy(): void {
      // Unsubscribe from all the parameters
-     this.quixService.unsubscribeFromParameter(this.quixService.messagesTopic, this.room, "chat-message");
-     this.quixService.unsubscribeFromParameter(this.quixService.draftsTopic ,this.room, "chat-message");
-     this.quixService.unsubscribeFromParameter(this.quixService.sentimentTopic, this.room, "sentiment");
-     this.quixService.unsubscribeFromParameter(this.quixService.sentimentTopic, this.room, "chat-message");
-     this.quixService.unsubscribeFromParameter(this.quixService.sentimentTopic, this.room, "average_sentiment");
+     this.quixService.unsubscribeFromParameter(this.quixService.messagesTopic, this.room, "*");
+     this.quixService.unsubscribeFromParameter(this.quixService.draftsTopic ,this.room, "*");
+     this.quixService.unsubscribeFromParameter(this.quixService.sentimentTopic, this.room, "*");
+     this.quixService.unsubscribeFromParameter(this.quixService.draftsSentimentTopic, this.room, "*");
   }
 }

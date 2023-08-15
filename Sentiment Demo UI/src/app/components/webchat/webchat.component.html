@@ -43,7 +43,7 @@
         </div>        
       </div>
       <div *ngIf="getTypingMessage() as message" class="mat-caption typing">
-        {{ message }}
+        <div [innerHTML]="message"></div>
       </div>
     </mat-card-content>
     <mat-card-footer>

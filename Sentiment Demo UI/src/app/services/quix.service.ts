@@ -26,6 +26,7 @@ export class QuixService {
   public messagesTopic: string = 'messages'; // get topic name from the Topics page
   public draftsTopic: string = 'drafts'; // get topic from the Topics page
   public sentimentTopic: string = 'sentiment'; // get topic name from the Topics page
+  public draftsSentimentTopic: string = 'drafts_sentiment'; // get topic name from the Topics page
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
 
   private subdomain = 'platform'; // leave as 'platform'
@@ -33,7 +34,6 @@ export class QuixService {
 
   private readerReconnectAttempts: number = 0;
   private writerReconnectAttempts: number = 0;
-  private maxReconnectAttempts: number = 3;
   private reconnectInterval: number = 5000;
 
   public readerHubConnection: HubConnection;
@@ -60,6 +60,7 @@ export class QuixService {
       this.messagesTopic = this.workspaceId + '-' + this.messagesTopic;
       this.draftsTopic = this.workspaceId + '-' + this.draftsTopic;
       this.sentimentTopic = this.workspaceId + '-' + this.sentimentTopic;
+      this.draftsSentimentTopic = this.workspaceId + '-' + this.draftsSentimentTopic;
       this.setUpHubConnections(this.workspaceId);
     }
     else {
@@ -68,6 +69,7 @@ export class QuixService {
       let messagesTopic$ = this.httpClient.get(this.server + 'messages_topic', {headers, responseType: 'text'});
       let draftTopic$ = this.httpClient.get(this.server + 'drafts_topic', {headers, responseType: 'text'});
       let sentimentTopic$ = this.httpClient.get(this.server + 'sentiment_topic', {headers, responseType: 'text'});
+      let draftsSentimentTopic$ = this.httpClient.get(this.server + 'drafts_sentiment_topic', {headers, responseType: 'text'});
       let token$ = this.httpClient.get(this.server + 'sdk_token', {headers, responseType: 'text'});
       let portalApi$ = this.httpClient.get(this.server + "portal_api", {headers, responseType: 'text'})
 
@@ -76,17 +78,19 @@ export class QuixService {
         messagesTopic$,
         draftTopic$,
         sentimentTopic$,
+        draftsSentimentTopic$,
         token$,
         portalApi$
-      ]).pipe(map(([workspaceId, messagesTopic, draftTopic, sentimentTopic, token, portalApi]) => {
-        return {workspaceId, messagesTopic, draftTopic, sentimentTopic, token, portalApi};
+      ]).pipe(map(([workspaceId, messagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, token, portalApi]) => {
+        return {workspaceId, messagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, token, portalApi};
       }));
 
-      value$.subscribe(({ workspaceId, messagesTopic, draftTopic, sentimentTopic, token, portalApi }) => {
+      value$.subscribe(({ workspaceId, messagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, token, portalApi }) => {
         this.workspaceId = this.stripLineFeed(workspaceId);
         this.messagesTopic = this.stripLineFeed(this.workspaceId + '-' + messagesTopic);
         this.draftsTopic = this.stripLineFeed(this.workspaceId + '-' + draftTopic);
         this.sentimentTopic = this.stripLineFeed(this.workspaceId + '-' + sentimentTopic);
+        this.draftsSentimentTopic = this.stripLineFeed(this.workspaceId + '-' + draftsSentimentTopic);
         this.token = token.replace('\n', '');
 
         portalApi = portalApi.replace("\n", "");
@@ -165,19 +169,13 @@ export class QuixService {
   }
 
   private tryReconnect(isReader: boolean, reconnectAttempts: number) {
-    const subject = isReader ? this.readerConnStatusChanged : this.writerConnStatusChanged;
     const hubName = isReader ? 'Reader' : 'Writer';
-
-    if (reconnectAttempts < this.maxReconnectAttempts) {
       reconnectAttempts++;
       setTimeout(() => {
         console.log(`QuixService - ${hubName} | Attempting reconnection... (${reconnectAttempts})`);
         this.startConnection(isReader, reconnectAttempts)
       },this.reconnectInterval);
-    } else {
-      console.log(`QuixService - ${hubName} | Max reconnection attempts reached. Connection failed.`);
-      subject.next(ConnectionStatus.Offline);
-    }
+   
   }
 
   public subscribeToParameter(topic: string, streamId: string, parameterId: string) {
