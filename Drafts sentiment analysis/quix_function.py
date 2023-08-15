@@ -24,7 +24,7 @@ class QuixFunction:
         for i, row in df.iterrows():
             
             # Get the draft message for the user, or create a new one if needed.
-            draft_msg = self.get_or_create_draft_message(self, row['TAG__name'], row['TAG__draft_id'], row['timestamp'])
+            draft_msg = self.get_or_create_draft_message(row['TAG__name'], row['TAG__draft_id'], row['timestamp'])
 
             # Calculate "sentiment" feature using label for sign and score for magnitude
             df.loc[i, "sentiment"] = row["score"] if row["label"] == "POSITIVE" else - row["score"]
