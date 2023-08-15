@@ -57,7 +57,7 @@ deployments:
   - name: Drafts sentiment analysis
     application: Drafts sentiment analysis
     deploymentType: Service
-    version: 5e265e2e041a9e270c43f29ca4c8f3ee0ef07e49
+    version: 115badbb91fde6f7ddfb8e287e0e8f06ef52f94f
     resources:
       cpu: 2000
       memory: 4000
@@ -84,28 +84,28 @@ topics:
   - name: drafts_sentiment
     persisted: false
     configuration:
-      partitions: 4
+      partitions: 2
       replicationFactor: 2
-      retentionInMinutes: 60
-      retentionInBytes: 52428800
+      retentionInMinutes: -1
+      retentionInBytes: 262144000
   - name: drafts
     persisted: false
     configuration:
-      partitions: 4
+      partitions: 2
       replicationFactor: 2
-      retentionInMinutes: 60
-      retentionInBytes: 52428800
+      retentionInMinutes: -1
+      retentionInBytes: 262144000
   - name: messages
     persisted: false
     configuration:
-      partitions: 4
+      partitions: 2
       replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
   - name: sentiment
     persisted: false
     configuration:
-      partitions: 4
+      partitions: 2
       replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
