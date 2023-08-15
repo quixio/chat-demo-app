@@ -18,39 +18,16 @@ class QuixFunction:
         draft_id = df_all_messages['TAG__draft_id'][0]
         timestamp = df_all_messages['timestamp'][0]
 
-        print("user:")
-        print(user)
-
-        print("draft_id:")
-        print(draft_id)
-
-        print("timestamp:")
-        print(timestamp)
-
         last_draft_msg = DraftMessage.from_string(self.state[user]) if self.state[user] is not None else None
-
-        print("last_draft_msg:")
-        print(last_draft_msg)
-
+    
         if last_draft_msg is None or last_draft_msg.draft_id != draft_id:
             draft_msg = DraftMessage(draft_id=draft_id, created_at_ns=timestamp)
-            
-            print("str(draft_msg):")
-            print(str(draft_msg))
-
             self.state[user] = str(draft_msg) 
         else:
             draft_msg = last_draft_msg
 
-
-        print("draft_msg:")
-        print(draft_msg)
-
-
         # Use the model to predict sentiment label and confidence score on received messages
         model_response = self.classifier(list(df_all_messages["chat-message"]))
-
-        print(df_all_messages)       
 
         # Add the model response ("label" and "score") to the pandas dataframe
         df = pd.concat([df_all_messages, pd.DataFrame(model_response)], axis = 1)
