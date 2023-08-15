@@ -11,21 +11,9 @@ class QuixFunction:
         self.classifier = classifier
         self.state = state
 
-    # Callback triggered for each new parameter data.
+    # Callback triggered for each new timeseries data.
     def on_dataframe_handler(self, consumer_stream: qx.StreamConsumer, df_all_messages: pd.DataFrame):
-
-        user = df_all_messages['TAG__name'][0]
-        draft_id = df_all_messages['TAG__draft_id'][0]
-        timestamp = df_all_messages['timestamp'][0]
-
-        last_draft_msg = self.state[user]
-    
-        if last_draft_msg is None or last_draft_msg.draft_id != draft_id:
-            draft_msg = DraftMessage(draft_id=draft_id, created_at_ns=timestamp)
-            self.state[user] = draft_msg 
-        else:
-            draft_msg = last_draft_msg
-
+        
         # Use the model to predict sentiment label and confidence score on received messages
         model_response = self.classifier(list(df_all_messages["chat-message"]))
 
@@ -34,6 +22,9 @@ class QuixFunction:
 
         # Iterate over the df to work on each message
         for i, row in df.iterrows():
+            
+            # Get the draft message for the user, or create a new one if needed.
+            draft_msg = self.get_or_create_draft_message(self, row['TAG__name'], row['TAG__draft_id'], row['timestamp'])
 
             # Calculate "sentiment" feature using label for sign and score for magnitude
             df.loc[i, "sentiment"] = row["score"] if row["label"] == "POSITIVE" else - row["score"]
@@ -44,3 +35,17 @@ class QuixFunction:
 
         # Output data with new features
         self.producer_stream.timeseries.publish(df)
+
+    def get_or_create_draft_message(self, user: str, draft_id: str, timestamp: int):
+        # Get the user's last draft message
+        last_draft_msg = self.state[user]
+
+        # If no draft exists or the draft IDs don't match, create a new draft
+        if last_draft_msg is None or last_draft_msg.draft_id != draft_id:
+            draft_msg = DraftMessage(draft_id=draft_id, created_at_ns=timestamp)
+            self.state[user] = draft_msg 
+        else:
+            # Use the existing draft if the IDs match, indicating the user is still editing the same message
+            draft_msg = last_draft_msg
+
+        return draft_msg
