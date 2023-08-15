@@ -84,28 +84,28 @@ topics:
   - name: drafts_sentiment
     persisted: false
     configuration:
-      partitions: 2
+      partitions: 4
       replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 262144000
+      retentionInMinutes: 60
+      retentionInBytes: 52428800
   - name: drafts
     persisted: false
     configuration:
-      partitions: 2
+      partitions: 4
       replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 262144000
+      retentionInMinutes: 60
+      retentionInBytes: 52428800
   - name: messages
     persisted: false
     configuration:
-      partitions: 2
+      partitions: 4
       replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
   - name: sentiment
     persisted: false
     configuration:
-      partitions: 2
+      partitions: 4
       replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
