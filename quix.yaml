@@ -9,7 +9,7 @@ deployments:
   - name: Sentiment Demo UI
     application: Sentiment Demo UI
     deploymentType: Service
-    version: 07048a085863ebf04108ab9a1123113075e0ba01
+    version: 75ff08cfb2698f0431a1713605cec0c1cbe32a12
     resources:
       cpu: 200
       memory: 500
@@ -34,6 +34,11 @@ deployments:
         description: ''
         required: true
         value: drafts
+      - name: drafts_sentiment
+        inputType: InputTopic
+        description: ''
+        required: false
+        value: drafts_sentiment
   - name: Sentiment analysis
     application: Sentiment analysis
     deploymentType: Service
