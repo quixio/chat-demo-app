@@ -49,8 +49,6 @@ twitch_oauth = "oauth:0sioqjjxi5ohy70u8fkvtpxf9zrrxy"
 
 
 twitch_bot = commands.Bot(
-    irc_token=twitch_oauth,
-    api_token=twitch_oauth,
     token=twitch_oauth,
     nick=twitch_nickname,
     prefix="!",  # This is the prefix for commands you'll use in chat, e.g. "!hello"
