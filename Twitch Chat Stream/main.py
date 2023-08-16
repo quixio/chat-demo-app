@@ -75,8 +75,3 @@ try:
 except KeyboardInterrupt:
     s.close()
     print("\nConnection closed!")
-
-
-
-# keep the app running and handle termination signals.
-qx.App.run()
