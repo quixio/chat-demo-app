@@ -49,8 +49,6 @@ twitch_oauth = "oauth:0sioqjjxi5ohy70u8fkvtpxf9zrrxy"
 
 
 twitch_bot = commands.Bot(
-    irc_token=twitch_oauth,
-    api_token=twitch_oauth,
     token=twitch_oauth,
     nick=twitch_nickname,
     prefix="!",  # This is the prefix for commands you'll use in chat, e.g. "!hello"
@@ -65,10 +63,7 @@ async def event_ready():
     print(f'We are logged in as {twitch_bot.nick}')
 
 @twitch_bot.event
-async def event_message(ctx):
-
-    await twitch_bot.handle_commands(ctx)
-
+def event_message(ctx):
     # Print the chat message to console
     print(f'Message from {ctx.author.name}: {ctx.content}')
 
