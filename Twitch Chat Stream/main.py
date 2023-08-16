@@ -65,10 +65,7 @@ async def event_ready():
     print(f'We are logged in as {twitch_bot.nick}')
 
 @twitch_bot.event
-async def event_message(ctx):
-
-    await twitch_bot.handle_commands(ctx)
-
+def event_message(ctx):
     # Print the chat message to console
     print(f'Message from {ctx.author.name}: {ctx.content}')
 
