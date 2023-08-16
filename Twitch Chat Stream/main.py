@@ -44,6 +44,7 @@ def publish_chat_message(user: str, message: str, role: str = "Customer"):
 # Callback function when a public message is received
 def on_pubmsg(connection, event):
     # Publish the message to the Quix stream
+    print(f"Received a msg from: {event.source.nick}, msg: {event.arguments[0]}")
     publish_chat_message(event.source.nick, event.arguments[0])
 
 
