@@ -68,7 +68,7 @@ deployments:
         inputType: FreeText
         description: Twitch channel name
         required: true
-        value: nmplol
+        value: tarik
       - name: TwitchNickname
         inputType: FreeText
         description: Needed for auth
