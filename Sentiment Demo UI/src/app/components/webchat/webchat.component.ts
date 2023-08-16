@@ -217,6 +217,7 @@ export class WebchatComponent implements OnInit, OnDestroy {
     }
 
     if (topicId === this.quixService.draftsSentimentTopic) {
+      if (!user) return;
       user = { ...user, sentiment };
       this.usersTyping.set(name, user);
     }
