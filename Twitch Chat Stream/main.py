@@ -5,9 +5,9 @@ import irc
 import irc.connection
 
 
-twitch_channel_name = os.environ["Twitch_channel"]
-twitch_nickname = os.environ["Twitch_nickname"]
-twitch_oauth = os.environ["Twitch_oauth"]
+twitch_channel_name = os.environ["TwitchChannel"]
+twitch_nickname = os.environ["TwitchNickname"]
+twitch_oauth = os.environ["TwitchOauth"]
 
 # Quix Platform injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
