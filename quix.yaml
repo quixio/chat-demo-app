@@ -6,39 +6,6 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: Sentiment Demo UI
-    application: Sentiment Demo UI
-    deploymentType: Service
-    version: 75ff08cfb2698f0431a1713605cec0c1cbe32a12
-    resources:
-      cpu: 200
-      memory: 500
-      replicas: 1
-    publicAccess:
-      enabled: true
-      urlPrefix: sentiment-ui
-    desiredStatus: Stopped
-    variables:
-      - name: sentiment
-        inputType: FreeText
-        description: The topic to read from
-        required: true
-        value: sentiment
-      - name: messages
-        inputType: FreeText
-        description: The topic to read from
-        required: true
-        value: messages
-      - name: drafts
-        inputType: FreeText
-        description: ''
-        required: true
-        value: drafts
-      - name: drafts_sentiment
-        inputType: InputTopic
-        description: ''
-        required: false
-        value: drafts_sentiment
   - name: Sentiment analysis
     application: Sentiment analysis
     deploymentType: Service
