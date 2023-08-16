@@ -51,14 +51,13 @@ deployments:
         value: sentiment
   - name: Twitch Chat Stream
     application: Twitch Chat Stream
-    deploymentType: Service
+    deploymentType: Job
     version: 544b49083b20a63fec5b140e288c03fba48691be
     resources:
       cpu: 2000
       memory: 1100
       replicas: 1
     libraryItemId: 7abe02e1-1e75-4783-864c-46b930b42afe
-    desiredStatus: Running
     variables:
       - name: Topic
         inputType: OutputTopic
