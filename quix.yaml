@@ -50,6 +50,39 @@ deployments:
         description: This is the output for the Hugging Face model score
         required: true
         value: drafts_sentiment
+  - name: Sentiment Demo UI
+    application: Sentiment Demo UI
+    deploymentType: Service
+    version: f203bf0beb5ae193d1c0446236b00d5aa9d9c02c
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: sentimentdemoui-f203bf0
+    desiredStatus: Running
+    variables:
+      - name: sentiment
+        inputType: FreeText
+        description: The topic to read from
+        required: true
+        value: sentiment
+      - name: messages
+        inputType: FreeText
+        description: The topic to read from
+        required: true
+        value: messages
+      - name: drafts
+        inputType: FreeText
+        description: ''
+        required: true
+        value: drafts
+      - name: drafts_sentiment
+        inputType: FreeText
+        description: ''
+        required: false
+        value: drafts_sentiment
 
 # This section describes the Topics of the data pipeline
 topics:
