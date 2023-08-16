@@ -62,7 +62,7 @@ irc_client.add_global_handler("pubmsg", on_pubmsg)
 irc_client.add_connection(irc_conn)
 
 # Join the desired Twitch channel
-irc_conn.join(twitch_channel_name)
+irc_conn.join(f"#{twitch_channel_name}")
 
 # Start processing events
 irc_client.process_forever()
