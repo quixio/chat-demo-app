@@ -16,6 +16,11 @@ variables:
     description: Needed for auth
     defaultValue: quixdemo
     required: true
+  - name: TwitchOauth
+    inputType: FreeText
+    description: Needed for auth
+    defaultValue: oauth:0sioqjjxi5ohy70u8fkvtpxf9zrrxy
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
