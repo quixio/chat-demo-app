@@ -253,6 +253,7 @@ export class WebchatComponent implements OnInit, OnDestroy {
   /**
    * Based on how many users are typing, it generates the appropriate
    * isTyping message to be displayed in the template.
+   * 
    * @returns The Html message.
    */
   public getTypingMessage(): string | undefined {  
@@ -291,6 +292,7 @@ export class WebchatComponent implements OnInit, OnDestroy {
   /**
    * Takes the sentiment value of a message and returns the
    * appropriate color to be rendered in the template.
+   * 
    * @param sentiment The sentiment of the message.
    * @returns The Html class.
    */
@@ -312,6 +314,7 @@ export class WebchatComponent implements OnInit, OnDestroy {
   /**
    * Takes the date timestamp, divides it by 1000000
    * and then creates a JS date from it to be used in the template.
+   * 
    * @param timestamp The date timestamp.
    * @returns The new Date. 
    */
@@ -321,6 +324,7 @@ export class WebchatComponent implements OnInit, OnDestroy {
 
   /**
    * Util method for generating a v4 GUID.
+   * 
    * @returns The generated GUID.
    */
   private generateGUID(): string {

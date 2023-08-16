@@ -119,6 +119,14 @@ export class QuixService {
     this.startConnection(false, this.writerReconnectAttempts);
   }
 
+  /**
+   * Creates a new hub connection.
+   * 
+   * @param url The url of the SignalR connection.
+   * @param options The options for the hub.
+   * @param isReader Whether it's the ReaderHub or WriterHub.
+   * @returns 
+   */
   private createHubConnection(url: string, options: IHttpConnectionOptions, isReader: boolean): HubConnection {
     const hubConnection = new HubConnectionBuilder()
       .withUrl(url,options)
@@ -132,6 +140,13 @@ export class QuixService {
     return hubConnection;
   }
 
+  /**
+   * Handles the initial logic of starting the hub connection. If it falls
+   * over in this process then it will attempt to reconnect.
+   * 
+   * @param isReader Whether it's the ReaderHub or WriterHub.
+   * @param reconnectAttempts The number of attempts to reconnect.
+   */
   private startConnection(isReader: boolean, reconnectAttempts: number): void {
     const hubConnection = isReader ? this.readerHubConnection : this.writerHubConnection;
     const subject = isReader ? this.readerConnStatusChanged : this.writerConnStatusChanged;
@@ -156,18 +171,34 @@ export class QuixService {
     }
   }
 
-  private setupReaderHubListeners(hubConnection: HubConnection): void {
+  /**
+   * Creates listeners on the ReaderHub connection for both parameters
+   * and events so that we can detect when something changes. This can then
+   * be emitted to any components listening.
+   * 
+   * @param readerHubConnection The readerHubConnection we are listening to.
+   */
+  private setupReaderHubListeners(readerHubConnection: HubConnection): void {
     // Listen for parameter data and emit
-    hubConnection.on("ParameterDataReceived", (payload: ParameterData) => {
+    readerHubConnection.on("ParameterDataReceived", (payload: ParameterData) => {
       this.paramDataReceived.next(payload);
     });
     
     // Listen for event data and emit
-    hubConnection.on("EventDataReceived", (payload: EventData) => {
+    readerHubConnection.on("EventDataReceived", (payload: EventData) => {
       this.eventDataReceived.next(payload);
     });
   }
 
+  /**
+   * Handles the reconnection for a hub connection. Will continiously
+   * attempt to reconnect to the hub when the connection drops out. It does
+   * so with a timer of 5 seconds to prevent a spam of requests and gives it a
+   * chance to reconnect.
+   * 
+   * @param isReader Whether it's the ReaderHub or WriterHub.
+   * @param reconnectAttempts The number of attempts to reconnect.
+   */
   private tryReconnect(isReader: boolean, reconnectAttempts: number) {
     const hubName = isReader ? 'Reader' : 'Writer';
       reconnectAttempts++;
@@ -178,11 +209,27 @@ export class QuixService {
    
   }
 
+  /**
+   * Subscribes to a parameter on the ReaderHub connection so
+   * we can listen to changes.
+   * 
+   * @param topic The topic being wrote to.
+   * @param streamId The id of the stream.
+   * @param parameterId The parameter want to listen for changes.
+   */
   public subscribeToParameter(topic: string, streamId: string, parameterId: string) {
     // console.log('QuixService Reader | Subscribing to parameter - ' + parameterId);
     this.readerHubConnection.invoke("SubscribeToParameter", topic, streamId, parameterId);
   }
 
+  /**
+   * Unsubscribe from a parameter on the ReaderHub connection
+   * so we no longer recieve changes.
+   * 
+   * @param topic 
+   * @param streamId 
+   * @param parameterId 
+   */
   public unsubscribeFromParameter(topic: string, streamId: string, parameterId: string) {
     // console.log('QuixService Reader | Unsubscribing from parameter - ' + parameterId);
     this.readerHubConnection.invoke("UnsubscribeFromParameter", topic, streamId, parameterId);
