@@ -17,7 +17,7 @@ variables:
     defaultValue: quixdemo
     required: true
   - name: TwitchOauth
-    inputType: FreeText
+    inputType: HiddenText
     description: Needed for auth
     defaultValue: oauth:0sioqjjxi5ohy70u8fkvtpxf9zrrxy
     required: true
