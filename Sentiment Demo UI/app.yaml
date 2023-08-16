@@ -16,5 +16,10 @@ variables:
     description: ''
     defaultValue: drafts
     required: true
+  - name: drafts_sentiment
+    inputType: FreeText
+    description: ''
+    defaultValue: drafts_sentiment
+    required: false
 dockerfile: src/build/dockerfile
 defaultFile: src/app/services/quix.service.ts
