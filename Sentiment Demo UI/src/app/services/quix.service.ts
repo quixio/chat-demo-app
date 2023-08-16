@@ -35,6 +35,7 @@ export class QuixService {
   private readerReconnectAttempts: number = 0;
   private writerReconnectAttempts: number = 0;
   private reconnectInterval: number = 5000;
+  private hasReaderHubListeners: boolean = false;
 
   public readerHubConnection: HubConnection;
   public writerHubConnection: HubConnection;
@@ -161,7 +162,10 @@ export class QuixService {
           subject.next(ConnectionStatus.Connected);
 
           // If it's reader hub connection then we create listeners for data
-          if (isReader) this.setupReaderHubListeners(hubConnection);
+          if (isReader && !this.hasReaderHubListeners) {
+            this.setupReaderHubListeners(hubConnection);
+            this.hasReaderHubListeners = true;
+          }
         })
         .catch(err => {
           console.error(`QuixService - ${hubName} | Error while starting connection!`, err);
