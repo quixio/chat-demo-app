@@ -49,7 +49,7 @@ def on_pubmsg(connection, event):
 
 
 # Create an IRC connection and client
-irc_conn = irc.connection.Factory().connect(
+irc_conn = irc.client.Server().connect(
     server="irc.chat.twitch.tv",
     port=6667,
     nickname=twitch_nickname,
