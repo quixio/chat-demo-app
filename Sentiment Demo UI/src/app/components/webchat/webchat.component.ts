@@ -140,7 +140,6 @@ export class WebchatComponent implements OnInit, OnDestroy {
 
     // Listen for reader messages
     this.quixService.paramDataReceived$.pipe(takeUntil(this.unsubscribe$)).subscribe((payload) => {
-      // console.log("Component - Payload Recieved", x);
       this.messageReceived(payload);
     });
   }
@@ -191,9 +190,7 @@ export class WebchatComponent implements OnInit, OnDestroy {
   }
 
   private messageReceived(payload: ParameterData): void {
-    
-    console.log("Receiving parameter data - ", payload);
-
+    // console.log("WebChat - Receiving parameter data - ", payload);
     let topicId = payload.topicId;
     let [timestamp] = payload.timestamps;
     let [name] = payload.tagValues["name"];
