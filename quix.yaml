@@ -51,11 +51,11 @@ deployments:
         value: sentiment
   - name: Twitch Chat Stream
     application: Twitch Chat Stream
-    deploymentType: Job
-    version: 1ab41ca2b4083c7f4429dd88e2a1bf77b36236dd
+    deploymentType: Service
+    version: 544b49083b20a63fec5b140e288c03fba48691be
     resources:
-      cpu: 200
-      memory: 200
+      cpu: 2000
+      memory: 1100
       replicas: 1
     libraryItemId: 7abe02e1-1e75-4783-864c-46b930b42afe
     variables:
@@ -64,6 +64,21 @@ deployments:
         description: Name of the output topic to write into
         required: true
         value: messages
+      - name: TwitchChannel
+        inputType: FreeText
+        description: Twitch channel name
+        required: true
+        value: nmplol
+      - name: TwitchNickname
+        inputType: FreeText
+        description: Needed for auth
+        required: true
+        value: quixdemo
+      - name: TwitchOauth
+        inputType: FreeText
+        description: Needed for auth
+        required: true
+        value: oauth:0sioqjjxi5ohy70u8fkvtpxf9zrrxy
 
 # This section describes the Topics of the data pipeline
 topics:
