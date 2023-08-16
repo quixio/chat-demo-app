@@ -25,7 +25,7 @@ stream_producer = topic_producer.create_stream(twitch_channel_name)
 
 # Configure the buffer to publish data as desired.
 # See docs for more options. Search "using-a-buffer"
-stream_producer.timeseries.buffer.time_span_in_milliseconds = 100
+#stream_producer.timeseries.buffer.time_span_in_milliseconds = 100
 
 
 def publish_chat_message(user: str, message: str, role: str = "Customer"):
@@ -38,7 +38,7 @@ def publish_chat_message(user: str, message: str, role: str = "Customer"):
         .add_tags({"room": twitch_channel_name, "name": user, "role": role})
 
     # publish the data to the Quix stream created earlier
-    stream_producer.timeseries.buffer.publish(timeseries_data)
+    stream_producer.timeseries.publish(timeseries_data)
 
 
 def connect_to_twitch():
