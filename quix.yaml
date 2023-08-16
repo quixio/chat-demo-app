@@ -37,7 +37,6 @@ deployments:
       cpu: 1000
       memory: 2000
       replicas: 1
-    libraryItemId: g207b9ff-3d52-4adb-b99f-e5e46b2642e9
     desiredStatus: Running
     variables:
       - name: input
@@ -50,17 +49,32 @@ deployments:
         description: This is the output for the Hugging Face model score
         required: true
         value: sentiment
+  - name: Twitch Chat Stream
+    application: Twitch Chat Stream
+    deploymentType: Job
+    version: 1ab41ca2b4083c7f4429dd88e2a1bf77b36236dd
+    resources:
+      cpu: 200
+      memory: 200
+      replicas: 1
+    libraryItemId: 7abe02e1-1e75-4783-864c-46b930b42afe
+    variables:
+      - name: Topic
+        inputType: OutputTopic
+        description: Name of the output topic to write into
+        required: true
+        value: messages
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: sentiment
+  - name: messages
     persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
-  - name: messages
+  - name: sentiment
     persisted: false
     configuration:
       partitions: 2
