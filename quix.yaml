@@ -52,7 +52,7 @@ deployments:
   - name: Twitch Chat Stream
     application: Twitch Chat Stream
     deploymentType: Job
-    version: 95b0095f74057f0d18b3add7726c4be2f65e0414
+    version: feb78d3d59cc72415cea9d7cb1e9189a67f7583b
     resources:
       cpu: 2000
       memory: 1100
