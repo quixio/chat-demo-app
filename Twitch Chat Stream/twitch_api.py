@@ -1,6 +1,6 @@
 import os
 import requests
-from typings import List
+from typing import List
 
 CLIENT_ID = os.environ["TwitchAppClientId"]
 CLIENT_SECRET = os.environ["TwitchAppClientSecret"]
