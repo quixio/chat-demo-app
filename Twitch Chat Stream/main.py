@@ -8,7 +8,6 @@ from twitch_bot import Bot
 desired_streams_to_join = os.environ["ChannelJoinCount"] # Current max is 100
 client = qx.QuixStreamingClient()
 
-print(f"Opening producer topic: {os.environ['Topic']}")
 topic_producer = client.get_topic_producer(os.environ["Topic"])
 
 def publish_chat_message(user: str, message: str, channel: str, role: str = "Customer"):
