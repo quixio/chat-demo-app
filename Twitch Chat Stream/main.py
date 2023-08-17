@@ -12,7 +12,7 @@ async def join_channel(channel_name):
     async with websockets.connect(uri) as ws:
         await ws.send(f"PASS {TOKEN}")
         await ws.send(f"NICK {NICK}")
-        await ws.send(f"JOIN #{channel_name}")
+        await ws.send(f"JOIN {channel_name}")
 
         while True:
             message = await ws.recv()
