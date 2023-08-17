@@ -11,7 +11,7 @@ class Bot(commands.Bot):
         # prefix can be a callable, which returns a list of strings or a string...
         # initial_channels can also be a callable which returns a list of strings...
         self.on_message_handler = on_message_handler
-        print(f"Joining {len(channels_to_join)} channels}")
+        print(f"Joining {len(channels_to_join)} channels")
         super().__init__(token=token, prefix='!', initial_channels=channels_to_join)
         print(f"Joined")
 
