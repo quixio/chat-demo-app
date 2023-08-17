@@ -13,7 +13,7 @@ class Bot(commands.Bot):
         self.on_message_handler = on_message_handler
         print(f"Joining {len(channels_to_join)} channels")
         super().__init__(token=token, prefix='!', initial_channels=channels_to_join)
-        print(f"Joined")
+        print("Joined")
 
     async def event_ready(self):
         # Notify us when everything is ready!
