@@ -6,7 +6,7 @@ variables:
     description: Name of the output topic to write into
     defaultValue: messages
     required: true
-  - name: TwitchToken
+  - name: TwitchBotToken
     inputType: HiddenText
     description: Needed for auth
     defaultValue: oauth:01qiyvmqb86s8tw18bovr81i52xerr
