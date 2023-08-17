@@ -1,7 +1,7 @@
 import asyncio
 import twitchio
 from twitchio.ext import commands
-from twitch_api import get_top_streams
+from twitch_api import get_top_streams, get_live_streams_by_users
 
 
 class Bot(commands.Bot):
@@ -54,7 +54,7 @@ class Bot(commands.Bot):
 
     async def part_offline_channels(self):
         joined_channel_names = [channel.name for channel in self.connected_channels]
-        live_channels = await self.fetch_streams(user_logins=joined_channel_names, type='live')
+        live_channels = get_live_streams_by_users(joined_channel_names)
 
         
         live_channel_names = [stream.user.channel.name for stream in live_channels]
