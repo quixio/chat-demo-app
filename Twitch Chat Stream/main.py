@@ -21,9 +21,12 @@ def publish_chat_message(user: str, message: str, channel: str, role: str = "Cus
     stream_producer = topic_producer.get_or_create_stream(channel)
     stream_producer.timeseries.publish(timeseries_data)
 
+# Joining 100 top streams in batches of 20 because of joining rate limit
 async def join_channels_in_batches():
+
     channels_to_join = get_top_streams(limit=100)
     while True:  
+        bot.connected_channels
         for i in range(0, len(channels_to_join), 20):
             batch = channels_to_join[i:i + 20]
             print(f"Joining channels: {batch}")
