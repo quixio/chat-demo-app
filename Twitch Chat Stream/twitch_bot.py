@@ -36,4 +36,4 @@ class Bot(commands.Bot):
 
     def get_connected_offline_channels(self):
         channels = self.connected_channels
-        print(channels)
+        print(channels[0])
