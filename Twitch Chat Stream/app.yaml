@@ -16,7 +16,7 @@ variables:
     description: Needed for auth
     defaultValue: quixdemo
     required: true
-  - name: TwitchOauth
+  - name: TwitchToken
     inputType: HiddenText
     description: Needed for auth
     defaultValue: oauth:0sioqjjxi5ohy70u8fkvtpxf9zrrxy
