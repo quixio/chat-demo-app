@@ -26,12 +26,12 @@ async def join_channels_in_batches():
 
     channels_to_join = get_top_streams(limit=100)
     while True:  
-        bot.connected_channels
         for i in range(0, len(channels_to_join), 20):
             batch = channels_to_join[i:i + 20]
             print(f"Joining channels: {batch}")
             await bot.join_channels(batch)
             await asyncio.sleep(11)  # Wait for 11 seconds between batches
+            bot.get_connected_offline_channels()
         
         await asyncio.sleep(1800)  # Wait for 30 minutes before the next cycle
 
