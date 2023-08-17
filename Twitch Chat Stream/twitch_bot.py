@@ -48,13 +48,16 @@ class Bot(commands.Bot):
         for i in range(0, len(channels_to_join), 20):
             batch = channels_to_join[i:i + 20]
             
-            print(f"Joining channels: {batch}")
+            #print(f"Joining channels: {batch}")
             await self.join_channels(batch)
             await asyncio.sleep(11)  # Wait for 11 seconds between batches
 
     async def part_offline_channels(self):
         joined_channel_names = [channel.name for channel in self.connected_channels]
         live_channels = await self.fetch_streams(user_logins=joined_channel_names, type='live')
+
+        print(f"Live channels: {len(live_channels)}")
+
         live_channel_names = [stream.user.name for stream in live_channels]
         offline_channel_names = list(set(joined_channel_names) - set(live_channel_names))
 
