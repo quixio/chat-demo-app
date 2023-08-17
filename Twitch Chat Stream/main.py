@@ -21,15 +21,12 @@ def publish_chat_message(user: str, message: str, channel: str, role: str = "Cus
     stream_producer = topic_producer.get_or_create_stream(channel)
     stream_producer.timeseries.publish(timeseries_data)
 
-# Joining 100 top streams in batches of 20 because of joining rate limit
 async def join_channels_in_batches():
     while True:  
         await bot.join_top_streams_in_batches(desired_streams_to_join)
         await asyncio.sleep(1800)  # Wait for 30 minutes
         await bot.part_offline_channels()
         
-
-    
 twitch_token = os.environ["TwitchBotToken"]
 bot = Bot(token=twitch_token, on_ready_handler=join_channels_in_batches, on_message_handler=publish_chat_message)
 bot.run()
