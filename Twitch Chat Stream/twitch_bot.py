@@ -56,7 +56,6 @@ class Bot(commands.Bot):
         joined_channel_names = [channel.name for channel in self.connected_channels]
         live_channels = get_live_streams_by_users(joined_channel_names)
 
-        
         live_channel_names = [stream.user.channel.name for stream in live_channels]
 
         print(f"connected channel names {joined_channel_names}")
