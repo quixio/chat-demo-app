@@ -59,6 +59,9 @@ class Bot(commands.Bot):
         print(f"Live channels: {len(live_channels)}")
 
         live_channel_names = [stream.user.name for stream in live_channels]
+
+        print(f"live channel names {live_channel_names}")
+
         offline_channel_names = list(set(joined_channel_names) - set(live_channel_names))
 
         await self.part_channels(offline_channel_names)
