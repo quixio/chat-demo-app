@@ -4,7 +4,6 @@ import quixstreams as qx
 from twitch_bot import Bot
 from twitch_api import get_top_streams
 
-print(get_top_streams())
 
 twitch_token = os.environ["TwitchToken"]
 channels_to_join = get_top_streams()
