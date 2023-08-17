@@ -43,6 +43,8 @@ class Bot(commands.Bot):
         joined_channel_names = [channel.name for channel in self.connected_channels]
         channels_to_join = list(set(top_live_channel_names) - set(joined_channel_names))
 
+        print(f"Total channels to join: {len(channels_to_join)}")
+
         for i in range(0, len(channels_to_join), 20):
             batch = channels_to_join[i:i + 20]
             
@@ -58,4 +60,4 @@ class Bot(commands.Bot):
 
         await self.part_channels(offline_channel_names)
 
-        print(f'Parted from channels: {offline_channel_names}')
+        print(f'Parted from {len(offline_channel_names)} channels: {offline_channel_names}')
