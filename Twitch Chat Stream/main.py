@@ -6,7 +6,7 @@ from twitch_api import get_top_streams
 
 
 twitch_token = os.environ["TwitchBotToken"]
-channels_to_join = get_top_streams(limit=70)
+channels_to_join = get_top_streams(limit=100)
 
 client = qx.QuixStreamingClient()
 
