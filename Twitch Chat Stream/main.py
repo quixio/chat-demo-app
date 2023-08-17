@@ -5,6 +5,8 @@ from twitch_bot import Bot
 from twitch_api import main
 
 
+main()
+
 twitch_token = os.environ["TwitchToken"]
 channels_to_join = ["xQc", "ElMariana", "PaymoneyWubby", "rivers_gg", "Rubius", "eliasn97", "sneakylol", "Caedrel", "Becca", "Fextralife", "k3soju", "ratirl"]
 
