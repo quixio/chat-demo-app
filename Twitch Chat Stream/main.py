@@ -1,5 +1,6 @@
 import os
 import time
+import asyncio
 import quixstreams as qx
 from twitch_bot import Bot
 from twitch_api import get_top_streams
