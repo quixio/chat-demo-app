@@ -57,7 +57,7 @@ class Bot(commands.Bot):
         live_channels = await self.fetch_streams(user_logins=joined_channel_names, type='live')
 
         
-        live_channel_names = [stream.user.name for stream in live_channels]
+        live_channel_names = [stream.user.channel.name for stream in live_channels]
 
         print(f"connected channel names {joined_channel_names}")
         print(f"live channel names {live_channel_names}")
