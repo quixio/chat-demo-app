@@ -9,7 +9,7 @@ variables:
   - name: TwitchToken
     inputType: HiddenText
     description: Needed for auth
-    defaultValue: oauth:0sioqjjxi5ohy70u8fkvtpxf9zrrxy
+    defaultValue: oauth:01qiyvmqb86s8tw18bovr81i52xerr
     required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
