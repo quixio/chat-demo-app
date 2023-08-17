@@ -1,6 +1,5 @@
 import quixstreams as qx
 import os
-import pandas as pd
 
 
 client = qx.QuixStreamingClient()
@@ -10,7 +9,6 @@ topic_producer = client.get_topic_producer(os.environ["output"])
 
 
 def on_data_released(stream_consumer: qx.StreamConsumer, data: qx.TimeseriesData):
-
     stream_producer = topic_producer.get_or_create_stream(stream_id = "count")
     stream_producer.timeseries.buffer.add_timestamp_nanoseconds(data.timestamps[0].timestamp_nanoseconds) \
         .add_value("count", len(data.timestamps)) \
