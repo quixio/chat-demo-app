@@ -20,7 +20,7 @@ def get_oauth_token(client_id, client_secret):
     response = requests.post(url, params=payload)
     return response.json().get('access_token')
 
-def get_top_streams(oauth_token, limit=50):
+def get_top_streams(oauth_token, limit=10):
     headers = {
         **HEADERS,
         'Authorization': f"Bearer {oauth_token}"
