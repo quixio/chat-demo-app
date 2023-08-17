@@ -52,7 +52,7 @@ deployments:
   - name: Twitch Chat Stream
     application: Twitch Chat Stream
     deploymentType: Service
-    version: 061f6046d94d71cf457790c080b395e2f8fbeabb
+    version: 80ac718b67bf2542629470264d7c28a557203bfc
     resources:
       cpu: 2000
       memory: 1100
@@ -84,6 +84,21 @@ deployments:
         description: Needed for auth
         required: true
         value: oauth:0sioqjjxi5ohy70u8fkvtpxf9zrrxy
+      - name: TwitchBotToken
+        inputType: HiddenText
+        description: Needed for auth
+        required: true
+        value: oauth:01qiyvmqb86s8tw18bovr81i52xerr
+      - name: TwitchAppClientId
+        inputType: HiddenText
+        description: ''
+        required: true
+        value: elqo0jjhhzxyat9mhtniuowdj0tipj
+      - name: TwitchAppClientSecret
+        inputType: HiddenText
+        description: ''
+        required: true
+        value: ifb1km2w404mtcbh2s7moewiud77bs
   - name: Message counter
     application: Starter transformation
     deploymentType: Service
