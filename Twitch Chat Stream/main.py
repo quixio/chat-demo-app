@@ -57,7 +57,7 @@ def connect_to_twitch():
     s.send(f"JOIN #{twitch_channel_name}\r\n".encode('utf-8'))
 
     for channel in twitch_channels_to_join:
-        s.send(f"JOIN #{channel}\r\n".encode('utf-8'))
+        s.send(f"JOIN {channel}\r\n".encode('utf-8'))
 
     return s
 
