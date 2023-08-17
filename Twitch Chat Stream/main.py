@@ -1,32 +1,43 @@
-import asyncio
-import websockets
-import json
+from twitchio.ext import commands
 
-NICK = 'your_twitch_username'
-TOKEN = 'oauth:your_twitch_oauth_token'  # Use https://twitchapps.com/tmi/ to get your OAuth token
-CHANNELS = ['thijs']  # List of channels you want to join
 
-async def join_channel(channel_name):
-    uri = f"wss://irc-ws.chat.twitch.tv:443"
-    
-    async with websockets.connect(uri) as ws:
-        await ws.send(f"PASS {TOKEN}")
-        await ws.send(f"NICK {NICK}")
-        await ws.send(f"JOIN {channel_name}")
+class Bot(commands.Bot):
 
-        while True:
-            message = await ws.recv()
-            if "PRIVMSG" in message:
-                # Extract username and message from the raw message string
-                username = message.split('!', 1)[0][1:]
-                chat_message = message.split('PRIVMSG', 1)[1].split(':', 1)[1]
-                print(f"[{channel_name}] {username}: {chat_message}")
-            elif "PING" in message:
-                await ws.send("PONG :tmi.twitch.tv")
+    def __init__(self):
+        # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
+        # prefix can be a callable, which returns a list of strings or a string...
+        # initial_channels can also be a callable which returns a list of strings...
+        super().__init__(token='ACCESS_TOKEN', prefix='?', initial_channels=['...'])
 
-async def main():
-    tasks = [join_channel(channel) for channel in CHANNELS]
-    await asyncio.gather(*tasks)
+    async def event_ready(self):
+        # Notify us when everything is ready!
+        # We are logged in and ready to chat and use commands...
+        print(f'Logged in as | {self.nick}')
+        print(f'User id is | {self.user_id}')
 
-if __name__ == '__main__':
-    asyncio.run(main())
+    async def event_message(self, message):
+        # Messages with echo set to True are messages sent by the bot...
+        # For now we just want to ignore them...
+        if message.echo:
+            return
+
+        # Print the contents of our message to console...
+        print(message.content)
+
+        # Since we have commands and are overriding the default `event_message`
+        # We must let the bot know we want to handle and invoke our commands...
+        await self.handle_commands(message)
+
+    @commands.command()
+    async def hello(self, ctx: commands.Context):
+        # Here we have a command hello, we can invoke our command with our prefix and command name
+        # e.g ?hello
+        # We can also give our commands aliases (different names) to invoke with.
+
+        # Send a hello back!
+        # Sending a reply back to the channel is easy... Below is an example.
+        await ctx.send(f'Hello {ctx.author.name}!')
+
+
+bot = Bot()
+bot.run()
