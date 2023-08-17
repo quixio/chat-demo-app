@@ -34,7 +34,12 @@ class Bot(commands.Bot):
 
         self.on_message_handler(user=user, message=msg_content, channel=channel)
 
-    async def get_connected_offline_channels(self):
-        channel_names = [channel.name for channel in self.connected_channels]
-        x = await self.fetch_streams(user_logins=channel_names)
-        print(x)
+    async def part_offline_channels(self):
+        connected_channel_names = [channel.name for channel in self.connected_channels]
+        live_channels = await self.fetch_streams(user_logins=connected_channel_names, type='live')
+        live_channel_names = [stream.user.name for stream in live_channels]
+        offline_channel_names = list(set(connected_channel_names) - set(live_channel_names))
+
+        await self.part_channels(offline_channel_names)
+
+        print(f'Parted from channels: {offline_channel_names}')
