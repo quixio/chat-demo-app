@@ -83,7 +83,7 @@ deployments:
 # This section describes the Topics of the data pipeline
 topics:
   - name: count
-    persisted: false
+    persisted: true
     configuration:
       partitions: 2
       replicationFactor: 2
