@@ -24,7 +24,7 @@ async def join_channels_in_batches():
     while True:
         print(f"Connected channels: {len(bot.connected_channels)}")  
         await bot.join_top_streams_in_batches(desired_streams_to_join)
-        await asyncio.sleep(5)  # Wait for 30 minutes
+        await asyncio.sleep(1800)  # Wait for 30 minutes
         await bot.part_offline_channels()
         
 twitch_token = os.environ["TwitchBotToken"]
