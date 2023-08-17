@@ -5,14 +5,11 @@ from twitch_api import get_top_streams, get_live_streams_by_users
 
 
 class Bot(commands.Bot):
-
+    
     def __init__(self, token: str, on_ready_handler, on_message_handler):
-        # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
-        # prefix can be a callable, which returns a list of strings or a string...
-        # initial_channels can also be a callable which returns a list of strings...
         self.on_message_handler = on_message_handler 
         self.on_ready_handler = on_ready_handler
-        super().__init__(token=token, prefix='!')
+        super().__init__(token=token)
 
     async def event_ready(self):
         # Notify us when everything is ready!
