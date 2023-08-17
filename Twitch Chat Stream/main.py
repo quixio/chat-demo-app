@@ -23,7 +23,8 @@ def publish_chat_message(user: str, message: str, channel: str, role: str = "Cus
     stream_producer = topic_producer.get_or_create_stream(channel)
     stream_producer.timeseries.publish(timeseries_data)
 
+def join_channels():
+    
 
-print(f"Joining {len(channels_to_join)} channels")
-bot = Bot(token=twitch_token, channels_to_join=channels_to_join, on_message_handler=publish_chat_message)
+bot = Bot(token=twitch_token, on_ready_handler=join_channels, on_message_handler=publish_chat_message)
 bot.run()
