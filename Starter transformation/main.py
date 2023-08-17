@@ -14,14 +14,10 @@ def on_data_released(stream_consumer: qx.StreamConsumer, data: qx.TimeseriesData
     timeseries_data = qx.TimeseriesData()
 
     timeseries_data \
-        .add_timestamp_nanoseconds(parameter.timestamp) \
-        .add_value("chat-message", "I am a happy person") \
-        .add_tags({"room": "nova", "name": "Bota_new", "draft_id": "12345"})
-
-    stream.timeseries.buffer.publish(timeseries_data)
-    stream_producer.timeseries \
-        .add_value("count", len(data.timestamps)) \
-        .publish()
+        .add_timestamp_nanoseconds(data.timestamps[0].timestamp_nanoseconds) \
+        .add_value("count", len(data.timestamps))
+    
+    stream_producer.publish(timeseries_data)
     print(len(data.timestamps))
 
 
