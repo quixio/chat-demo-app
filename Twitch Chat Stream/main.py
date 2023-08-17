@@ -6,9 +6,6 @@ from twitch_bot import Bot
 from twitch_api import get_top_streams
 
 
-twitch_token = os.environ["TwitchBotToken"]
-channels_to_join = get_top_streams(limit=50)
-
 client = qx.QuixStreamingClient()
 
 print(f"Opening producer topic: {os.environ['Topic']}")
@@ -25,6 +22,7 @@ def publish_chat_message(user: str, message: str, channel: str, role: str = "Cus
     stream_producer.timeseries.publish(timeseries_data)
 
 async def join_channels_in_batches():
+    channels_to_join = get_top_streams(limit=100)
     while True:  
         for i in range(0, len(channels_to_join), 20):
             batch = channels_to_join[i:i + 20]
@@ -35,6 +33,6 @@ async def join_channels_in_batches():
         await asyncio.sleep(1800)  # Wait for 30 minutes before the next cycle
 
     
-
+twitch_token = os.environ["TwitchBotToken"]
 bot = Bot(token=twitch_token, on_ready_handler=join_channels_in_batches, on_message_handler=publish_chat_message)
 bot.run()
