@@ -22,7 +22,8 @@ def publish_chat_message(user: str, message: str, channel: str, role: str = "Cus
     stream_producer.timeseries.publish(timeseries_data)
 
 async def join_channels_in_batches():
-    while True:  
+    while True:
+        print(f"Connected channels: {len(bot.connected_channels)}")  
         await bot.join_top_streams_in_batches(desired_streams_to_join)
         await asyncio.sleep(5)  # Wait for 30 minutes
         await bot.part_offline_channels()
