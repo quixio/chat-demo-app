@@ -34,41 +34,40 @@ def publish_chat_message(user: str, message: str, channel: str, role: str = "Cus
     stream_producer.timeseries.publish(timeseries_data)
 
 
-def connect_to_twitch():
-    server = 'irc.chat.twitch.tv'
-    port = 6667
-    s = socket.socket()
-    
-    # Connect to the server
-    s.connect((server, port))
+def on_message(ws, message):
+    data = json.loads(message)
+    if data['type'] == 'MESSAGE':
+        channel = data['data']['channel_name']
+        user = data['data']['from_broadcaster_user']['display_name']
+        msg = data['data']['text']
+        print(f"[{channel}] {user}: {msg}")
 
-    # Send authentication commands to the server
-    s.send(f"PASS {twitch_oauth}\r\n".encode('utf-8'))
-    s.send(f"NICK {twitch_nickname}\r\n".encode('utf-8'))
-    s.send(f"JOIN #{twitch_channel_name}\r\n".encode('utf-8'))
+        publish_chat_message(user=user, message=msg, channel=channel)
 
+def on_open(ws):
     for channel in twitch_channels_to_join:
-        s.send(f"JOIN {channel}\r\n".encode('utf-8'))
+        ws.send(json.dumps({
+            "type": "LISTEN",
+            "nonce": "noncename",  # you can replace this with any unique string
+            "data": {
+                "topics": [f"channel-points-channel-v1.{channel}", f"chat_moderator_actions.{channel}", f"whispers.{channel}"],
+                "auth_token": twitch_oauth  # Replace with your OAuth token
+            }
+        }))
 
-    return s
+    print("Connection opened!")
 
+def on_error(ws, error):
+    print(error)
 
-s = connect_to_twitch()
+def on_close(ws, close_status_code, close_msg):
+    print("### closed ###")
 
-try:
-    while True:
-        resp = s.recv(2048).decode('utf-8')
+websocket.enableTrace(True)
+ws = websocket.WebSocketApp("wss://irc-ws.chat.twitch.tv/",
+                            on_message=on_message,
+                            on_error=on_error,
+                            on_close=on_close,
+                            on_open=on_open)
 
-        # Respond to Twitch's Ping messages with Pong to maintain the connection
-        if resp.startswith('PING'):
-            s.send("PONG\n".encode('utf-8'))
-
-        # Extract nickname and message from chat
-        elif 'PRIVMSG' in resp:
-            nickname = resp.split('!', 1)[0][1:]
-            message = resp.split('PRIVMSG', 1)[1].split(':', 1)[1]
-            channel = resp.split('PRIVMSG')[1].split(' :', 1)[0].strip()
-            publish_chat_message(user=nickname, message=message.strip(), channel=channel)
-except KeyboardInterrupt:
-    s.close()
-    print("\nConnection closed!")
+ws.run_forever()
