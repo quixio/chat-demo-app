@@ -53,6 +53,6 @@ def get_top_streams(limit: int = 50):
 
 def get_live_streams_by_users(user_logins: List[str]):
     oauth_token = get_oauth_token(CLIENT_ID, CLIENT_SECRET)
-    live_streams = _get_top_streams(oauth_token, user_logins)
+    live_streams = _get_live_streams_by_users(oauth_token, user_logins)
 
     return [stream["user_login"] for stream in live_streams]
