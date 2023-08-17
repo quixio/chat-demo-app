@@ -4,7 +4,7 @@ import json
 
 NICK = 'your_twitch_username'
 TOKEN = 'oauth:your_twitch_oauth_token'  # Use https://twitchapps.com/tmi/ to get your OAuth token
-CHANNELS = ['channel1', 'channel2']  # List of channels you want to join
+CHANNELS = ['thijs']  # List of channels you want to join
 
 async def join_channel(channel_name):
     uri = f"wss://irc-ws.chat.twitch.tv:443"
