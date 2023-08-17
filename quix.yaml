@@ -104,7 +104,7 @@ deployments:
         inputType: FreeText
         description: number of channels you intend to join, but with the added twist that channels are dynamically connected/disconnected based on their online status
         required: true
-        value: 40
+        value: 100
   - name: Message counter
     application: Starter transformation
     deploymentType: Service
