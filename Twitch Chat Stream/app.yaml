@@ -6,11 +6,6 @@ variables:
     description: Name of the output topic to write into
     defaultValue: messages
     required: true
-  - name: TwitchChannel
-    inputType: FreeText
-    description: Twitch channel name
-    defaultValue: nmplol
-    required: true
   - name: TwitchNickname
     inputType: FreeText
     description: Needed for auth
