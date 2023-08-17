@@ -21,6 +21,11 @@ variables:
     description: ''
     defaultValue: ifb1km2w404mtcbh2s7moewiud77bs
     required: true
+  - name: ChannelJoinCount
+    inputType: FreeText
+    description: number of channels you intend to join, but with the added twist that channels are dynamically connected/disconnected based on their online status
+    defaultValue: 100
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
