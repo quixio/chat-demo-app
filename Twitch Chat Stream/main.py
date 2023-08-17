@@ -2,6 +2,8 @@ import os
 import time
 import quixstreams as qx
 from twitch_bot import Bot
+from twitch_api import 
+
 
 twitch_token = os.environ["TwitchToken"]
 channels_to_join = ["xQc", "ElMariana", "PaymoneyWubby", "rivers_gg", "Rubius", "eliasn97", "sneakylol", "Caedrel", "Becca", "Fextralife", "k3soju", "ratirl"]
