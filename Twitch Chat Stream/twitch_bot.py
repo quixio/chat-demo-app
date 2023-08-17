@@ -14,8 +14,6 @@ class Bot(commands.Bot):
     async def event_ready(self):
         # Notify us when everything is ready!
         # We are logged in and ready to chat and use commands...
-        print(f'Logged in as | {self.nick}')
-        print(f'User id is | {self.user_id}')
         await self.on_ready_handler()
 
     async def event_message(self, message: twitchio.Message):
@@ -45,19 +43,15 @@ class Bot(commands.Bot):
         for i in range(0, len(channels_to_join), 20):
             batch = channels_to_join[i:i + 20]
             
-            #print(f"Joining channels: {batch}")
+            print(f"Joining channels: {batch}")
             await self.join_channels(batch)
             await asyncio.sleep(11)  # Wait for 11 seconds between batches
 
     async def part_offline_channels(self):
         joined_channel_names = [channel.name for channel in self.connected_channels]
         live_channel_names = get_live_streams_by_users(joined_channel_names)
-
-        print(f"connected channel names {joined_channel_names}")
-        print(f"live channel names {live_channel_names}")
-
+        
         offline_channel_names = list(set(joined_channel_names) - set(live_channel_names))
-
         await self.part_channels(offline_channel_names)
 
         print(f'Parted from {len(offline_channel_names)} channels: {offline_channel_names}')
