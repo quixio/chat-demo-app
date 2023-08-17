@@ -73,7 +73,7 @@ deployments:
         inputType: FreeText
         description: Needed for auth
         required: true
-        value: ' '
+        value: ' quixdemo'
       - name: TwitchOauth
         inputType: FreeText
         description: Needed for auth
