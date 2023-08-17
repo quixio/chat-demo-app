@@ -1,5 +1,6 @@
 import os
 import requests
+from typings import List
 
 CLIENT_ID = os.environ["TwitchAppClientId"]
 CLIENT_SECRET = os.environ["TwitchAppClientSecret"]
@@ -27,6 +28,18 @@ def _get_top_streams(oauth_token: str, limit: int):
     }
     params = {
         'first': limit,
+        'type': 'live'
+    }
+    response = requests.get(f"{BASE_URL}streams", headers=headers, params=params)
+    return response.json().get('data', [])
+
+def _get_live_streams_from_users(oauth_token: str, user_logins: List[str]):
+    headers = {
+        **HEADERS,
+        'Authorization': f"Bearer {oauth_token}"
+    }
+    params = {
+        'user_login': user_logins,
         'type': 'live'
     }
     response = requests.get(f"{BASE_URL}streams", headers=headers, params=params)
