@@ -10,7 +10,7 @@ topic_producer = client.get_topic_producer(os.environ["output"])
 
 def on_data_released(stream_consumer: qx.StreamConsumer, data: qx.TimeseriesData):
     stream_producer = topic_producer.get_or_create_stream(stream_id = "count")
-    stream_producer.timeseries.add_timestamp_nanoseconds(data.timestamps[0].timestamp_nanoseconds) \
+    stream_producer.timeseries \
         .add_value("count", len(data.timestamps)) \
         .publish()
     print(len(data.timestamps))
