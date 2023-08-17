@@ -24,5 +24,6 @@ def publish_chat_message(user: str, message: str, channel: str, role: str = "Cus
     stream_producer.timeseries.publish(timeseries_data)
 
 
+print(f"Joining {len(channels_to_join)} channels")
 bot = Bot(token=twitch_token, channels_to_join=channels_to_join, on_message_handler=publish_chat_message)
 bot.run()
