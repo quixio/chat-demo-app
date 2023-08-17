@@ -2,7 +2,7 @@ import os
 import time
 import quixstreams as qx
 from twitch_bot import Bot
-from twitch_api import 
+from twitch_api import main
 
 
 twitch_token = os.environ["TwitchToken"]
