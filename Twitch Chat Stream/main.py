@@ -1,3 +1,4 @@
+import twitchio
 from twitchio.ext import commands
 
 
@@ -15,14 +16,14 @@ class Bot(commands.Bot):
         print(f'Logged in as | {self.nick}')
         print(f'User id is | {self.user_id}')
 
-    async def event_message(self, message):
+    async def event_message(self, message: twitchio.Message):
         # Messages with echo set to True are messages sent by the bot...
         # For now we just want to ignore them...
         if message.echo:
             return
 
         # Print the contents of our message to console...
-        print(message.content)
+        print(message.content, message.author.name, message.channel.name)
 
         # Since we have commands and are overriding the default `event_message`
         # We must let the bot know we want to handle and invoke our commands...
