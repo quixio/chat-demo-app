@@ -10,10 +10,8 @@ class Bot(commands.Bot):
         # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
         # prefix can be a callable, which returns a list of strings or a string...
         # initial_channels can also be a callable which returns a list of strings...
-        self.on_message_handler = on_message_handler
-        print(f"Joining {len(channels_to_join)} channels")
+        self.on_message_handler = on_message_handler 
         super().__init__(token=token, prefix='!', initial_channels=channels_to_join)
-        print("Joined")
 
     async def event_ready(self):
         # Notify us when everything is ready!
