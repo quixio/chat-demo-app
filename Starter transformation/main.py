@@ -10,6 +10,15 @@ topic_producer = client.get_topic_producer(os.environ["output"])
 
 def on_data_released(stream_consumer: qx.StreamConsumer, data: qx.TimeseriesData):
     stream_producer = topic_producer.get_or_create_stream(stream_id = "count")
+    
+    timeseries_data = qx.TimeseriesData()
+
+    timeseries_data \
+        .add_timestamp_nanoseconds(parameter.timestamp) \
+        .add_value("chat-message", "I am a happy person") \
+        .add_tags({"room": "nova", "name": "Bota_new", "draft_id": "12345"})
+
+    stream.timeseries.buffer.publish(timeseries_data)
     stream_producer.timeseries \
         .add_value("count", len(data.timestamps)) \
         .publish()
