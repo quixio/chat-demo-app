@@ -8,6 +8,8 @@ twitch_channel_name = os.environ["TwitchChannel"]
 twitch_nickname = os.environ["TwitchNickname"]
 twitch_oauth = os.environ["TwitchToken"]
 
+twitch_channels_to_join = ["xQc", "ElMariana", "PaymoneyWubby", "rivers_gg", "Rubius", "eliasn97", "sneakylol", "Caedrel", "Becca", "Fextralife"]
+
 # Quix Platform injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
 client = qx.QuixStreamingClient()
@@ -53,6 +55,9 @@ def connect_to_twitch():
     s.send(f"PASS {twitch_oauth}\r\n".encode('utf-8'))
     s.send(f"NICK {twitch_nickname}\r\n".encode('utf-8'))
     s.send(f"JOIN #{twitch_channel_name}\r\n".encode('utf-8'))
+
+    for channel in twitch_channels_to_join:
+        s.send(f"JOIN #{channel}\r\n".encode('utf-8'))
 
     return s
 
