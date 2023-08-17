@@ -1,8 +1,8 @@
 import quixstreams as qx
 import time
 import os
-import socket
-
+import json
+import websocket
 
 twitch_channel_name = os.environ["TwitchChannel"]
 twitch_nickname = os.environ["TwitchNickname"]
