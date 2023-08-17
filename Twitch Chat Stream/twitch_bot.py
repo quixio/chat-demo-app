@@ -1,6 +1,7 @@
 import asyncio
 import twitchio
 from twitchio.ext import commands
+from twitch_api import get_top_streams
 
 
 class Bot(commands.Bot):
