@@ -36,17 +36,7 @@ class Bot(commands.Bot):
 
         self.on_message_handler(user=user, message=msg_content, channel=channel)
 
-    async def part_offline_channels(self):
-        joined_channel_names = [channel.name for channel in self.connected_channels]
-        live_channels = await self.fetch_streams(user_logins=joined_channel_names, type='live')
-        live_channel_names = [stream.user.name for stream in live_channels]
-        offline_channel_names = list(set(joined_channel_names) - set(live_channel_names))
-
-        await self.part_channels(offline_channel_names)
-
-        print(f'Parted from channels: {offline_channel_names}')
-
-
+    # Joining top streams in batches of 20 because of joining rate limit
     async def join_top_streams_in_batches(self, desired_streams_to_join: int):
         top_live_channel_names = get_top_streams(limit=desired_streams_to_join)
 
@@ -58,3 +48,13 @@ class Bot(commands.Bot):
             print(f"Joining channels: {batch}")
             await self.join_channels(batch)
             await asyncio.sleep(11)  # Wait for 11 seconds between batches
+
+    async def part_offline_channels(self):
+        joined_channel_names = [channel.name for channel in self.connected_channels]
+        live_channels = await self.fetch_streams(user_logins=joined_channel_names, type='live')
+        live_channel_names = [stream.user.name for stream in live_channels]
+        offline_channel_names = list(set(joined_channel_names) - set(live_channel_names))
+
+        await self.part_channels(offline_channel_names)
+
+        print(f'Parted from channels: {offline_channel_names}')
