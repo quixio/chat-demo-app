@@ -26,13 +26,13 @@ class Bot(commands.Bot):
             return
 
         user=message.author.name
-        message=message.content
+        msg_content=message.content
         channel=message.channel.name
 
         if not user or not message or not channel:
             return
 
-        self.on_message_handler(user=user, message=message, channel=channel)
+        self.on_message_handler(user=user, message=msg_content, channel=channel)
 
     async def event_join(self, channel: twitchio.Channel, user: twitchio.User):
         print(f"Joined channel: {channel.name}")
