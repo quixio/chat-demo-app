@@ -4,7 +4,7 @@ import os
 
 client = qx.QuixStreamingClient()
 
-topic_consumer = client.get_topic_consumer(os.environ["input"], consumer_group = "counter", auto_offset_reset=qx.AutoOffsetReset.Earliest)
+topic_consumer = client.get_topic_consumer(os.environ["input"], consumer_group = "counter", auto_offset_reset=qx.AutoOffsetReset.Latest)
 topic_producer = client.get_topic_producer(os.environ["output"])
 
 
