@@ -67,7 +67,8 @@ try:
         elif 'PRIVMSG' in resp:
             nickname = resp.split('!', 1)[0][1:]
             message = resp.split('PRIVMSG', 1)[1].split(':', 1)[1]
-            publish_chat_message(user=nickname, message=message.strip())
+            channel = resp.split('PRIVMSG')[1].split(' :', 1)[0].strip()
+            publish_chat_message(user=nickname, message=message.strip(), channel=channel)
 except KeyboardInterrupt:
     s.close()
     print("\nConnection closed!")
