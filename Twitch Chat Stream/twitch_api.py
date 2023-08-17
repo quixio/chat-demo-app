@@ -2,8 +2,8 @@ import os
 import requests
 import json
 
-CLIENT_ID = 'elqo0jjhhzxyat9mhtniuowdj0tipj'
-CLIENT_SECRET = 'ifb1km2w404mtcbh2s7moewiud77bs'
+CLIENT_ID = os.environ["TwitchAppClientId"]
+CLIENT_SECRET = os.environ["TwitchAppClientSecret"]
 BASE_URL = 'https://api.twitch.tv/helix/'
 
 HEADERS = {
