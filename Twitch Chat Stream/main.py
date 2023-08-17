@@ -6,6 +6,7 @@ from twitch_bot import Bot
 from twitch_api import get_top_streams
 
 
+channel_join_count = os.environ["ChannelJoinCount"]
 client = qx.QuixStreamingClient()
 
 print(f"Opening producer topic: {os.environ['Topic']}")
@@ -34,6 +35,7 @@ async def join_channels_in_batches():
             await bot.part_offline_channels()
         
         await asyncio.sleep(1800)  # Wait for 30 minutes before the next cycle
+        
 
     
 twitch_token = os.environ["TwitchBotToken"]
