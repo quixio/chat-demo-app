@@ -48,7 +48,7 @@ class Bot(commands.Bot):
 
 
     async def join_top_streams_in_batches(self, desired_streams_to_join: int):
-        top_live_channel_names = # get top live streams from twitch api
+        top_live_channel_names = get_top_streams(limit=desired_streams_to_join)
 
         joined_channel_names = [channel.name for channel in self.connected_channels]
         channels_to_join = list(set(top_live_channel_names) - set(joined_channel_names))
