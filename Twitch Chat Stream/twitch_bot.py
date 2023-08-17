@@ -54,9 +54,7 @@ class Bot(commands.Bot):
 
     async def part_offline_channels(self):
         joined_channel_names = [channel.name for channel in self.connected_channels]
-        live_channels = get_live_streams_by_users(joined_channel_names)
-
-        live_channel_names = [stream.user.channel.name for stream in live_channels]
+        live_channels_names = get_live_streams_by_users(joined_channel_names)
 
         print(f"connected channel names {joined_channel_names}")
         print(f"live channel names {live_channel_names}")
