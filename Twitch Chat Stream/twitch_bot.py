@@ -24,6 +24,8 @@ class Bot(commands.Bot):
         if message.echo:
             return
 
+        print("timestamp: " + message.timestamp)
+
         user=message.author.name
         message=message.content
         channel=message.channel.name
