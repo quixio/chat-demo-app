@@ -25,20 +25,18 @@ class Bot(commands.Bot):
         if message.echo:
             return
 
-        # Print the contents of our message to console...
-        # print(message.content, message.author.name, message.channel.name)
         self.on_message_handler(user=message.author.name, message=message.content, channel=message.channel.name)
 
         # Since we have commands and are overriding the default `event_message`
         # We must let the bot know we want to handle and invoke our commands...
-        await self.handle_commands(message)
+        #await self.handle_commands(message)
 
-    @commands.command()
-    async def hello(self, ctx: commands.Context):
-        # Here we have a command hello, we can invoke our command with our prefix and command name
-        # e.g ?hello
-        # We can also give our commands aliases (different names) to invoke with.
+    # @commands.command()
+    # async def hello(self, ctx: commands.Context):
+    #     # Here we have a command hello, we can invoke our command with our prefix and command name
+    #     # e.g ?hello
+    #     # We can also give our commands aliases (different names) to invoke with.
 
-        # Send a hello back!
-        # Sending a reply back to the channel is easy... Below is an example.
-        await ctx.send(f'Hello {ctx.author.name}!')
+    #     # Send a hello back!
+    #     # Sending a reply back to the channel is easy... Below is an example.
+    #     await ctx.send(f'Hello {ctx.author.name}!')
