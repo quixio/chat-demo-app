@@ -52,7 +52,7 @@ deployments:
   - name: Twitch Chat Stream
     application: Twitch Chat Stream
     deploymentType: Service
-    version: 80ac718b67bf2542629470264d7c28a557203bfc
+    version: d2750854f03cd2fb6d27587e77f52ec1ef17a319
     resources:
       cpu: 2000
       memory: 1100
@@ -73,7 +73,7 @@ deployments:
         inputType: FreeText
         description: Needed for auth
         required: true
-        value: quixdemo
+        value: ' '
       - name: TwitchOauth
         inputType: FreeText
         description: Needed for auth
