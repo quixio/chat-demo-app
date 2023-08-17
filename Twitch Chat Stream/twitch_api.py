@@ -1,6 +1,5 @@
 import os
 import requests
-import json
 
 CLIENT_ID = os.environ["TwitchAppClientId"]
 CLIENT_SECRET = os.environ["TwitchAppClientSecret"]
