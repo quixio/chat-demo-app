@@ -24,7 +24,14 @@ class Bot(commands.Bot):
         if message.echo:
             return
 
-        self.on_message_handler(user=message.author.name, message=message.content, channel=message.channel.name)
+        user=message.author.name
+        message=message.content
+        channel=message.channel.name
+
+        if not user or not message or not channel:
+            return
+
+        self.on_message_handler(user=user, message=message, channel=channel)
 
         # Since we have commands and are overriding the default `event_message`
         # We must let the bot know we want to handle and invoke our commands...
