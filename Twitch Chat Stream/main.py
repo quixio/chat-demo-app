@@ -23,7 +23,8 @@ class Bot(commands.Bot):
             return
 
         # Print the contents of our message to console...
-        print(message.content, message.author.name, message.channel.name)
+        # print(message.content, message.author.name, message.channel.name)
+        print(f"Message from {message.author.name}: {message.content}")
 
         # Since we have commands and are overriding the default `event_message`
         # We must let the bot know we want to handle and invoke our commands...
