@@ -6,7 +6,7 @@ import socket
 
 twitch_channel_name = os.environ["TwitchChannel"]
 twitch_nickname = os.environ["TwitchNickname"]
-twitch_oauth = os.environ["TwitchOauth"]
+twitch_oauth = os.environ["TwitchToken"]
 
 # Quix Platform injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
