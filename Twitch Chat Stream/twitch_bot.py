@@ -1,4 +1,3 @@
-from typing import List
 import twitchio
 from twitchio.ext import commands
 
@@ -26,8 +25,6 @@ class Bot(commands.Bot):
         if message.echo:
             return
 
-        print("timestamp: " + message.timestamp)
-
         user=message.author.name
         message=message.content
         channel=message.channel.name
@@ -40,5 +37,5 @@ class Bot(commands.Bot):
     async def event_join(self, channel: twitchio.Channel, user: twitchio.User):
         print(f"Joined channel: {channel.name}")
 
-    async def event_join(self, user: twitchio.User):
+    async def event_part(self, user: twitchio.User):
         print(f"Parted user: {user.name}")
