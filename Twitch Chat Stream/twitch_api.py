@@ -35,4 +35,4 @@ def get_top_streams(limit: int = 50):
     oauth_token = get_oauth_token(CLIENT_ID, CLIENT_SECRET)
     top_streams = get_top_streams(oauth_token)
 
-    return [stream.get("user_name") for stream in top_streams]
+    return [stream["user_name"] for stream in top_streams]
