@@ -68,7 +68,7 @@ deployments:
         inputType: FreeText
         description: Twitch channel name
         required: true
-        value: tarik
+        value: k3soju
       - name: TwitchNickname
         inputType: FreeText
         description: Needed for auth
