@@ -35,16 +35,8 @@ class Bot(commands.Bot):
 
         self.on_message_handler(user=user, message=message, channel=channel)
 
-        # Since we have commands and are overriding the default `event_message`
-        # We must let the bot know we want to handle and invoke our commands...
-        #await self.handle_commands(message)
+    async def event_join(self, channel: twitchio.Channel, user: twitchio.User):
+        print(f"Joined channel: {channel.name}")
 
-    # @commands.command()
-    # async def hello(self, ctx: commands.Context):
-    #     # Here we have a command hello, we can invoke our command with our prefix and command name
-    #     # e.g ?hello
-    #     # We can also give our commands aliases (different names) to invoke with.
-
-    #     # Send a hello back!
-    #     # Sending a reply back to the channel is easy... Below is an example.
-    #     await ctx.send(f'Hello {ctx.author.name}!')
+    async def event_join(self, user: twitchio.User):
+        print(f"Parted user: {user.name}")
