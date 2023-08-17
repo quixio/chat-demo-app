@@ -34,7 +34,7 @@ class Bot(commands.Bot):
 
         self.on_message_handler(user=user, message=msg_content, channel=channel)
 
-    def get_connected_offline_channels(self):
+    async def get_connected_offline_channels(self):
         channel_names = [channel.name for channel in self.connected_channels]
-        x = self.fetch_streams(user_logins=channel_names)
+        x = await self.fetch_streams(user_logins=channel_names)
         print(x)
