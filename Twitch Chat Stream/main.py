@@ -3,10 +3,9 @@ import time
 import asyncio
 import quixstreams as qx
 from twitch_bot import Bot
-from twitch_api import get_top_streams
 
 
-channel_join_count = os.environ["ChannelJoinCount"]
+desired_streams_to_join = os.environ["ChannelJoinCount"]
 client = qx.QuixStreamingClient()
 
 print(f"Opening producer topic: {os.environ['Topic']}")
@@ -24,17 +23,10 @@ def publish_chat_message(user: str, message: str, channel: str, role: str = "Cus
 
 # Joining 100 top streams in batches of 20 because of joining rate limit
 async def join_channels_in_batches():
-
-    channels_to_join = get_top_streams(limit=100)
     while True:  
-        for i in range(0, len(channels_to_join), 20):
-            batch = channels_to_join[i:i + 20]
-            print(f"Joining channels: {batch}")
-            await bot.join_channels(batch)
-            await asyncio.sleep(11)  # Wait for 11 seconds between batches
-            await bot.part_offline_channels()
-        
-        await asyncio.sleep(1800)  # Wait for 30 minutes before the next cycle
+        await bot.join_top_streams_in_batches(desired_streams_to_join)
+        await asyncio.sleep(1800)  # Wait for 30 minutes
+        await bot.part_offline_channels()
         
 
     
