@@ -18,7 +18,7 @@ class Bot(commands.Bot):
         # We are logged in and ready to chat and use commands...
         print(f'Logged in as | {self.nick}')
         print(f'User id is | {self.user_id}')
-        self.on_ready_handler()
+        await self.on_ready_handler()
 
     async def event_message(self, message: twitchio.Message):
         # Messages with echo set to True are messages sent by the bot...
