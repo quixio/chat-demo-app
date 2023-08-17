@@ -4,11 +4,10 @@ import quixstreams as qx
 from twitch_bot import Bot
 from twitch_api import get_top_streams
 
-print("started")
 print(get_top_streams())
-print("ended")
+
 twitch_token = os.environ["TwitchToken"]
-channels_to_join = ["xQc", "ElMariana", "PaymoneyWubby", "rivers_gg", "Rubius", "eliasn97", "sneakylol", "Caedrel", "Becca", "Fextralife", "k3soju", "ratirl"]
+channels_to_join = get_top_streams()
 
 client = qx.QuixStreamingClient()
 
