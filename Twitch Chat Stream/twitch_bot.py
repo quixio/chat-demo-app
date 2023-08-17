@@ -33,9 +33,3 @@ class Bot(commands.Bot):
             return
 
         self.on_message_handler(user=user, message=msg_content, channel=channel)
-
-    async def event_join(self, channel: twitchio.Channel, user: twitchio.User):
-        print(f"Joined channel: {channel.name}")
-
-    async def event_part(self, user: twitchio.User):
-        print(f"Parted user: {user.name}")
