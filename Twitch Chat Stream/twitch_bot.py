@@ -3,7 +3,6 @@ import twitchio
 from twitchio.ext import commands
 
 
-
 class Bot(commands.Bot):
 
     def __init__(self, token: str, channels_to_join: List[str], on_message_handler):
