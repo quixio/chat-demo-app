@@ -6,10 +6,11 @@ from twitchio.ext import commands
 
 class Bot(commands.Bot):
 
-    def __init__(self, token: str, channels_to_join: List[str]):
+    def __init__(self, token: str, channels_to_join: List[str], on_message_handler):
         # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
         # prefix can be a callable, which returns a list of strings or a string...
         # initial_channels can also be a callable which returns a list of strings...
+        self.on_message_handler = on_message_handler
         super().__init__(token=token, prefix='!', initial_channels=channels_to_join)
 
     async def event_ready(self):
@@ -26,6 +27,7 @@ class Bot(commands.Bot):
 
         # Print the contents of our message to console...
         # print(message.content, message.author.name, message.channel.name)
+        self.on_message_handler(message.content, message.author.name, message.channel.name)
         print(f"Message from {message.author.name}: {message.content}")
 
         # Since we have commands and are overriding the default `event_message`
