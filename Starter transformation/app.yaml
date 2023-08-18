@@ -1,6 +1,11 @@
 name: Message counter
 language: python
-variables: []
+variables:
+  - name: Topic
+    inputType: InputTopic
+    description: ''
+    defaultValue: messages
+    required: false
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
