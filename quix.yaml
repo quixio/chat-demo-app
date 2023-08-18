@@ -110,8 +110,8 @@ deployments:
     deploymentType: Service
     version: 30e91cddd9a26a65c1598fddfb61cca201e2812b
     resources:
-      cpu: 200
-      memory: 500
+      cpu: 1000
+      memory: 1000
       replicas: 1
     desiredStatus: Running
     variables:
