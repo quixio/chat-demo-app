@@ -41,7 +41,7 @@ class Bot(commands.Bot):
         channels_to_join = list(set(top_live_channel_names) - set(joined_channel_names))
 
         max_streams_to_join = streams_to_join - len(joined_channel_names)
-        print(f"Total channels to join: {len(max_streams_to_join)}")
+        print(f"Total channels to join: {max_streams_to_join}")
 
         for i in range(0, len(channels_to_join[:max_streams_to_join]), 20):
             batch = channels_to_join[i:i + 20]
