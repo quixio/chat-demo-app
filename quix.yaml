@@ -108,7 +108,7 @@ deployments:
   - name: Message counter
     application: Starter transformation
     deploymentType: Service
-    version: 449a52cde06acf2d66fc11d07445bd91b4836314
+    version: 30e91cddd9a26a65c1598fddfb61cca201e2812b
     resources:
       cpu: 200
       memory: 500
