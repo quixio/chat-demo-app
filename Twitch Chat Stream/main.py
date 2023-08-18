@@ -17,7 +17,7 @@ def publish_chat_message(user: str, message: str, channel: str, role: str = "Cus
         .add_value("chat-message", message) \
         .add_tags({"room": "channel", "name": user, "role": role})
 
-    stream_producer = topic_producer.get_or_create_stream("TEST_ROOM")
+    stream_producer = topic_producer.get_or_create_stream(channel)
     stream_producer.timeseries.publish(timeseries_data)
 
 async def join_channels_in_batches():
