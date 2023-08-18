@@ -13,7 +13,7 @@ def on_data_released(stream_consumer: qx.StreamConsumer, data: qx.TimeseriesData
     stream_producer.timeseries.buffer.add_timestamp_nanoseconds(data.timestamps[0].timestamp_nanoseconds) \
         .add_value("count", len(data.timestamps)) \
         .publish()
-    print(str(data.timestamps[0].timestamp_milliseconds) + " - " + str(data.timestamps[-1].timestamp_milliseconds))
+    print(str(data.timestamps[0].timestamp_milliseconds) + " - " + str(data.timestamps[-1].timestamp_milliseconds) + " count: " + str(len(data.timestamps)))
 
 
 
