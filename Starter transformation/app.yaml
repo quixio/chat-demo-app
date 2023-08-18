@@ -1,11 +1,6 @@
 name: Message counter
 language: python
 variables:
-  - name: Topic
-    inputType: InputTopic
-    description: ''
-    defaultValue: messages
-    required: false
   - name: output
     inputType: OutputTopic
     description: ''
