@@ -47,7 +47,7 @@ class Bot(commands.Bot):
             
             print(f"Joining channels {len(batch)}: {batch}")
             await self.join_channels(batch)
-            await asyncio.sleep(11)  # Wait for 11 seconds between batches
+            await asyncio.sleep(15)  # Wait for 15 seconds between batches
 
     async def part_offline_channels(self):
         joined_channel_names = [channel.name for channel in self.connected_channels]
