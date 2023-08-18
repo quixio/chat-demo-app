@@ -20,6 +20,22 @@ def publish_chat_message(user: str, message: str, channel: str, role: str = "Cus
     stream_producer = topic_producer.get_or_create_stream(channel)
     stream_producer.timeseries.publish(timeseries_data)
 
+    timeseries_data = qx.TimeseriesData()
+    timeseries_data \
+        .add_timestamp_nanoseconds(time.time_ns()) \
+        .add_value("chat-message", message) \
+        .add_tags({"room": "channel", "name": user, "role": role})
+
+    stream_producer.timeseries.publish(timeseries_data)
+
+    timeseries_data = qx.TimeseriesData()
+    timeseries_data \
+        .add_timestamp_nanoseconds(time.time_ns()) \
+        .add_value("chat-message", message) \
+        .add_tags({"room": "channel", "name": user, "role": role})
+
+    stream_producer.timeseries.publish(timeseries_data)
+
 async def join_channels_in_batches():
     while True:
         print(f"Connected channels: {len(bot.connected_channels)}")  
