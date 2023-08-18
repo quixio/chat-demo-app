@@ -9,14 +9,15 @@ topic_consumer = client.get_topic_consumer(os.environ["input"], consumer_group =
 topic_producer = client.get_topic_producer(os.environ["output"])
 
 messages_received_accross_all_streams = 0
-
-def on_data_released(stream_consumer: qx.StreamConsumer, data: qx.TimeseriesData):
-    global messages_received_accross_all_streams
-    messages_received_accross_all_streams = messages_received_accross_all_streams + len(data.timestamps)
     
 def on_stream_received_handler(stream_consumer: qx.StreamConsumer):
+    def on_data_released(stream_consumer: qx.StreamConsumer, data: qx.TimeseriesData):
+        global messages_received_accross_all_streams
+        messages_received_accross_all_streams += len(data.timestamps)
+
     buffer = stream_consumer.timeseries.create_buffer()
     buffer.on_data_released = on_data_released
+
 
 def publish_count_every_second():
     global messages_received_accross_all_streams
