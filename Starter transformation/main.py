@@ -1,33 +1,41 @@
 import quixstreams as qx
 import os
-from tqdm import tqdm
+import threading
+import time
 
 client = qx.QuixStreamingClient()
 
 topic_consumer = client.get_topic_consumer(os.environ["input"], consumer_group = "counter", auto_offset_reset=qx.AutoOffsetReset.Latest)
 topic_producer = client.get_topic_producer(os.environ["output"])
 
+messages_received_accross_all_streams = 0
 
 def on_data_released(stream_consumer: qx.StreamConsumer, data: qx.TimeseriesData):
-    stream_producer = topic_producer.get_or_create_stream(stream_id = "count")
-    stream_producer.timeseries.buffer.add_timestamp_nanoseconds(data.timestamps[0].timestamp_nanoseconds) \
-        .add_value("count", len(data.timestamps)) \
-        .publish()
-    bar.update()
-    print(str(data.timestamps[0].timestamp_milliseconds) + " - " + str(data.timestamps[-1].timestamp_milliseconds) + " count: " + str(len(data.timestamps)))
-
-
-
+    global messages_received_accross_all_streams
+    messages_received_accross_all_streams =+ 1
+    
 def on_stream_received_handler(stream_consumer: qx.StreamConsumer):
     buffer = stream_consumer.timeseries.create_buffer()
     buffer.on_data_released = on_data_released
 
+def publish_count_every_second():
+    global messages_received_accross_all_streams
+    while True:
+        stream_producer = topic_producer.get_or_create_stream(stream_id = "count")
+        stream_producer.timeseries.buffer.add_timestamp_nanoseconds(time.time_ns()) \
+            .add_value("count", messages_received_accross_all_streams) \
+            .publish()
+        messages_received_accross_all_streams = 0
+        time.sleep(1)
+
+# Create a new thread that will execute the print_message function
+t = threading.Thread(target=publish_count_every_second)
 
 # subscribe to new streams being received
 topic_consumer.on_stream_received = on_stream_received_handler
 
-
-bar = tqdm(desc="Receiving messages")
+# Start the new thread
+t.start()
 
 # Handle termination signals and provide a graceful exit
 qx.App.run()
