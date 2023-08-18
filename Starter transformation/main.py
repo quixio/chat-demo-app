@@ -21,11 +21,14 @@ def on_stream_received_handler(stream_consumer: qx.StreamConsumer):
 def publish_count_every_second():
     global messages_received_accross_all_streams
     while True:
+        total_msgs = messages_received_accross_all_streams
+        messages_received_accross_all_streams = 0
+        
         stream_producer = topic_producer.get_or_create_stream(stream_id = "count")
         stream_producer.timeseries.buffer.add_timestamp_nanoseconds(time.time_ns()) \
-            .add_value("count", messages_received_accross_all_streams) \
+            .add_value("count", total_msgs) \
             .publish()
-        messages_received_accross_all_streams = 0
+        print("count: " + str(total_msgs))
         time.sleep(1)
 
 # Create a new thread that will execute the print_message function
