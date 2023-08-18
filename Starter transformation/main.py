@@ -13,7 +13,6 @@ messages_received_accross_all_streams = 0
 def on_data_released(stream_consumer: qx.StreamConsumer, data: qx.TimeseriesData):
     global messages_received_accross_all_streams
     messages_received_accross_all_streams = messages_received_accross_all_streams + len(data.timestamps)
-    print("new msg")
     
 def on_stream_received_handler(stream_consumer: qx.StreamConsumer):
     buffer = stream_consumer.timeseries.create_buffer()
