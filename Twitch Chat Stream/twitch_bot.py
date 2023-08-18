@@ -34,15 +34,15 @@ class Bot(commands.Bot):
         self.on_message_handler(user=user, message=msg_content, channel=channel)
 
     # Joining top streams in batches of 20 because of joining rate limit
-    async def join_top_streams_in_batches(self, desired_streams_to_join: int):
-        top_live_channel_names = get_top_streams(limit=desired_streams_to_join)
+    async def join_top_streams_in_batches(self, streams_to_join: int):
+        top_live_channel_names = get_top_streams(limit=streams_to_join)
 
         joined_channel_names = [channel.name for channel in self.connected_channels]
         channels_to_join = list(set(top_live_channel_names) - set(joined_channel_names))
 
-        print(f"Total channels to join: {len(channels_to_join)}")
+        max_streams_to_join = streams_to_join - len(joined_channel_names)
 
-        for i in range(0, len(channels_to_join), 20):
+        for i in range(0, len(channels_to_join[:max_streams_to_join]), 20):
             batch = channels_to_join[i:i + 20]
             
             print(f"Joining channels {len(batch)}: {batch}")
