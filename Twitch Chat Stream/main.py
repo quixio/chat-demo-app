@@ -23,7 +23,7 @@ def publish_chat_message(user: str, message: str, channel: str, role: str = "Cus
 async def join_channels_in_batches():
     while True:
         print(f"Connected channels: {len(bot.connected_channels)}")  
-        await bot.join_top_streams_in_batches(streams_to_join_count)
+        await bot.join_top_streams_in_batches(int(streams_to_join_count))
         await asyncio.sleep(900)  # Wait for 15 minutes
         await bot.part_offline_channels()
         await asyncio.sleep(10)  # Wait for 10 seconds
