@@ -26,21 +26,21 @@ def on_stream_received_handler(stream_consumer: qx.StreamConsumer):
 # subscribe to new streams being received
 topic_consumer.on_stream_received = on_stream_received_handler
 
-print("Listening to streams. Press CTRL-C to exit.")
+# print("Listening to streams. Press CTRL-C to exit.")
 
-import threading
-import time
+# import threading
+# import time
 
-def print_message():
-    while True:
-        print("Hello, this is a non-blocking message!")
-        time.sleep(1)
+# def print_message():
+#     while True:
+#         print("Hello, this is a non-blocking message!")
+#         time.sleep(1)
 
-# Create a new thread that will execute the print_message function
-t = threading.Thread(target=print_message)
+# # Create a new thread that will execute the print_message function
+# t = threading.Thread(target=print_message)
 
-# Start the new thread
-t.start()
+# # Start the new thread
+# t.start()
 
 # Handle termination signals and provide a graceful exit
 qx.App.run()
