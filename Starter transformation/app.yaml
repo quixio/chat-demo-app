@@ -11,6 +11,11 @@ variables:
     description: ''
     defaultValue: count
     required: false
+  - name: input
+    inputType: InputTopic
+    description: ''
+    defaultValue: messages
+    required: false
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
