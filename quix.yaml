@@ -32,7 +32,7 @@ deployments:
   - name: Sentiment analysis
     application: Sentiment analysis
     deploymentType: Service
-    version: 680a7bd7e2fc7735ed0bb49576b19725ab927a41
+    version: 4913203559e26522915defa1be49f4e638dbd07d
     resources:
       cpu: 2000
       memory: 2000
