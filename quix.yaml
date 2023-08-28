@@ -50,6 +50,47 @@ deployments:
         description: This is the output for the Hugging Face model score
         required: true
         value: sentiment
+  - name: BigQuery Journeys
+    application: BigQuery
+    deploymentType: Service
+    version: 60676192adc1253a00a05c3e1aa05923b62db296
+    resources:
+      cpu: 200
+      memory: 200
+      replicas: 1
+    desiredStatus: Stopped
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic
+        required: true
+        value: user-journeys
+      - name: PROJECT_ID
+        inputType: FreeText
+        description: The BigQuery GCP Project ID
+        required: true
+        value: chatapp-396214
+      - name: DATASET_ID
+        inputType: FreeText
+        description: The target BigQuery dataset ID
+        required: true
+        value: chatapp
+      - name: DATASET_LOCATION
+        inputType: FreeText
+        description: Location of BigQuery dataset
+        required: true
+        value: europe-west3
+      - name: SERVICE_ACCOUNT_JSON
+        inputType: HiddenText
+        description: JSON string of the service account file for the BigQuery GCP project
+        required: true
+        value: {{ big_query_token }}
+      - name: MAX_QUEUE_SIZE
+        inputType: FreeText
+        description: Max queue size for the sink ingestion
+        required: true
+        value: 50
+
 
 # This section describes the Topics of the data pipeline
 topics:
