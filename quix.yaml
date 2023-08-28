@@ -135,13 +135,6 @@ topics:
       replicationFactor: 2
       retentionInMinutes: 2460
       retentionInBytes: 52428800
-  - name: sentiment
-    persisted: false
-    configuration:
-      partitions: 16
-      replicationFactor: 2
-      retentionInMinutes: 60
-      retentionInBytes: 39845888
   - name: count
     persisted: true
     configuration:
