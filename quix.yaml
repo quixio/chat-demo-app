@@ -32,11 +32,11 @@ deployments:
   - name: Sentiment analysis
     application: Sentiment analysis
     deploymentType: Service
-    version: bccbfa0ef540ad547ce8bb5c87f9db4ee819486e
+    version: 680a7bd7e2fc7735ed0bb49576b19725ab927a41
     resources:
       cpu: 2000
       memory: 2000
-      replicas: 2
+      replicas: 8
     desiredStatus: Stopped
     variables:
       - name: input
