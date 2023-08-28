@@ -37,7 +37,6 @@ deployments:
       cpu: 1000
       memory: 2000
       replicas: 1
-    libraryItemId: g207b9ff-3d52-4adb-b99f-e5e46b2642e9
     desiredStatus: Running
     variables:
       - name: input
@@ -53,7 +52,7 @@ deployments:
   - name: BigQuery Journeys
     application: BigQuery
     deploymentType: Service
-    version: v1
+    version: 89affc2eed64029f036906fe9edbc5b002cb73a9
     resources:
       cpu: 200
       memory: 200
@@ -64,7 +63,7 @@ deployments:
         inputType: InputTopic
         description: This is the input topic
         required: true
-        value: user-journeys
+        value: sentiment
       - name: PROJECT_ID
         inputType: FreeText
         description: The BigQuery GCP Project ID
@@ -84,24 +83,23 @@ deployments:
         inputType: HiddenText
         description: JSON string of the service account file for the BigQuery GCP project
         required: true
-        value: {{ BIG_QUERY_SERVIS_ACCOUNT_JSON }}
+        value: '{   "type": "service_account",   "project_id": "portalanalytics-391408",   "private_key_id": "8c76547ad83e25e58b8bb2a7fd0be7ec45e58239",   "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCPoSRWgg/7H//F\nlDyx4b7vlcqjXtL63ef0r+ugbiuT4SeY2SP7TNPU2EcBkvRdBZu0HwDK+wxheQpb\netV+COe8nSYdSqLcKQ3g8LdXkso6WjV6DVIBnxpk8/q+MHs6btVMagYOSCl5hysj\nFheLldplTQIM54xzh+V4lMI5/g/2VH5m0AveWTuFD6JX8Ge2U++bIvLBKd1EIJXb\n8GsCudLSl/7X9RI0ZJ/rKcaOnPqqIrwLnHTKBynkNKcbdzTSNEazuBPLJyzIDfis\nAarXitBRC5LzTURClANNbSwyC3f5CeguxqzLJ7n7/6YMS3f9sygzLZUSbUab0Sx+\nfNEXBpThAgMBAAECggEANrSAFCj2sEX4U8dJtNDQOg26AC6SOjXB7ssAenrrwyfb\nPpbZ4xHYjvWPWfSgeTu1Gc5DLYygIxIIlV48KYR3yzmptjdiv2stm5LjqgnBV6db\nPfEL3o08bt4Uj1ME5HUpbbDmPJNUpLKMhhEYh7RcWgASO1sH/krw5lP2hEMVzlK/\nNRBWL0W98uo1lnUfugBVqlDhQ4+dyq3Ax+V0jsIxggsGi7jdC9E/Zd2HTssUZmS+\nJi3GrFcHB6h+t/Qf0WrzniJ2SvzuDGyV8+eeNfrQRAbZvQXoJQ1m7K4fFvkgpgMr\nz/aCMFYOknUdOfzFvFrq4IspHTu9Qru654FGhLaP3wKBgQDEBB1T6MI3VxPF8zmn\n06CWQNsCrC3j9MyMC8/KR6Teb1ro1SItQM0TfzvwLI+SKkTrU32C7h0o8HJ3pyqy\nPvl+5VmJ5YwAv+ijoy3f5buJ8/UwpZSG0wCqAlyxPCTqJoiHlRYEi/49RLLZDw7P\nCL4HwvGYu4QGp546QVYjHUrPQwKBgQC7lRBZ+A/zTAbMduZ9Bti0POsPfv6Yge4O\nHSAi1BaJUzK9+laLk1ft+9q/53X9W4NqSQAHunPWedUP+tNi56B8oVnFPMiB4nME\nFJmpZuj6fi6DXpyHmoVv4snCO3Kyu0CRUbI8LDozLowePVx/LweF8g6Q+QFlq3xL\nVWtp5x5PCwKBgQCTfckXlz90ZqgxPbf3aU0fYgOpuib5rPywsD6VJV2QJdgQ9Da4\nOFdXQVi3esA5Kmcbb4I0n7j/UhW/pOCCqNIRQsAh+8Bh3AVQA/wDyhhYUGIBTcY5\nwNFyGz7l+ayJJ5957ZtYpoISVfwBScxJynk629vwocBRRZTQntMSrvrYgwKBgQCo\nszrtbwcJTEqhAB3yO4IRNuhAG3plNhUeZFtOd2d9QXHVIZtME8t0oJjvFf8rSG47\n3ENGsA0VyqQvpukNfjr7WzEdDblV9o5yEQTRMVg+T9UNGL21xuZS5aeGI2jYDUfY\naZzeOPhup2IkoBLb3zPo5vTqtMbo5Pz3026y48SCWQKBgCVUS+qA3IhNWbRxOK0m\n5uGVYpFicXwAHMxXnbPaM+3cp4V11qLsdIsGn7axdlhQ0nXbYU9ul8bmev1Fi8aP\nEWTPawmQZ5k9ZyAlU5Fib0rvsta/BUKNjL1lFlYe+Eu7Nv98wELk/nK+R5v8TC3Y\nE1mrY2YH+dJKCpmbeWLWD8vD\n-----END PRIVATE KEY-----\n",   "client_email": "quixsink@portalanalytics-391408.iam.gserviceaccount.com",   "client_id": "109042871583538764595",   "auth_uri": "https://accounts.google.com/o/oauth2/auth",   "token_uri": "https://oauth2.googleapis.com/token",   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/quixsink%40portalanalytics-391408.iam.gserviceaccount.com",   "universe_domain": "googleapis.com" }'
       - name: MAX_QUEUE_SIZE
         inputType: FreeText
         description: Max queue size for the sink ingestion
         required: true
         value: 50
 
-
 # This section describes the Topics of the data pipeline
 topics:
-  - name: sentiment
+  - name: messages
     persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
-  - name: messages
+  - name: sentiment
     persisted: false
     configuration:
       partitions: 2
