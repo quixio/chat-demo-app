@@ -53,7 +53,7 @@ deployments:
   - name: BigQuery Journeys
     application: BigQuery
     deploymentType: Service
-    version: 60676192adc1253a00a05c3e1aa05923b62db296
+    version: v1
     resources:
       cpu: 200
       memory: 200
