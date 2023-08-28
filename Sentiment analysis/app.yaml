@@ -9,7 +9,7 @@ variables:
   - name: output
     inputType: OutputTopic
     description: This is the output for the Hugging Face model score
-    defaultValue: sentiment
+    defaultValue: count
     required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
