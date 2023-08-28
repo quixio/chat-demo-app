@@ -35,8 +35,8 @@ deployments:
     version: 4913203559e26522915defa1be49f4e638dbd07d
     resources:
       cpu: 2000
-      memory: 2000
-      replicas: 8
+      memory: 4100
+      replicas: 4
     desiredStatus: Stopped
     variables:
       - name: input
