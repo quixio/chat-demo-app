@@ -129,7 +129,7 @@ deployments:
 # This section describes the Topics of the data pipeline
 topics:
   - name: sentiment
-    persisted: false
+    persisted: true
     configuration:
       partitions: 16
       replicationFactor: 2
