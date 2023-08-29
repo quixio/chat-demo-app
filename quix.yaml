@@ -102,6 +102,36 @@ deployments:
         description: This is the output topic to write data to
         required: true
         value: count
+  - name: Twitch Chat
+    application: Twitch Chat
+    deploymentType: Service
+    version: 17a33717fb2989226755492645be7e5baa43f260
+    resources:
+      cpu: 2000
+      memory: 1000
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: Topic
+        inputType: OutputTopic
+        description: Name of the output topic to write messages into
+        required: true
+        value: messages
+      - name: TwitchBotToken
+        inputType: HiddenText
+        description: Needed for auth
+        required: true
+        value: oauth:01qiyvmqb86s8tw18bovr81i52xerr
+      - name: TwitchAppClientId
+        inputType: HiddenText
+        description: ''
+        required: true
+        value: elqo0jjhhzxyat9mhtniuowdj0tipj
+      - name: TwitchAppClientSecret
+        inputType: HiddenText
+        description: ''
+        required: true
+        value: ifb1km2w404mtcbh2s7moewiud77bs
 
 # This section describes the Topics of the data pipeline
 topics:
