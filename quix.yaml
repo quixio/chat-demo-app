@@ -135,6 +135,13 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
+  - name: messages
+    persisted: false
+    configuration:
+      partitions: 16
+      replicationFactor: 2
+      retentionInMinutes: 120
+      retentionInBytes: 104857600
   - name: count
     persisted: false
     configuration:
