@@ -16,6 +16,11 @@ variables:
     description: Name of the output topic to write messages into
     defaultValue: messages
     required: true
+  - name: TwitchBotToken
+    inputType: HiddenText
+    description: Needed for auth
+    defaultValue: oauth:01qiyvmqb86s8tw18bovr81i52xerr
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
