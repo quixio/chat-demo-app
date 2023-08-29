@@ -26,6 +26,11 @@ variables:
     description: ''
     defaultValue: elqo0jjhhzxyat9mhtniuowdj0tipj
     required: true
+  - name: TwitchAppClientSecret
+    inputType: HiddenText
+    description: ''
+    defaultValue: ifb1km2w404mtcbh2s7moewiud77bs
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
