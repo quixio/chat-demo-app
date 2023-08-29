@@ -56,7 +56,7 @@ deployments:
     resources:
       cpu: 2000
       memory: 1100
-      replicas: 8
+      replicas: 1
     libraryItemId: 7abe02e1-1e75-4783-864c-46b930b42afe
     desiredStatus: Running
     variables:
