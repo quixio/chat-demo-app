@@ -21,6 +21,11 @@ variables:
     description: Needed for auth
     defaultValue: oauth:01qiyvmqb86s8tw18bovr81i52xerr
     required: true
+  - name: TwitchAppClientId
+    inputType: HiddenText
+    description: ''
+    defaultValue: elqo0jjhhzxyat9mhtniuowdj0tipj
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
