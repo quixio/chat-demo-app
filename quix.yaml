@@ -37,7 +37,6 @@ deployments:
     state:
       enabled: true
       size: 1
-    libraryItemId: g207b9ff-3d52-4adb-b99f-e5e46b2642e9
     desiredStatus: Running
     variables:
       - name: input
@@ -86,21 +85,7 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: drafts_sentiment
-    persisted: false
-    configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 262144000
-  - name: drafts
-    persisted: false
-    configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 262144000
-  - name: messages
+  - name: count
     persisted: false
     configuration:
       partitions: 2
@@ -114,3 +99,24 @@ topics:
       replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
+  - name: messages
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: 60
+      retentionInBytes: 52428800
+  - name: drafts
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 262144000
+  - name: drafts_sentiment
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 262144000
