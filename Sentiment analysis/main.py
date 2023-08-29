@@ -26,8 +26,11 @@ def read_stream(consumer_stream: qx.StreamConsumer):
     # handle the data in a function to simplify the example
     quix_function = QuixFunction(consumer_stream, producer_stream, classifier)
 
+    buffer = consumer_stream.timeseries.create_buffer()
+    buffer.time_span_in_milliseconds = 200
+
     # React to new data received from input topic.
-    consumer_stream.timeseries.on_dataframe_received = quix_function.on_dataframe_handler
+    buffer.on_dataframe_released = quix_function.on_dataframe_handler
 
     # When input stream closes, we close output stream as well. 
     def on_stream_close(stream_consumer: qx.StreamConsumer, end_type: qx.StreamEndType):
