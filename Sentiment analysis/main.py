@@ -28,6 +28,7 @@ def read_stream(consumer_stream: qx.StreamConsumer):
 
     buffer = consumer_stream.timeseries.create_buffer()
     buffer.time_span_in_milliseconds = 200
+    buffer.buffer_timeout = 200
 
     # React to new data received from input topic.
     buffer.on_dataframe_released = quix_function.on_dataframe_handler
