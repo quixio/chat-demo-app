@@ -88,8 +88,8 @@ deployments:
     deploymentType: Service
     version: bigquery-v1
     resources:
-      cpu: 200
-      memory: 200
+      cpu: 1000
+      memory: 1000
       replicas: 1
     desiredStatus: Running
     variables:
