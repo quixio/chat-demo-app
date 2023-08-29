@@ -11,6 +11,11 @@ variables:
     description: This is the output topic to write data to
     defaultValue: output-topic
     required: true
+  - name: Topic
+    inputType: OutputTopic
+    description: Name of the output topic to write messages into
+    defaultValue: messages
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
