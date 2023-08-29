@@ -1,5 +1,8 @@
 /** Describes parameter data for multiple timestamps */
 export interface ParameterData {
+	/** Topic Id source of the generated the package */
+	topicId: string;
+
 	/** Topic Name source of the generated the package */
 	topicName: string;
 
