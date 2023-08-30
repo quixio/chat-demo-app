@@ -8,7 +8,7 @@ from twitch_bot import Bot
 streams_to_join_count = 100 # Current max is 100 duo to API limitations, can be increased with additional work
 client = qx.QuixStreamingClient()
 
-topic_producer = client.get_topic_producer(os.environ["Topic"])
+topic_producer = client.get_topic_producer(os.environ["output"])
 
 def publish_chat_message(user: str, message: str, channel: str, role: str = "Customer"):
     timeseries_data = qx.TimeseriesData()
