@@ -1,4 +1,6 @@
-# Hugging Face model
+# Sentiment analysis - Hugging Face model
+
+Calculates sentiment of chat messages
 
 [This project](https://github.com/quixio/quix-samples/tree/main/python/transformations/Sentiment-Analysis) generates a prediction with a [Hugging Face](https://huggingface.co/) model: 
 - It listens to the input topic for input data to predict on.
