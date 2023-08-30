@@ -1,19 +1,13 @@
-# Sample template
+# Message counter
 
-[This project](https://github.com/quixio/quix-samples/tree/main/python/empty) is a template for developing Quix Code Samples with Python.
-
-## How to run
-
-Create a [Quix](https://portal.platform.quix.ai/self-sign-up?xlink=github) account or log-in and visit the Samples to use this project.
-
-Clicking `Edit code` on the Sample, forks the project to your own Git repo so you can customize it before deploying.
+Counts total messages sent per second accross all streams (message keys)
 
 ## Environment variables
 
 This project uses the following environment variables:
 
 - **input**: {This is the input topic to read data from}
-- **output**: {Description of the variable}
+- **output**: {This is the output topic to write data to}
 
 ## Requirements/prerequisites (optional)
 
