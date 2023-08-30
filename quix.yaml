@@ -82,26 +82,6 @@ deployments:
         description: ''
         required: false
         value: drafts_sentiment
-  - name: Messages Counter
-    application: Messages Counter
-    deploymentType: Service
-    version: 17f4dd6aead1944c33bbcdbead33d2474ee9e181
-    resources:
-      cpu: 1000
-      memory: 1500
-      replicas: 1
-    desiredStatus: Stopped
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: This is the input topic to read data from
-        required: true
-        value: messages
-      - name: output
-        inputType: OutputTopic
-        description: This is the output topic to write data to
-        required: true
-        value: count
   - name: Twitch Chat
     application: Twitch Chat
     deploymentType: Service
