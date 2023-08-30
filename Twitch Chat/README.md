@@ -6,7 +6,7 @@ Twitch chat integration that reads messages from Top 100 active twitch channels 
 
 This code sample uses the following environment variables:
 
-- **Topic**: {Description of the variable}
+- **Topic**: {Name of the output topic to write messages into}
 - **input**: {Description of the variable}
 - **output**: {Description of the variable}
 
