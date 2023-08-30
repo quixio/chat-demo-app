@@ -12,7 +12,7 @@ Clicking `Edit code` on the Sample, forks the project to your own Git repo so yo
 
 This project uses the following environment variables:
 
-- **input**: {zDescription of the variable}
+- **input**: {This is the input topic to read data from}
 - **output**: {Description of the variable}
 
 ## Requirements/prerequisites (optional)
