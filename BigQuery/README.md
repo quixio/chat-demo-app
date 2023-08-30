@@ -23,7 +23,7 @@ The code sample uses the following environment variables:
 
 ## Known limitations 
 - BigQuery fails to immediately recognize new Schema changes such as adding a new field when streaming insert data.
-- BigQuery doesn't allow deleting data when streaming insert data.
+- BigQuery doesn't allow data deletion while streaming inserts are ongoing.
 
 ## Contribute
 
