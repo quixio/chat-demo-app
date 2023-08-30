@@ -10,10 +10,9 @@ Clicking `Edit code` on the Sample, forks the project to your own Git repo so yo
 
 ## Environment variables
 
-This code sample uses the following environment variables:
+This project uses the following environment variables:
 
-- **VariableName**: {Description of the variable}
-- **input**: {Description of the variable}
+- **input**: {zDescription of the variable}
 - **output**: {Description of the variable}
 
 ## Requirements/prerequisites (optional)
