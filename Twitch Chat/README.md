@@ -1,18 +1,12 @@
-# Sample template
+# Twitch chat
 
-[This project](https://github.com/quixio/quix-samples/tree/main/python/empty) is a template for developing Quix Code Samples with Python.
-
-## How to run
-
-Create a [Quix](https://portal.platform.quix.ai/self-sign-up?xlink=github) account or log-in and visit the Samples to use this project.
-
-Clicking `Edit code` on the Sample, forks the project to your own Git repo so you can customize it before deploying.
+Twitch chat integration that reads messages from Top 100 active twitch channels and sinks them to kafka stream.
 
 ## Environment variables
 
 This code sample uses the following environment variables:
 
-- **VariableName**: {Description of the variable}
+- **Topic**: {Description of the variable}
 - **input**: {Description of the variable}
 - **output**: {Description of the variable}
 
