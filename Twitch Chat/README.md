@@ -9,7 +9,7 @@ This code sample uses the following environment variables:
 - **output**: {Name of the output topic to write messages into}
 - **TwitchBotToken**: {Twitch Bot token needed for reading messages from channels}
 - **TwitchAppClientId**: {Twitch App client id - needed for calling Twitch API}
-- **TwitchAppClientSecret**: {Description of the variable}
+- **TwitchAppClientSecret**: {Twitch App client secret - needed for calling Twitch API}
 
 ## Requirements/prerequisites (optional)
 
