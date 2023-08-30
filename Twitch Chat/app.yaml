@@ -13,7 +13,7 @@ variables:
     required: true
   - name: TwitchAppClientId
     inputType: HiddenText
-    description: ''
+    description: Twitch App client id - needed for calling Twitch API
     defaultValue: elqo0jjhhzxyat9mhtniuowdj0tipj
     required: true
   - name: TwitchAppClientSecret
