@@ -35,7 +35,7 @@ class QuixFunction:
         logger.debug("on_committing done")
 
 
-    # Callback triggered for each new parameter data.
+    # Callback triggered for each new time-series data.
     def on_data_handler(self, stream: qx.StreamConsumer, data: qx.TimeseriesData):
 
         self.mutex.acquire()
