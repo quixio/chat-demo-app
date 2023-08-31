@@ -83,6 +83,46 @@ deployments:
         description: ''
         required: false
         value: drafts_sentiment
+  - name: BigQuery Journeys
+    application: BigQuery
+    deploymentType: Service
+    version: bigquery-v1
+    resources:
+      cpu: 1000
+      memory: 1000
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic
+        required: true
+        value: sentiment
+      - name: PROJECT_ID
+        inputType: FreeText
+        description: The BigQuery GCP Project ID
+        required: true
+        value: chatapp-396214
+      - name: DATASET_ID
+        inputType: FreeText
+        description: The target BigQuery dataset ID
+        required: true
+        value: chatapp
+      - name: DATASET_LOCATION
+        inputType: FreeText
+        description: Location of BigQuery dataset
+        required: true
+        value: europe-west3
+      - name: SERVICE_ACCOUNT_JSON
+        inputType: HiddenText
+        description: JSON string of the service account file for the BigQuery GCP project
+        required: true
+        value: {{ BIG_QUERY_SERVIS_ACCOUNT_JSON }}
+      - name: MAX_QUEUE_SIZE
+        inputType: FreeText
+        description: Max queue size for the sink ingestion
+        required: true
+        value: 50
 
 # This section describes the Topics of the data pipeline
 topics:
