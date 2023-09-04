@@ -21,6 +21,11 @@ variables:
     description: Twitch App client secret - needed for calling Twitch API
     defaultValue: ifb1km2w404mtcbh2s7moewiud77bs
     required: true
+  - name: StreamsToJoinCount
+    inputType: FreeText
+    description: Number of active stream channel to constantly be connected to
+    defaultValue: 100
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
