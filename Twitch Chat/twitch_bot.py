@@ -27,11 +27,12 @@ class Bot(commands.Bot):
         user=message.author.name
         msg_content=message.content
         channel=message.channel.name
+        timestamp=message.timestamp
 
         if not user or not message or not channel:
             return
 
-        self.on_message_handler(user=user, message=msg_content, channel=channel)
+        self.on_message_handler(user=user, message=msg_content, channel=channel, timestamp=timestamp)
 
     # Joining top streams in batches of 20 because of joining rate limit
     async def join_top_streams_in_batches(self, streams_to_join: int):
