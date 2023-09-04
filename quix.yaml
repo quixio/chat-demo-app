@@ -85,7 +85,7 @@ deployments:
   - name: Twitch Chat
     application: Twitch Chat
     deploymentType: Service
-    version: e48cc9e145446601577164f785bdb8df2e4dca2e
+    version: tc-v1-dev1
     resources:
       cpu: 2000
       memory: 1000
