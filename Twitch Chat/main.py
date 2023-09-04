@@ -1,5 +1,5 @@
 import os
-import time
+import datetime
 import asyncio
 import quixstreams as qx
 from twitch_bot import Bot
@@ -10,7 +10,7 @@ client = qx.QuixStreamingClient()
 
 topic_producer = client.get_topic_producer(os.environ["output"])
 
-def publish_chat_message(user: str, message: str, channel: str, timestamp, role: str = "Customer"):
+def publish_chat_message(user: str, message: str, channel: str, timestamp: datetime, role: str = "Customer"):
     timeseries_data = qx.TimeseriesData()
     timeseries_data \
         .add_timestamp(timestamp) \
