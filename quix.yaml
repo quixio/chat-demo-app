@@ -85,7 +85,7 @@ deployments:
   - name: Twitch Chat
     application: Twitch Chat
     deploymentType: Service
-    version: 17a33717fb2989226755492645be7e5baa43f260
+    version: eb0f9abd66b4ee5722ac734a53243b6728d774d5
     resources:
       cpu: 2000
       memory: 1000
@@ -112,6 +112,16 @@ deployments:
         description: ''
         required: true
         value: ifb1km2w404mtcbh2s7moewiud77bs
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write messages into
+        required: true
+        value: messages
+      - name: StreamsToJoinCount
+        inputType: FreeText
+        description: Number of active stream channel to constantly be connected to
+        required: true
+        value: 100
 
 # This section describes the Topics of the data pipeline
 topics:
