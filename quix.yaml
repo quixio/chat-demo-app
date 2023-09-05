@@ -90,7 +90,7 @@ deployments:
       cpu: 2000
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: TwitchBotToken
         inputType: HiddenText
