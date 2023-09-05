@@ -10,13 +10,27 @@ import { NgChartsModule } from "ng2-charts";
 import { LobbyComponent } from './components/lobby/lobby.component';
 import { MaterialModule } from './material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { InfoComponent } from './components/info/info.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
+import { WebChat2Component } from './components/web-chat2/web-chat2.component';
+import { MessageSourceDropdownComponent } from './components/message-source-dropdown/message-source-dropdown.component';
+import { SentimentChartComponent } from './components/sentiment-chart/sentiment-chart.component';
+import { NewChatroomDialogComponent } from './components/dialogs/new-chatroom-dialog/new-chatroom-dialog.component';
+import { ShareChatroomDialogComponent } from './components/dialogs/share-chatroom-dialog/share-chatroom-dialog.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [
     AppComponent,
     WebchatComponent,
-    LobbyComponent
+    LobbyComponent,
+    InfoComponent,
+    HomePageComponent,
+    WebChat2Component,
+    MessageSourceDropdownComponent,
+    SentimentChartComponent,
+    NewChatroomDialogComponent,
+    ShareChatroomDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,10 +39,10 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
     FormsModule,
     ReactiveFormsModule,
     NgChartsModule,
-    NgxQRCodeModule,
     BrowserAnimationsModule,
     MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    QRCodeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

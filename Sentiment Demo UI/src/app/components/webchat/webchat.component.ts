@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NgxQrcodeElementTypes, NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
 import { Chart, ChartDataset, ChartOptions, Legend, LinearScale, LineController, LineElement, PointElement } from 'chart.js';
 import 'chartjs-adapter-luxon';
 import ChartStreaming, { RealTimeScale } from 'chartjs-plugin-streaming';
@@ -30,8 +29,6 @@ export class WebchatComponent implements OnInit, OnDestroy {
   readerConnectionStatus: ConnectionStatus = ConnectionStatus.Offline;
   writerConnectionStatus: ConnectionStatus = ConnectionStatus.Offline;
 
-  ngxQrcodeElementTypes = NgxQrcodeElementTypes;
-  ngxQrcodeErrorCorrectionLevels = NgxQrcodeErrorCorrectionLevels
   qrValue: string;
 
   messages: MessagePayload[] = [];
@@ -132,7 +129,7 @@ export class WebchatComponent implements OnInit, OnDestroy {
     // Listen for connection status changes
     this.quixService.readerConnStatusChanged$.pipe(takeUntil(this.unsubscribe$)).subscribe((status) => {
       this.readerConnectionStatus = status;
-      if (status === ConnectionStatus.Connected) this.subscribeToParams();
+      // if (status === ConnectionStatus.Connected) this.subscribeToParams();
     });
     this.quixService.writerConnStatusChanged$.pipe(takeUntil(this.unsubscribe$)).subscribe((status) => {
       this.writerConnectionStatus = status
@@ -169,7 +166,7 @@ export class WebchatComponent implements OnInit, OnDestroy {
       }
     };
 
-    this.quixService.sendMessage(this.room, payload, isDraft);
+    this.quixService.sendMessage(payload, isDraft);
   }
 
   private subscribeToParams() {

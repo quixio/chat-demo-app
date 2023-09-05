@@ -1,0 +1,18 @@
+::ng-deep {
+  .mat-menu-item {
+    line-height: unset !important;
+    height: unset !important;
+  }
+
+  .mat-menu-panel {
+    max-width: unset !important;
+  }
+
+  .mat-divider {
+    margin: 8px 0 !important;
+  }
+}
+
+.selected {
+  background-color: rgba(0, 142, 255, 0.10) !important;
+}

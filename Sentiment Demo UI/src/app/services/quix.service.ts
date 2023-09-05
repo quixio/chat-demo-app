@@ -20,9 +20,9 @@ export class QuixService {
 
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
   /*WORKING LOCALLY? UPDATE THESE!*/
-  private workingLocally = false; // set to true if working locally
+  private workingLocally = true; // set to true if working locally
   private token: string = ''; // Create a token in the Tokens menu and paste it here
-  public workspaceId: string = 'demo-chatappdemo-istypingservice'; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
+  public workspaceId: string = 'demo-chatappdemo-newfeui'; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
   public messagesTopic: string = 'messages'; // get topic name from the Topics page
   public draftsTopic: string = 'drafts'; // get topic from the Topics page
   public sentimentTopic: string = 'sentiment'; // get topic name from the Topics page
@@ -54,6 +54,9 @@ export class QuixService {
   private domainRegex = new RegExp(
     "^https:\\/\\/portal-api\\.([a-zA-Z]+)\\.quix\\.ai"
   );
+
+
+  selectedRoom: string;
 
   constructor(private httpClient: HttpClient) {
 
@@ -213,6 +216,26 @@ export class QuixService {
    
   }
 
+  public subscribeToRoom(roomName: string): void {
+    roomName = roomName || 'Quix chatroom';
+    console.log('Subscribing to a room', roomName);
+    // Set in local storage
+    localStorage.setItem('selectedRoom', roomName);
+
+    // Perform room logic
+    this.selectedRoom = roomName;
+
+    this.unsubscribeFromParameter(this.messagesTopic, roomName, "*");
+    this.unsubscribeFromParameter(this.draftsTopic, roomName, "*");
+    this.unsubscribeFromParameter(this.sentimentTopic, roomName, "*");
+    this.unsubscribeFromParameter(this.draftsSentimentTopic, roomName, "*");
+
+    this.subscribeToParameter(this.messagesTopic, roomName, "*");
+    this.subscribeToParameter(this.draftsTopic, roomName, "*");
+    this.subscribeToParameter(this.sentimentTopic, roomName, "*");
+    this.subscribeToParameter(this.draftsSentimentTopic, roomName, "*");
+  }
+
   /**
    * Subscribes to a parameter on the ReaderHub connection so
    * we can listen to changes.
@@ -240,16 +263,15 @@ export class QuixService {
   }
   
   public sendMessage(
-    room: string,
     payload: any,
     isDraft?: boolean
   ) {
     const topic = isDraft ? this.draftsTopic : this.messagesTopic;
-    console.log("QuixService Sending parameter data!", topic, room, payload);
+    console.log("QuixService Sending parameter data!", topic, this.selectedRoom, payload);
     this.writerHubConnection.invoke(
       "SendParameterData",
       topic,
-      room,
+      this.selectedRoom,
       payload
     );
   

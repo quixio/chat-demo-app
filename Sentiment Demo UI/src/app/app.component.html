@@ -11,15 +11,9 @@
             <strong>Sentiment analysis demo</strong>
           </span>
         </div>
-        <div fxLayout="row" fxLayoutAlign="end center">
-          <button mat-raised-button [ngClass.lt-md]="'mat-body-2'" routerLink="/lobby" routerLinkActive
-            #leaveRoom="routerLinkActive" [fxHide]="leaveRoom.isActive">
-            <strong>Leave room</strong>
-          </button>
-        </div>
       </mat-toolbar>
     </header>
-    <main fxFlex [ngStyle.lt-md]="{ 'padding.px': 24 }">
+    <main fxFlex>
       <router-outlet></router-outlet>
     </main>
   </mat-drawer-content>

@@ -1,0 +1,64 @@
+<mat-form-field appearance="outline" [class.mat-focused]="menuTrigger?.menuOpen" 
+  class="w-100 cursor-pointer mb-0 mt-2 p-0" [matMenuTriggerFor]="menu" (menuOpened)="prepareMenu()">
+  <mat-label>Message source</mat-label>
+  <input matInput [value]="selectedRoom" class="pe-none" readonly>
+  <mat-icon matSuffix>{{ menuTrigger?.menuOpen ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
+</mat-form-field>
+
+<mat-menu #menu="matMenu" class="dropdown bg-white">
+  <!-- Title option -->
+	<button
+    mat-menu-item
+    disabled
+    (click)="$event.preventDefault()"
+    class="px-4 py-2">
+    <span class="mat-caption text-uppercase text-muted fw-bold text-truncate">Quix</span>
+  </button>
+
+  <!-- Default Quix Chat Room -->
+  <button mat-menu-item fxLayout="row" fxLayoutAlign="start center" class="bg-white px-4 py-2 fw-bold" [class.selected]="selectedRoom === QuixChatRoom" (click)="changeRoom()">
+    <div fxLayoutAlign="start center" class="rounded-circle overflow-hidden me-2">
+      <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/58a75ce3-3ecd-422a-8c32-d01e07c09eeb-profile_image-70x70.png" height="32">
+    </div>  
+    Quix chatroom
+  </button>
+
+  <!-- Local Storage Chat rooms -->
+  <button mat-menu-item fxLayout="row" fxLayoutAlign="start center" class="bg-white px-4 py-2 fw-bold" *ngFor="let room of storedRooms" [class.selected]="selectedRoom === room" (click)="changeRoom(room)">
+    <div fxLayoutAlign="start center" class="rounded-circle overflow-hidden me-2">
+      <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/58a75ce3-3ecd-422a-8c32-d01e07c09eeb-profile_image-70x70.png" height="32">
+    </div>  
+    {{ room }}
+  </button>
+
+
+  <button mat-menu-item class="bg-white px-4 py-2" (click)="openCreateChatroomDialog()">
+    <a class="mat-body-2 fw-bold text-primary-light">+ New chat room</a>
+  </button>
+
+  <mat-divider class="m-0"></mat-divider>
+  
+  <!-- Title option -->
+  <button
+    mat-menu-item
+    disabled
+    (click)="$event.preventDefault()"
+    class="bg-white py-1">
+    <span class="mat-caption text-uppercase text-muted fw-bold text-truncate">Top twitch channels now</span>
+  </button>
+
+  <cdk-virtual-scroll-viewport itemSize="100" [style.height.px]="200">
+  
+    <button mat-menu-item fxLayout="row" fxLayoutAlign="start center" class="bg-white px-4 py-2" *ngFor="let item of [].constructor(100)"> 
+      <div fxLayoutAlign="start center" class="rounded-circle overflow-hidden me-2">
+        <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/58a75ce3-3ecd-422a-8c32-d01e07c09eeb-profile_image-70x70.png" height="32">
+      </div>
+      <div fxLayout="column">
+        <span class="fw-bold">JohnSmith</span>
+        <span>Blasphemous</span>
+      </div> 
+    </button>
+  </cdk-virtual-scroll-viewport>
+
+
+</mat-menu>

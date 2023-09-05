@@ -1,0 +1,45 @@
+<section fxLayout="column" class="p-5 overflow-visible">
+  <!-- Header -->
+  <div class="mb-5">
+    <div class="mat-h2 m-0">Sentiment analysis</div>
+    <div class="mat-body-2 description fw-normal mb-3">Real-time sentiment analysis demo</div>
+    <div class="mat-h4 fw-normal mb-3">Take the emotional pulse of any conversation with a ML sentiment analysis pipeline built in Quix.</div>
+    <div>
+      <button mat-flat-button color="primary" class="small me-3">Explore the pipeline</button>
+      <button mat-flat-button class="small">
+        <img src="assets/icons/github.png" class="me-1">
+        View repo
+      </button>
+    </div>
+  </div>
+
+  <!-- Realtime messages feed -->
+  <div fxLayout="column" class="mb-5">
+    <div class="mat-h4 mb-2">Realtime messages feed</div>
+    <p class="description">To feed our model, we <a href="">ingest the messages</a> sent by our users from this very same UI. But you can <a href="">customise the code</a> to connect any data source. For instance, try to select a Twitch chat from the following dropdown.</p>
+    <app-message-source-dropdown></app-message-source-dropdown>
+  </div>
+
+    <!-- Sentiment analysis -->
+    <div fxLayout="column" class="mb-5">
+      <div class="mat-h4 mb-2">Sentiment Analysis</div>
+      <p class="description">Sentiment is <a href="">calculated in real time</a> using a huggingface model. Each message is assigned a value between -1 and 1. Then, we use a rolling windown (5 min) to analyse the trend.</p>
+      <app-sentiment-chart [style.height.px]="200"></app-sentiment-chart>
+    </div>
+
+    <!-- Content moderation in realtime -->
+    <div fxLayout="column" class="mb-2">
+      <div class="mat-h4 mb-2">Content moderation in realtime</div>
+      <p class="description">This is a placeholder for now. Explanation of how the model works, and a link to the pipeline.</p>
+    </div>
+
+    <!-- Interested? -->
+    <div>
+      <div class="mat-h4 mb-2">Are you intrigued?</div>
+      <p class="description mb-3">Try Quix for free to build your own pipeline. Or visit other demos to explore what else is possible.</p>
+      <div>
+        <button mat-flat-button color="primary" class="small me-2">Sign up for free</button>
+        <button mat-flat-button class="small">Explore other demos</button>
+      </div>
+    </div>
+</section>
