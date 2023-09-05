@@ -37,7 +37,7 @@ deployments:
     state:
       enabled: true
       size: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -159,27 +159,6 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: sentiment
-    persisted: true
-    configuration:
-      partitions: 16
-      replicationFactor: 2
-      retentionInMinutes: 120
-      retentionInBytes: 10485760
-  - name: messages
-    persisted: false
-    configuration:
-      partitions: 16
-      replicationFactor: 2
-      retentionInMinutes: 120
-      retentionInBytes: 104857600
-  - name: drafts
-    persisted: false
-    configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 262144000
   - name: drafts_sentiment
     persisted: false
     configuration:
@@ -187,3 +166,24 @@ topics:
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 262144000
+  - name: drafts
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 262144000
+  - name: messages
+    persisted: false
+    configuration:
+      partitions: 16
+      replicationFactor: 2
+      retentionInMinutes: 120
+      retentionInBytes: 104857600
+  - name: sentiment
+    persisted: false
+    configuration:
+      partitions: 16
+      replicationFactor: 2
+      retentionInMinutes: 120
+      retentionInBytes: 10485760
