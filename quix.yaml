@@ -9,11 +9,11 @@ deployments:
   - name: Sentiment analysis
     application: Sentiment analysis
     deploymentType: Service
-    version: bccbfa0ef540ad547ce8bb5c87f9db4ee819486e
+    version: sa-v1-dev1
     resources:
-      cpu: 1000
-      memory: 2000
-      replicas: 1
+      cpu: 2000
+      memory: 4000
+      replicas: 4
     desiredStatus: Running
     variables:
       - name: input
@@ -29,7 +29,7 @@ deployments:
   - name: Drafts sentiment analysis
     application: Drafts sentiment analysis
     deploymentType: Service
-    version: 115badbb91fde6f7ddfb8e287e0e8f06ef52f94f
+    version: dsa-v1-dev1
     resources:
       cpu: 2000
       memory: 4000
@@ -37,7 +37,6 @@ deployments:
     state:
       enabled: true
       size: 1
-    libraryItemId: g207b9ff-3d52-4adb-b99f-e5e46b2642e9
     desiredStatus: Running
     variables:
       - name: input
@@ -53,9 +52,9 @@ deployments:
   - name: Sentiment Demo UI
     application: Sentiment Demo UI
     deploymentType: Service
-    version: 47525a5ceb997df93759b703451d359f0755b30d
+    version: f01305d872a62da1ab010102f90823f97884c83a
     resources:
-      cpu: 200
+      cpu: 1000
       memory: 500
       replicas: 1
     publicAccess:
@@ -83,6 +82,41 @@ deployments:
         description: ''
         required: false
         value: drafts_sentiment
+  - name: Twitch Chat
+    application: Twitch Chat
+    deploymentType: Service
+    version: tc-v1-dev1
+    resources:
+      cpu: 2000
+      memory: 1000
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: TwitchBotToken
+        inputType: HiddenText
+        description: Needed for auth
+        required: true
+        value: oauth:01qiyvmqb86s8tw18bovr81i52xerr
+      - name: TwitchAppClientId
+        inputType: HiddenText
+        description: ''
+        required: true
+        value: elqo0jjhhzxyat9mhtniuowdj0tipj
+      - name: TwitchAppClientSecret
+        inputType: HiddenText
+        description: ''
+        required: true
+        value: ifb1km2w404mtcbh2s7moewiud77bs
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write messages into
+        required: true
+        value: messages
+      - name: StreamsToJoinCount
+        inputType: FreeText
+        description: Number of active stream channel to constantly be connected to
+        required: true
+        value: 5
   - name: BigQuery Journeys
     application: BigQuery
     deploymentType: Service
@@ -91,7 +125,7 @@ deployments:
       cpu: 1000
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -117,7 +151,6 @@ deployments:
         inputType: HiddenText
         description: JSON string of the service account file for the BigQuery GCP project
         required: true
-        value: {{ BIG_QUERY_SERVIS_ACCOUNT_JSON }}
       - name: MAX_QUEUE_SIZE
         inputType: FreeText
         description: Max queue size for the sink ingestion
@@ -126,13 +159,20 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: drafts_sentiment
+  - name: sentiment
+    persisted: true
+    configuration:
+      partitions: 16
+      replicationFactor: 2
+      retentionInMinutes: 120
+      retentionInBytes: 10485760
+  - name: messages
     persisted: false
     configuration:
-      partitions: 2
+      partitions: 16
       replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 262144000
+      retentionInMinutes: 120
+      retentionInBytes: 104857600
   - name: drafts
     persisted: false
     configuration:
@@ -140,17 +180,10 @@ topics:
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 262144000
-  - name: messages
+  - name: drafts_sentiment
     persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
-      retentionInMinutes: 60
-      retentionInBytes: 52428800
-  - name: sentiment
-    persisted: false
-    configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: 60
-      retentionInBytes: 52428800
+      retentionInMinutes: -1
+      retentionInBytes: 262144000
