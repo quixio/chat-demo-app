@@ -90,7 +90,7 @@ deployments:
       cpu: 2000
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: TwitchBotToken
         inputType: HiddenText
@@ -151,11 +151,13 @@ deployments:
         inputType: HiddenText
         description: JSON string of the service account file for the BigQuery GCP project
         required: true
+        value: {{ BIG_QUERY_SERVIS_ACCOUNT_JSON }}
       - name: MAX_QUEUE_SIZE
         inputType: FreeText
         description: Max queue size for the sink ingestion
         required: true
         value: 50
+
 
 # This section describes the Topics of the data pipeline
 topics:
