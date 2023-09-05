@@ -92,11 +92,6 @@ deployments:
       replicas: 1
     desiredStatus: Running
     variables:
-      - name: Topic
-        inputType: OutputTopic
-        description: Name of the output topic to write messages into
-        required: true
-        value: messages
       - name: TwitchBotToken
         inputType: HiddenText
         description: Needed for auth
