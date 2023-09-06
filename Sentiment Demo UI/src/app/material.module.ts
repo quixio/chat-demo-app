@@ -14,6 +14,7 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import {ClipboardModule} from '@angular/cdk/clipboard';
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
   exports: [
@@ -31,7 +32,8 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
     MatTooltipModule,
     ScrollingModule,
     MatDialogModule,
-    ClipboardModule
+    ClipboardModule,
+    MatProgressSpinnerModule
   ]
 })
 export class MaterialModule { }

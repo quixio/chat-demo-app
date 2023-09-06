@@ -9,6 +9,7 @@ import { MessagePayload } from 'src/app/models/messagePayload';
 import { ParameterData } from 'src/app/models/parameterData';
 import { ConnectionStatus, QuixService } from '../../services/quix.service';
 import { TitleCasePipe } from '@angular/common';
+import { RoomService } from 'src/app/services/room.service';
 
 export class UserTyping {
   timeout?: Subscription;
@@ -93,7 +94,7 @@ export class WebchatComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject<void>();
 
-  constructor(private quixService: QuixService, private route: ActivatedRoute, private titleCasePipe: TitleCasePipe) {
+  constructor(private quixService: QuixService, private roomService: RoomService, private route: ActivatedRoute, private titleCasePipe: TitleCasePipe) {
     Chart.register(
       LinearScale,
       LineController,
@@ -166,24 +167,7 @@ export class WebchatComponent implements OnInit, OnDestroy {
       }
     };
 
-    this.quixService.sendMessage(payload, isDraft);
-  }
-
-  private subscribeToParams() {
-    this.quixService.subscribeToParameter(this.quixService.messagesTopic, this.room, "*");
-    this.quixService.subscribeToParameter(this.quixService.draftsTopic, this.room, "*");
-    this.quixService.subscribeToParameter(this.quixService.sentimentTopic, this.room, "*");
-    this.quixService.subscribeToParameter(this.quixService.draftsSentimentTopic, this.room, "*");
-
-    let host = window.location.host;
-    this.qrValue = `${window.location.protocol}//${host}/lobby?room=${this.room}`;
-
-    this.quixService.getLastMessages(this.room).subscribe(lastMessage => {
-      this.messages = lastMessage.slice(Math.max(0, lastMessage.length - 20), lastMessage.length);
-
-      const el = this.chatWrapper.nativeElement;
-      setTimeout(() => el.scrollTop = el.scrollHeight);
-    });
+    this.roomService.sendMessage(payload, isDraft);
   }
 
   private messageReceived(payload: ParameterData): void {
@@ -330,10 +314,6 @@ export class WebchatComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-     // Unsubscribe from all the parameters
-     this.quixService.unsubscribeFromParameter(this.quixService.messagesTopic, this.room, "*");
-     this.quixService.unsubscribeFromParameter(this.quixService.draftsTopic ,this.room, "*");
-     this.quixService.unsubscribeFromParameter(this.quixService.sentimentTopic, this.room, "*");
-     this.quixService.unsubscribeFromParameter(this.quixService.draftsSentimentTopic, this.room, "*");
+    
   }
 }

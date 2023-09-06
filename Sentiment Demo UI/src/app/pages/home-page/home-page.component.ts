@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, skip, takeUntil, tap } from 'rxjs';
+import { Subject, filter, skip, switchMap, take, takeUntil, tap } from 'rxjs';
 import { ConnectionStatus, QuixService } from 'src/app/services/quix.service';
+import { RoomService } from 'src/app/services/room.service';
+import { TwitchService } from 'src/app/services/twitch.service';
 
 @Component({
   selector: 'app-home-page',
@@ -10,40 +12,39 @@ import { ConnectionStatus, QuixService } from 'src/app/services/quix.service';
 })
 export class HomePageComponent implements OnInit {
 
+  room: string;
+  isTwitchRoom?: boolean;
   private unsubscribe$ = new Subject<void>();
 
-  constructor(private quixService: QuixService, private route: ActivatedRoute) { }
+  constructor(private roomService: RoomService, private quixService: QuixService, private twitchService: TwitchService,
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.route.queryParams.pipe(
-      tap((params) => {
-        const {room} = params;
-        this.quixService.selectedRoom = room || 'Quix chatroom';
-      }),
-      skip(1),
-      takeUntil(this.unsubscribe$)).subscribe(params => {
-      console.log('PARAMS', params);
-      const {room} = params;
-      this.quixService.subscribeToRoom(room);
+        tap((params) => {
+          const {room, twitchRoom} = params;
+          this.isTwitchRoom = !!twitchRoom;
+          this.room = room || twitchRoom;
+        }),
+        skip(1), 
+        takeUntil(this.unsubscribe$)
+      ).subscribe(() => {
+      this.roomService.switchRoom(this.room, this.isTwitchRoom);
     });
 
      // Listen for connection status changes
      this.quixService.readerConnStatusChanged$.pipe(takeUntil(this.unsubscribe$)).subscribe((status) => {
       if (status === ConnectionStatus.Connected) {
-        console.log('Subscribing');
+        this.roomService.switchRoom(this.room, this.isTwitchRoom);
 
-        this.quixService.subscribeToRoom(this.quixService.selectedRoom);
-        
-        // this.quixService.subscribeToParameter(this.quixService.messagesTopic, 'test', "*");
-        // this.quixService.subscribeToParameter(this.quixService.draftsTopic, 'test', "*");
-        // this.quixService.subscribeToParameter(this.quixService.sentimentTopic, 'test', "*");
-        // this.quixService.subscribeToParameter(this.quixService.draftsSentimentTopic, 'test', "*");
+        this.twitchService.activateStreamsChanged();
+        this.twitchService.subscribeToChannels();
       } 
     });
   }
 
   ngOnDestroy(): void {
-    // this.quixService.unsubscribeFromParameter(this.quixService.sentimentTopic, 'test', "*");
+    this.twitchService.unsubscribeFromChannels();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }

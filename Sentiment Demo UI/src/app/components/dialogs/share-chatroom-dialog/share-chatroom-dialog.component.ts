@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { QuixService } from 'src/app/services/quix.service';
+import { RoomService } from 'src/app/services/room.service';
 
 @Component({
   selector: 'app-share-chatroom-dialog',
@@ -13,12 +14,12 @@ export class ShareChatroomDialogComponent implements OnInit {
   qrValue: string;
 
 
- constructor(@Inject(MAT_DIALOG_DATA) public data: any, private quixService: QuixService,
+ constructor(@Inject(MAT_DIALOG_DATA) public data: any, private roomService: RoomService,
    public dialogRef: MatDialogRef<ShareChatroomDialogComponent>) { }
 
   ngOnInit(): void {
     let host = window.location.host;
-    const url = `${window.location.protocol}//${host}?${this.quixService.selectedRoom}`
+    const url = `${window.location.protocol}//${host}?${this.roomService.selectedRoom}`
     
     this.qrValue = url;
   }

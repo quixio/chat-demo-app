@@ -1,12 +1,14 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { NewChatroomDialogComponent } from '../dialogs/new-chatroom-dialog/new-chatroom-dialog.component';
 import { Subject, takeUntil } from 'rxjs';
-import { QuixService } from 'src/app/services/quix.service';
+import { ConnectionStatus, QuixService } from 'src/app/services/quix.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TwitchService } from 'src/app/services/twitch.service';
+import { ActiveStream, ActiveStreamAction } from 'src/app/models/activeStream';
+import { QuixChatRoom, RoomService } from 'src/app/services/room.service';
 
-const QuixChatRoom = 'Quix chatroom';
 
 @Component({
   selector: 'app-message-source-dropdown',
@@ -14,26 +16,47 @@ const QuixChatRoom = 'Quix chatroom';
   styleUrls: ['./message-source-dropdown.component.scss']
 })
 export class MessageSourceDropdownComponent implements OnInit, OnDestroy {
+
+  @ViewChild('twitchWrapper') twitchWrapper: ElementRef<HTMLElement>;
+
   QuixChatRoom = QuixChatRoom;
-  selectedRoom: string = QuixChatRoom;
+  selectedRoom: string | undefined = QuixChatRoom;
   storedRooms: string[];
   @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
 
+  channels = new Set<string>();
+  isLoadingChannels: boolean = true;
+
   private unsubscribe = new Subject<void>();
 
-  constructor(private matDialog: MatDialog, private quixService: QuixService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private matDialog: MatDialog, private roomService: RoomService, private twitchService: TwitchService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    const localStorageValue = localStorage.getItem('rooms');
-    this.storedRooms = localStorageValue ? JSON.parse(localStorageValue) : [];
-    console.log('Rooms', this.storedRooms);
+    this.roomService.roomChanged$.pipe(takeUntil(this.unsubscribe)).subscribe(({roomId}) => {
+      this.selectedRoom = roomId;
+    });
 
-    // Preset the 
-    console.log('QUIX service selection', this.quixService.selectedRoom);
-    if (!this.storedRooms.includes(this.quixService.selectedRoom) && !QuixChatRoom) {
-      this.storedRooms.push(this.quixService.selectedRoom);
+    this.roomService.previousRooms$.pipe(takeUntil(this.unsubscribe)).subscribe((rooms) => {
+      this.storedRooms = rooms!;
+    });
+
+    this.twitchService.getActiveStreams$().pipe(takeUntil(this.unsubscribe)).subscribe((activeStreamsSubs) => {
+      this.isLoadingChannels = false;
+      this.setActiveSteams(activeStreamsSubs?.streams!, activeStreamsSubs?.action);
+    });
+  }
+
+  setActiveSteams(streamData: ActiveStream[], streamAction?: ActiveStreamAction): void {
+    if (streamAction) {
+      if (streamAction === ActiveStreamAction.AddUpdate) {
+        if (streamData[0]) this.channels.add(streamData[0].streamId);
+      } else if (streamAction === ActiveStreamAction.Remove) {
+				this.channels.delete(streamData[0]?.streamId);
+			}
+    } else {
+      const streams = streamData.map((m) => m.streamId);
+      this.channels = new Set(streams);
     }
-    this.selectedRoom = this.quixService.selectedRoom;
 
   }
 
@@ -49,7 +72,7 @@ export class MessageSourceDropdownComponent implements OnInit, OnDestroy {
       const {newRoom} = result;
       if (newRoom) {
         this.selectedRoom = newRoom;
-        this.quixService.subscribeToRoom(newRoom);
+        this.changeRoom(newRoom);
       }
     });
   }
@@ -64,14 +87,12 @@ export class MessageSourceDropdownComponent implements OnInit, OnDestroy {
 		}, 0);
 	}
 
-  changeRoom(room?: string): void {
-    this.selectedRoom = room ? room : QuixChatRoom;
+  changeRoom(room?: string, isTwitch?: boolean): void {
     // Navigate to the current route with the updated query parameters
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { room: room },
+      queryParams: { [isTwitch ? 'twitchRoom' : 'room']: room },
     });
-    // this.quixService.subscribeToRoom(this.selectedRoom);
   }
 
   ngOnDestroy(): void {

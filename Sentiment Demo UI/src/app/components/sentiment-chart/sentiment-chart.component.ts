@@ -4,6 +4,7 @@ import ChartStreaming, { RealTimeScale } from 'chartjs-plugin-streaming';
 import { Subject, filter, takeUntil } from 'rxjs';
 import { ParameterData } from 'src/app/models/parameter-data';
 import { QuixService } from 'src/app/services/quix.service';
+import { RoomService } from 'src/app/services/room.service';
 
 @Component({
   selector: 'app-sentiment-chart',
@@ -56,7 +57,7 @@ export class SentimentChartComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject<void>();
   
-  constructor(private quixService: QuixService) { 
+  constructor(private quixService: QuixService, private roomService: RoomService) { 
     Chart.register(
       LinearScale,
       LineController,
@@ -73,15 +74,20 @@ export class SentimentChartComponent implements OnInit, OnDestroy {
     this.quixService.paramDataReceived$
      .pipe(takeUntil(this.unsubscribe$), filter((f) => f.topicId === this.quixService.sentimentTopic))
      .subscribe((payload) => {
-      this.sentimentMessageRecieved(payload);
+      // console.log("SentimentChart - Receiving parameter data - ", payload);
+      this.sentimentMessageReceived(payload);
+    });
+
+    this.roomService.roomChanged$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
+      this.datasets!.at(0)!.data = [];
     });
   }
 
-  sentimentMessageRecieved(payload: ParameterData): void {
+  sentimentMessageReceived(payload: ParameterData): void {
     let [timestamp] = payload.timestamps;
     let averageSentiment = payload.numericValues["average_sentiment"]?.at(0) || 0;
     let row = { x: timestamp / 1000000, y: averageSentiment };
-    this.datasets[0].data.push(row as any);
+    this.datasets?.at(0)?.data.push(row as any);
   }
 
   ngOnDestroy(): void {

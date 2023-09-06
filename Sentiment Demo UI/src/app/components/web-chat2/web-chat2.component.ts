@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription, debounceTime, takeUntil, timer } from 'rxjs';
 import { MessagePayload } from 'src/app/models/messagePayload';
@@ -8,6 +8,10 @@ import { Animals } from '../../constants/animals';
 import { TitleCasePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ShareChatroomDialogComponent } from '../dialogs/share-chatroom-dialog/share-chatroom-dialog.component';
+import { RoomService } from 'src/app/services/room.service';
+
+const POSITIVE_THRESHOLD = 0.5;
+const NEGATIVE_THRESHOLD = -0.5;
 
 export class UserTyping {
   timeout?: Subscription;
@@ -24,6 +28,8 @@ export class WebChat2Component implements OnInit {
   username: string;
   profilePic: string;
 
+  isTwitch: boolean = true;
+
   @ViewChild('chatWrapper') chatWrapper: ElementRef<HTMLElement>;
 
   connectionState = ConnectionStatus;
@@ -37,8 +43,8 @@ export class WebChat2Component implements OnInit {
   });
   
   messages: MessagePayload[] = [];
-  happy: number = 0;
-  unhappy: number = 0;
+  happyTypers = new Set<string>();
+  unhappyTypers = new Set<string>();
   usersTyping: Map<string, UserTyping> = new Map();
   averageSentiment: number = 0;
   typingTimeout: number = 4000;
@@ -48,9 +54,10 @@ export class WebChat2Component implements OnInit {
 
   private unsubscribe$ = new Subject<void>();
   
-  constructor(public quixService: QuixService, private titleCasePipe: TitleCasePipe, private matDialog: MatDialog) { }
+  constructor(public quixService: QuixService, public roomService: RoomService, private titleCasePipe: TitleCasePipe, private matDialog: MatDialog) { }
 
   ngOnInit(): void {
+
     // this.username = this.generateGUID();
     this.profilePic = this.generateProfilePic();
 
@@ -78,8 +85,13 @@ export class WebChat2Component implements OnInit {
     this.quixService.paramDataReceived$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((payload) => {
-      console.log('PAYLOAD', payload);
+      // console.log('PAYLOAD', payload);
       this.messageReceived(payload);
+    });
+
+    this.roomService.roomChanged$.subscribe(({ isTwitch }) => {
+      this.messages = [];
+      this.isTwitch = isTwitch;
     });
   }
 
@@ -102,9 +114,9 @@ export class WebChat2Component implements OnInit {
     const payload = {
       timestamps: [new Date().getTime() * 1000000],
       tagValues: {
-        room: [this.quixService.selectedRoom],
+        room: [this.roomService.selectedRoom],
         role: ['Customer'],
-        username: [this.username],
+        name: [this.username],
         profilePic: [this.profilePic],
         draft_id: [this.draftGuid]
       },
@@ -113,15 +125,15 @@ export class WebChat2Component implements OnInit {
       }
     };
 
-    this.quixService.sendMessage(payload, isDraft);
+    this.roomService.sendMessage(payload, isDraft);
   }
 
   private messageReceived(payload: ParameterData): void {
     console.log("WebChat - Receiving parameter data - ", payload);
     let topicId = payload.topicId;
     let [timestamp] = payload.timestamps;
-    let [name] = payload.tagValues["username"];
-    let [profilePic] = payload.tagValues["profilePic"];
+    let [name] = payload.tagValues["name"];
+    let profilePic = payload.tagValues["profilePic"]?.at(0);
     let sentiment = payload.numericValues["sentiment"]?.at(0) || 0;
     let averageSentiment = payload.numericValues["average_sentiment"]?.at(0) || 0;
     let message = this.messages.find((f) => f.timestamp === timestamp && f.name === name);
@@ -133,7 +145,9 @@ export class WebChat2Component implements OnInit {
       // If they were already tying
       if (user) this.usersTyping.get(name)?.timeout?.unsubscribe();
       // When it finishes, removes the user from typing list
-      const subscription = timer$.subscribe(() => this.usersTyping.delete(name));
+      const subscription = timer$.subscribe(() => {
+        this.usersTyping.delete(name);
+      })
       // Add the subscription to the object
       this.usersTyping.set(name, {
         ...user,
@@ -144,8 +158,8 @@ export class WebChat2Component implements OnInit {
     if (topicId === this.quixService.draftsSentimentTopic) {
       if (!user) return;
       user = { ...user, sentiment };
-      if (sentiment > 0) this.happy =+ 1;
-      if (sentiment < 0) this.unhappy =+ 1;
+      if (sentiment > 0) this.happyTypers.add(name);
+      if (sentiment < 0) this.unhappyTypers.add(name);
       this.usersTyping.set(name, user);
     }
 
@@ -173,6 +187,20 @@ export class WebChat2Component implements OnInit {
     if (isScrollToBottom) setTimeout(() => (el.scrollTop = el.scrollHeight));
   }
 
+  getSentimentStats(): { smileys: string[], neutrals: string[], frowneys: string[] } {
+    let smileys: string[] = [];
+    let neutrals: string[] = [];
+    let frowneys: string[] = [];
+    this.usersTyping.forEach(({sentiment}, name) => {
+      if (sentiment! > POSITIVE_THRESHOLD) smileys.push(name);  
+      if (sentiment! < POSITIVE_THRESHOLD && sentiment! > NEGATIVE_THRESHOLD) neutrals.push(name);  
+      if (sentiment! < NEGATIVE_THRESHOLD) frowneys.push(name);  
+    });
+
+    return { smileys, neutrals, frowneys };
+  }
+
+
   /**
    * Based on how many users are typing, it generates the appropriate
    * isTyping message to be displayed in the template.
@@ -180,20 +208,27 @@ export class WebChat2Component implements OnInit {
    * @returns The Html message.
    */
     public getTypingMessage(): string | undefined {  
+
       const users = Array.from(this.usersTyping.entries())
       .map(([key, value]) => ({
         name: this.titleCasePipe.transform(key),
         sentiment: value.sentiment!,
       }));
-  
+
+      if (!users.length) return undefined;
+
       if (users.length === 1) {
         const [user] = users;
-        return `${user.name} is Typing`;
-      } else if (users.length > 1) {
-        const lastUser = users.pop()!;
-        const allUsersHtml = users.map(user => user.name).join(", ");
-        const lastUserHtml = lastUser.name!
-        return `${allUsersHtml} and ${lastUserHtml} are typing...`;
+        return `<b>${user.name}</b> is typing...`;
+      }
+
+      if (users.length < 3) {
+        const usersJoined = users.map((m) => m.name).join(' and ');
+        return `<b>${usersJoined}</b> are typing...`; 
+      }
+
+      if (users.length >= 3) {
+        return `<b>${users.length}</b> users are typing...`;    
       }
 
       return undefined
@@ -207,9 +242,6 @@ export class WebChat2Component implements OnInit {
    * @returns The Html class.
    */
   public getColor(sentiment: number): string {
-    const POSITIVE_THRESHOLD = 0.5;
-    const NEGATIVE_THRESHOLD = -0.5;
-    
     if (sentiment > POSITIVE_THRESHOLD) {
       return 'text-success';
     } else if (sentiment < NEGATIVE_THRESHOLD) {
@@ -219,10 +251,7 @@ export class WebChat2Component implements OnInit {
     return 'text-grey-light';
   }
 
-  public getSentimentClass(sentiment: number): string {
-    const POSITIVE_THRESHOLD = 0.5;
-    const NEGATIVE_THRESHOLD = -0.5;
-    
+  public getSentimentIcon(sentiment: number): string {
     if (sentiment > POSITIVE_THRESHOLD) {
       return 'sentiment_satisfied';
     } else if (sentiment < NEGATIVE_THRESHOLD) {

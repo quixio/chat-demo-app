@@ -29,16 +29,11 @@ export class NewChatroomDialogComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<NewChatroomDialogComponent>) { }
 
   ngOnInit(): void {
-    this.existingChatRooms = this.data.existingChatRooms;
-    console.log('ROOMS', this.existingChatRooms);
     this.nameFC.addValidators(uniqueStringValidator(this.existingChatRooms));
   }
 
   create(): void {
     const newRoom = this.nameFC.value;
-    this.existingChatRooms.push(newRoom!);
-    localStorage.setItem('rooms', JSON.stringify(this.existingChatRooms));
-    this.dialogRef.close();
     this.dialogRef.close({ newRoom });
   }
 

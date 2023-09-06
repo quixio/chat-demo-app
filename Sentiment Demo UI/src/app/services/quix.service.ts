@@ -21,7 +21,7 @@ export class QuixService {
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
   /*WORKING LOCALLY? UPDATE THESE!*/
   private workingLocally = true; // set to true if working locally
-  private token: string = ''; // Create a token in the Tokens menu and paste it here
+  private token: string = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1qVTBRVE01TmtJNVJqSTNOVEpFUlVSRFF6WXdRVFF4TjBSRk56SkNNekpFUWpBNFFqazBSUSJ9.eyJodHRwczovL3F1aXguYWkvb3JnX2lkIjoiZGVtbyIsImh0dHBzOi8vcXVpeC5haS9vd25lcl9pZCI6ImF1dGgwfGM1M2QzMzIxLTgwZDItNGQzYS1hNmU3LTdmYjY1NGM5YzJmMiIsImh0dHBzOi8vcXVpeC5haS90b2tlbl9pZCI6IjYxYmYwYjc0LTkyZGQtNGRkOC04YTEzLTA3MzRmYzg3ODA1YyIsImh0dHBzOi8vcXVpeC5haS9leHAiOiIxNzAyNTk4NDAwIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnF1aXguYWkvIiwic3ViIjoiWGNQR3JUdTRiU0ljaHl2bXRXZ1RSWkV2dHp3U2x3d0FAY2xpZW50cyIsImF1ZCI6InF1aXgiLCJpYXQiOjE2OTMzMTA4MjgsImV4cCI6MTY5NTkwMjgyOCwiYXpwIjoiWGNQR3JUdTRiU0ljaHl2bXRXZ1RSWkV2dHp3U2x3d0EiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMiLCJwZXJtaXNzaW9ucyI6W119.UPEnv0cBeAHs9yEg4MFWBuda575m309f1vmXmC2p_IBScW5ivJlHhGg8ESW3fnpaxiVHS0B0LsCRqpaOeF4-5lojPqrseQUkc-JAuSB_rqLFkaJB145-6URN2caLVpea9VqcZS04cTGvac6qWHWYT9UJ6qwcAFkudTBCTWEab362oiEQDJVSX-xkbKglAtKmSS035gn7gkWSfB9aSYKI3xM17kkllf1bktTC69wk2NF0nAcsWMFm0bpzoe4_f3WN57qMYXcIFXhyYzFc2Rf_fC-D9G_-Nycn0yk8bC-dI-B0LfJt-vSs0MMZHIMGHx87zLZkJhy4MMezq5a15usIEA'; // Create a token in the Tokens menu and paste it here
   public workspaceId: string = 'demo-chatappdemo-newfeui'; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
   public messagesTopic: string = 'messages'; // get topic name from the Topics page
   public draftsTopic: string = 'drafts'; // get topic from the Topics page
@@ -54,9 +54,6 @@ export class QuixService {
   private domainRegex = new RegExp(
     "^https:\\/\\/portal-api\\.([a-zA-Z]+)\\.quix\\.ai"
   );
-
-
-  selectedRoom: string;
 
   constructor(private httpClient: HttpClient) {
 
@@ -216,26 +213,6 @@ export class QuixService {
    
   }
 
-  public subscribeToRoom(roomName: string): void {
-    roomName = roomName || 'Quix chatroom';
-    console.log('Subscribing to a room', roomName);
-    // Set in local storage
-    localStorage.setItem('selectedRoom', roomName);
-
-    // Perform room logic
-    this.selectedRoom = roomName;
-
-    this.unsubscribeFromParameter(this.messagesTopic, roomName, "*");
-    this.unsubscribeFromParameter(this.draftsTopic, roomName, "*");
-    this.unsubscribeFromParameter(this.sentimentTopic, roomName, "*");
-    this.unsubscribeFromParameter(this.draftsSentimentTopic, roomName, "*");
-
-    this.subscribeToParameter(this.messagesTopic, roomName, "*");
-    this.subscribeToParameter(this.draftsTopic, roomName, "*");
-    this.subscribeToParameter(this.sentimentTopic, roomName, "*");
-    this.subscribeToParameter(this.draftsSentimentTopic, roomName, "*");
-  }
-
   /**
    * Subscribes to a parameter on the ReaderHub connection so
    * we can listen to changes.
@@ -245,7 +222,7 @@ export class QuixService {
    * @param parameterId The parameter want to listen for changes.
    */
   public subscribeToParameter(topic: string, streamId: string, parameterId: string) {
-    // console.log('QuixService Reader | Subscribing to parameter - ' + parameterId);
+    // console.log(`QuixService Reader | Subscribing to parameter - ${topic}, ${streamId}, ${parameterId}`);
     this.readerHubConnection.invoke("SubscribeToParameter", topic, streamId, parameterId);
   }
 
@@ -258,58 +235,23 @@ export class QuixService {
    * @param parameterId 
    */
   public unsubscribeFromParameter(topic: string, streamId: string, parameterId: string) {
-    // console.log('QuixService Reader | Unsubscribing from parameter - ' + parameterId);
+    // console.log(`QuixService Reader | Unsubscribing from parameter - ${topic}, ${streamId}, ${parameterId}`);
     this.readerHubConnection.invoke("UnsubscribeFromParameter", topic, streamId, parameterId);
   }
-  
-  public sendMessage(
-    payload: any,
-    isDraft?: boolean
-  ) {
-    const topic = isDraft ? this.draftsTopic : this.messagesTopic;
-    console.log("QuixService Sending parameter data!", topic, this.selectedRoom, payload);
-    this.writerHubConnection.invoke(
-      "SendParameterData",
-      topic,
-      this.selectedRoom,
-      payload
-    );
-  
+
+  /**
+   * 
+   * @param topic 
+   * @param streamId 
+   * @param payload 
+   */
+  public sendParameterData(topic: string, streamId: string, payload: any): void {
+    console.log("QuixService Sending parameter data!", topic, streamId, payload);
+    this.writerHubConnection.invoke("SendParameterData", topic, streamId, payload);
   }
 
-  private stripLineFeed(s: string): string {
-    return s.replace('\n', '');
-  }
 
-  public getLastMessages(room: string): Observable<MessagePayload[]> {
-    let payload =
-    {
-      'numericParameters': [
-        {
-          'parameterName': 'sentiment',
-          'aggregationType': 'None'
-        },
-        {
-          'parameterName': 'average_sentiment',
-          'aggregationType': 'None'
-        }
-      ],
-      'stringParameters': [
-        {
-          'parameterName': 'chat-message',
-          'aggregationType': 'None'
-        }
-      ],
-
-      'streamIds': [
-        room + '-output'
-      ],
-      'groupBy': [
-        'role',
-        'name'
-      ],
-    };
-
+  public retrievePersistedParameterData(payload: any): Observable<MessagePayload[]> {
     return this.httpClient.post<ParameterData>(
       `https://telemetry-query-${this.workspaceId}.${this.subdomain}.quix.ai/parameters/data`,
       payload,
@@ -329,4 +271,10 @@ export class QuixService {
       return result;
     }));
   }
+
+  private stripLineFeed(s: string): string {
+    return s.replace('\n', '');
+  }
+
 }
+

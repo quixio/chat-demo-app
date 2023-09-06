@@ -4,9 +4,8 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 
 
 const routes: Routes = [
-  // {path: '', redirectTo: '/lobby', pathMatch: 'full'}
-  { path: '', component: HomePageComponent },
-  // {path: 'lobby', component: LobbyComponent},
+  {path: '', redirectTo: '/chat', pathMatch: 'full'},
+  { path: 'chat', component: HomePageComponent },
 ];
 
 @NgModule({
