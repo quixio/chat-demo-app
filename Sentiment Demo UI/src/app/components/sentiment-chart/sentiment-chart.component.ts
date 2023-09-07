@@ -5,6 +5,7 @@ import { Subject, filter, takeUntil } from 'rxjs';
 import { ParameterData } from 'src/app/models/parameter-data';
 import { QuixService } from 'src/app/services/quix.service';
 import { RoomService } from 'src/app/services/room.service';
+import 'chartjs-adapter-luxon';
 
 @Component({
   selector: 'app-sentiment-chart',
