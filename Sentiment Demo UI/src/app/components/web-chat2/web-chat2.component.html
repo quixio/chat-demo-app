@@ -5,7 +5,10 @@
     <!-- TwitchTV Header -->
     <mat-card-header fxLayout="row" fxLayoutAlign="space-between center" *ngIf="isTwitch">     
         <div fxLayoutAlign="start center">
-          <div class="_profile-pic me-2">
+          <button fxHide.gt-sm mat-icon-button color="primary" class="me-1" (click)="scrollToInfo()">
+            <mat-icon>arrow_upward</mat-icon>
+          </button>
+          <div class="_profile-pic me-2" [style.background-color]="profilePicColor">
             <img [src]="profilePic" height="28">
           </div>
           <p class="mat-body-2 fw-bold m-0 me-2">{{ roomService.selectedRoom }}</p>
@@ -43,7 +46,7 @@
       <div fxFlex class="overflow-auto"  #chatWrapper>
         <div fxLayout="column" class="_message py-1 px-2 m-3 rounded-3 overflow-hidden" *ngFor="let message of messages">
           <div fxFlex fxLayout="row" fxLayoutAlign="start start">
-            <div *ngIf="message.profilePic" class="_profile-pic me-2">
+            <div *ngIf="message.profilePic" [style.background-color]="message.profilePicColor" class="_profile-pic me-2">
               <img [src]="message.profilePic" height="28">
             </div>
             <div fxLayout="column">
@@ -114,7 +117,7 @@
 
         <!-- Username provided - Allow user to send messages -->
         <div fxFlex fxLayout="row" fxLayoutAlign="start center" *ngIf="username">
-          <div class="_profile-pic me-2">
+          <div class="_profile-pic me-2" [style.background-color]="profilePicColor">
             <img [src]="profilePic" height="28">
           </div>
           <mat-form-field appearance="outline" fxFlex class="_message-input me-2 pb-0">

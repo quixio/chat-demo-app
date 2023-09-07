@@ -18,7 +18,7 @@
     <div class="mat-h4 mb-2">Realtime messages feed</div>
     <p class="mat-body-2 text-grey">To feed our model, we <a href="">ingest the messages</a> sent by our users from this very same UI. But you can <a href="">customise the code</a> to connect any data source. For instance, try to select a Twitch chat from the following dropdown.</p>
     <app-message-source-dropdown class="w-100"></app-message-source-dropdown>
-    <button mat-flat-button class="mt-3 small" color="primary">
+    <button fxHide.gt-sm mat-flat-button class="mt-3 small" color="primary" (click)="scrollToChat()">
       <div fxLayoutAlign="start center">
         <mat-icon inline [style.fontSize.px]="16" class="me-1">download</mat-icon>
         Explore messages

@@ -9,6 +9,7 @@ import { TitleCasePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ShareChatroomDialogComponent } from '../dialogs/share-chatroom-dialog/share-chatroom-dialog.component';
 import { RoomService } from 'src/app/services/room.service';
+import { Colors } from 'src/app/constants/colors';
 
 const POSITIVE_THRESHOLD = 0.5;
 const NEGATIVE_THRESHOLD = -0.5;
@@ -27,6 +28,7 @@ export class UserTyping {
 export class WebChat2Component implements OnInit {
   username: string;
   profilePic: string;
+  profilePicColor: string;
 
   isTwitch: boolean = true;
 
@@ -57,9 +59,8 @@ export class WebChat2Component implements OnInit {
   constructor(public quixService: QuixService, public roomService: RoomService, private titleCasePipe: TitleCasePipe, private matDialog: MatDialog) { }
 
   ngOnInit(): void {
-
-    // this.username = this.generateGUID();
     this.profilePic = this.generateProfilePic();
+    this.profilePicColor = this.generateRandomColor();
 
     this.messageFC.valueChanges.pipe(debounceTime(300), takeUntil(this.unsubscribe$)).subscribe((value) => {
       // Prevents it triggering when they send message and debounce is triggered
@@ -118,6 +119,7 @@ export class WebChat2Component implements OnInit {
         role: ['Customer'],
         name: [this.username],
         profilePic: [this.profilePic],
+        profilePicColor: [this.profilePicColor],
         draft_id: [this.draftGuid]
       },
       stringValues: {
@@ -134,8 +136,10 @@ export class WebChat2Component implements OnInit {
     let [timestamp] = payload.timestamps;
     let [name] = payload.tagValues["name"];
     let profilePic = payload.tagValues["profilePic"]?.at(0);
+    let profilePicColor = payload.tagValues["profilePicColor"]?.at(0);
     let sentiment = payload.numericValues["sentiment"]?.at(0) || 0;
     let averageSentiment = payload.numericValues["average_sentiment"]?.at(0) || 0;
+    let value = payload.stringValues["chat-message"]?.at(0);
     let message = this.messages.find((f) => f.timestamp === timestamp && f.name === name);
     let user = this.usersTyping.get(name);
 
@@ -170,7 +174,7 @@ export class WebChat2Component implements OnInit {
          this.usersTyping.delete(name);
        } 
        // Push the new message
-       this.messages.push({timestamp, name, profilePic, sentiment, value: payload.stringValues["chat-message"]?.at(0)});
+       this.messages.push({timestamp, name, profilePic, profilePicColor, sentiment, value });
     }
 
     if (topicId === this.quixService.sentimentTopic) {
@@ -284,10 +288,21 @@ export class WebChat2Component implements OnInit {
         return v.toString(16);
     });
   }
-
   private generateProfilePic(): string {
     const randomNumber = Math.floor(Math.random() * Animals?.length);
     return `https://ssl.gstatic.com/docs/common/profile/${Animals[randomNumber]}_lg.png`;
+  }
+
+  private generateRandomColor(): string {
+    const randomNumber = Math.floor(Math.random() * Colors?.length);
+    return Colors[randomNumber];
+  }
+
+  scrollToInfo(): void {
+    const chatEle = document.getElementById('info-section');
+    chatEle?.scrollIntoView({
+      behavior: 'smooth'
+    })
   }
 
   openShareChatroomDialog(): void {

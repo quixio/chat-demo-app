@@ -13,4 +13,14 @@ export class InfoComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * 
+   */
+  scrollToChat(): void {
+    const chatEle = document.getElementById('chat-section');
+    chatEle?.scrollIntoView({
+      behavior: 'smooth'
+    })
+  }
+
 }
