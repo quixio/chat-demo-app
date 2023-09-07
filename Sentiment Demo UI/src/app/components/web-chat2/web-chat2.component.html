@@ -1,14 +1,14 @@
-<section fxLayout="column" fxLayoutAlign="center center" fxLayout.lt-md="column" fxFlexFill class="background">
+<section fxLayout="column" fxLayoutAlign="center center" fxLayout.lt-md="column" fxFlexFill class="_background">
   
-  <mat-card fxLayout="column" class="chat-card w-100" [style.maxWidth.px]="440">
+  <mat-card fxLayout="column" class="p-0 h-100 w-100" [style.maxWidth.px]="440">
 
     <!-- TwitchTV Header -->
     <mat-card-header fxLayout="row" fxLayoutAlign="space-between center" *ngIf="isTwitch">     
         <div fxLayoutAlign="start center">
-          <div class="profile-pic me-2">
+          <div class="_profile-pic me-2">
             <img [src]="profilePic" height="28">
           </div>
-          <p class="fw-bold m-0 me-2">{{ roomService.selectedRoom }}</p>
+          <p class="mat-body-2 fw-bold m-0 me-2">{{ roomService.selectedRoom }}</p>
         </div>
 
         <a fxLayoutAlign="start center" [href]="'https://twitch.tv/' + roomService.selectedRoom" target="_blank">
@@ -21,7 +21,7 @@
     <mat-card-header fxLayout="row" fxLayoutAlign="space-between center" *ngIf="!isTwitch">
       <p class="fw-bold m-0 me-2">{{ roomService.selectedRoom }}</p>
       <div fxLayout="row" fxLayoutAlign="start center">
-        <mat-chip-list aria-label="Fish selection" class="me-2">
+        <mat-chip-list aria-label="Status" class="me-2">
           <mat-chip class="status-chip">
             <mat-icon fontIcon="circle" class="status-icon" 
             [class.text-success]="readerConnectionStatus === connectionState.Connected"
@@ -35,19 +35,20 @@
           Share
         </button>
       </div>
-  </mat-card-header>
+    </mat-card-header>
 
 
-    <mat-card-content fxFlex fxLayout="column" class="bg-white overflow-hidden">
+
+    <mat-card-content fxFlex fxLayout="column" class="bg-white mb-0 overflow-hidden">
       <div fxFlex class="overflow-auto"  #chatWrapper>
         <div fxLayout="column" class="_message py-1 px-2 m-3 rounded-3 overflow-hidden" *ngFor="let message of messages">
           <div fxFlex fxLayout="row" fxLayoutAlign="start start">
-            <div *ngIf="message.profilePic" class="profile-pic me-2">
+            <div *ngIf="message.profilePic" class="_profile-pic me-2">
               <img [src]="message.profilePic" height="28">
             </div>
             <div fxLayout="column">
               <p class="mb-0 fw-bold mat-body-2">{{ message.name }}</p>
-              <div>{{ message.value }}</div>
+              <div class="_message-text">{{ message.value }}</div>
             </div>
           </div>
           <div fxLayout="row" fxLayoutAlign="end center" class="mat-caption">
@@ -64,7 +65,7 @@
       </div>
 
       <!-- Standard Chat isTyping sentiment indicator -->
-      <div *ngIf="!isTwitch && !!usersTyping.size" fxLayout="row" fxLayoutAlign="space-between center" class="mat-caption my-2 mx-3">
+      <div *ngIf="!isTwitch && !!usersTyping.size" fxLayout="row" fxLayoutAlign="space-between center" class="mat-caption text-grey my-2 mx-3">
         
         <!-- Display sentiment statistics -->
         <div *ngIf="getSentimentStats() as stats" fxLayout="row">
@@ -93,7 +94,7 @@
     </mat-card-content>
 
     <!-- TwitchTV Footer -->
-    <mat-card-footer *ngIf="isTwitch">
+    <mat-card-footer class="m-0 text-grey" *ngIf="isTwitch">
       <p class="mb-0 fw-bold text-uppercase">Read only</p>
     </mat-card-footer>
 
@@ -102,7 +103,7 @@
       <form *ngIf="!isTwitch" [formGroup]="chatForm" fxLayout="row" fxLayoutGap="10" autocomplete="off" (ngSubmit)="submit()"> 
         <!-- Username empty - Prompt user to enter username before they enter chat -->
         <ng-container *ngIf="!username">
-          <mat-form-field appearance="outline" fxFlex class="small pb-0" [hideRequiredMarker]="true">
+          <mat-form-field appearance="outline" fxFlex class="small pb-0">
             <mat-label>Enter your username</mat-label>
             <input matInput [formControl]="usernameFC">
           </mat-form-field>
@@ -113,7 +114,7 @@
 
         <!-- Username provided - Allow user to send messages -->
         <div fxFlex fxLayout="row" fxLayoutAlign="start center" *ngIf="username">
-          <div class="profile-pic me-2">
+          <div class="_profile-pic me-2">
             <img [src]="profilePic" height="28">
           </div>
           <mat-form-field appearance="outline" fxFlex class="_message-input me-2 pb-0">

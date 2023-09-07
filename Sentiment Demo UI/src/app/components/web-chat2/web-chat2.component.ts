@@ -293,6 +293,7 @@ export class WebChat2Component implements OnInit {
   openShareChatroomDialog(): void {
     this.matDialog.open(ShareChatroomDialogComponent, {
       maxWidth: '480px',
+      autoFocus: false
     });
   }
 

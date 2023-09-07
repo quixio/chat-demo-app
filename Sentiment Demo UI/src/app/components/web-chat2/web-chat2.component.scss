@@ -1,56 +1,6 @@
-.background {
-  padding: 40px;
-  background: linear-gradient(128deg, #0064FF 0%, #BD2EFF 53.90%, #FF7828 100%);
-}
+/** --- Component Specific Material overrides --- **/
 
-.mat-icon.status-icon {
-  width: 14px;
-  height: 14px;
-  font-size: 14px;
-}
-
-.mat-chip {
-  &.status-chip {
-    background-color: white !important;
-    color: inherit !important;
-  }
-
-  &.sentiment-chip {
-    padding: 4px 8px 4px 4px;
-    min-height: 0;
-    height: auto;
-    line-height: 1em;
-    font-size: 12px;
-  }
-}
-
-.mat-card.chat-card {
-  height: 100%;
-
-  .mat-card-content {
-    overflow: auto;
-    margin: -17px;
-  }
-}
-
-.mat-card.chart-card {
-  height: 100%;
-} 
-
-.profile-pic {
-  height: 32px;
-  width: 32px;
-  background-color: #FF7828;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-._message {
-  border-bottom: 1px solid #E4E4E6;
-}
-
+// Message input styling
 ._message-input.mat-form-field-appearance-outline::ng-deep {
   .mat-form-field-outline {
     top: 0;
@@ -68,7 +18,48 @@
   }
 }
 
+.mat-card-header {
+  color: rgba(0, 0, 0, 0.85);
+}
 
-.text-grey-light {
-  color: #646471;
+
+/** --- Component Specific generic classes --- **/
+
+._background {
+  padding: 40px;
+  background: linear-gradient(128deg, #0064FF 0%, #BD2EFF 53.90%, #FF7828 100%);
+}
+
+.mat-chip {
+  &.status-chip {
+    background-color: white !important;
+    color: inherit !important;
+  }
+
+  &.sentiment-chip {
+    padding: 4px 8px 4px 4px;
+    min-height: 0;
+    height: auto;
+    line-height: 1em;
+    font-size: 12px;
+  }
+}
+
+._profile-pic {
+  height: 32px;
+  width: 32px;
+  background-color: #FF7828;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+._message {
+  border-bottom: 1px solid #E4E4E6;
+
+  ._message-text {
+    color: #222229;
+  }
+
 }

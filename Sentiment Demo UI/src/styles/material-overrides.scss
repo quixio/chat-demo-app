@@ -81,9 +81,9 @@
 
 // Card
 $card-padding: 16px;
+
 .mat-card {
   overflow: hidden;
-  // padding: $card-padding !important;
   border-radius: 8px !important;
   color: inherit;
   box-shadow: none !important;
@@ -91,19 +91,12 @@ $card-padding: 16px;
 }
 
 .mat-card-header {
-  margin-top: -$card-padding !important;
-  margin-left: -$card-padding !important;
-  margin-right: -$card-padding !important;
-  margin-bottom: $card-padding !important;
   padding: $card-padding;
   background-color: #f1f1f3;
 }
 
 .mat-card-footer {
-  margin-top: $card-padding !important;
-  margin-left: -$card-padding !important;
-  margin-right: -$card-padding !important;
-  margin-bottom: -$card-padding !important;
+  margin: 0 !important;
   padding: $card-padding;
   background-color: #f1f1f3;
 }
@@ -123,4 +116,14 @@ $card-padding: 16px;
   line-height: 20px;
   margin: 10px !important;
   word-break: break-word;
+}
+
+.mat-h1 {
+  color: #222229 !important;
+}
+
+.mat-h2,
+.mat-h3,
+.mat-h4 {
+  color: rgba(0, 0, 0, 0.85) !important;
 }

@@ -16,3 +16,9 @@
 .selected {
   background-color: rgba(0, 142, 255, 0.10) !important;
 }
+
+.mat-menu-item {
+  &:hover:not([disabled]) {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+  }
+}

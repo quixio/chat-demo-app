@@ -63,6 +63,7 @@ export class MessageSourceDropdownComponent implements OnInit, OnDestroy {
   openCreateChatroomDialog(): void {
     const dialogRef = this.matDialog.open(NewChatroomDialogComponent, {
       maxWidth: '480px',
+      autoFocus: false,
       data: {
         existingChatRooms: this.storedRooms
       }

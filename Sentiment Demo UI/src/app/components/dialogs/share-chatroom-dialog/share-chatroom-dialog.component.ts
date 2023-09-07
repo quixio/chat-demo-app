@@ -13,7 +13,6 @@ export class ShareChatroomDialogComponent implements OnInit {
 
   qrValue: string;
 
-
  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private roomService: RoomService,
    public dialogRef: MatDialogRef<ShareChatroomDialogComponent>) { }
 
