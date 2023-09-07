@@ -21,7 +21,7 @@ export class MessageSourceDropdownComponent implements OnInit, OnDestroy {
   QuixChatRoom = QuixChatRoom;
   selectedRoom: string | undefined = QuixChatRoom;
   storedRooms: string[];
-  @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
+  @ViewChild(MatMenuTrigger, { static: true }) menuTrigger: MatMenuTrigger;
 
   channels = new Set<string>();
   isLoadingChannels: boolean = true;

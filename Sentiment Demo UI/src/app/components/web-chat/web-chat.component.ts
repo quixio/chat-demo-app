@@ -20,12 +20,12 @@ export class UserTyping {
 }
 
 @Component({
-  selector: 'app-web-chat2',
-  templateUrl: './web-chat2.component.html',
-  styleUrls: ['./web-chat2.component.scss'],
+  selector: 'app-web-chat',
+  templateUrl: './web-chat.component.html',
+  styleUrls: ['./web-chat.component.scss'],
   providers: [TitleCasePipe]
 })
-export class WebChat2Component implements OnInit {
+export class WebChatComponent implements OnInit {
   username: string;
   profilePic: string;
   profilePicColor: string;
