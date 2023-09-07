@@ -20,8 +20,8 @@ export class QuixService {
 
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
   /*WORKING LOCALLY? UPDATE THESE!*/
-  private workingLocally = true; // set to true if working locally
-  private token: string = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1qVTBRVE01TmtJNVJqSTNOVEpFUlVSRFF6WXdRVFF4TjBSRk56SkNNekpFUWpBNFFqazBSUSJ9.eyJodHRwczovL3F1aXguYWkvb3JnX2lkIjoiZGVtbyIsImh0dHBzOi8vcXVpeC5haS9vd25lcl9pZCI6ImF1dGgwfGM1M2QzMzIxLTgwZDItNGQzYS1hNmU3LTdmYjY1NGM5YzJmMiIsImh0dHBzOi8vcXVpeC5haS90b2tlbl9pZCI6IjYxYmYwYjc0LTkyZGQtNGRkOC04YTEzLTA3MzRmYzg3ODA1YyIsImh0dHBzOi8vcXVpeC5haS9leHAiOiIxNzAyNTk4NDAwIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnF1aXguYWkvIiwic3ViIjoiWGNQR3JUdTRiU0ljaHl2bXRXZ1RSWkV2dHp3U2x3d0FAY2xpZW50cyIsImF1ZCI6InF1aXgiLCJpYXQiOjE2OTMzMTA4MjgsImV4cCI6MTY5NTkwMjgyOCwiYXpwIjoiWGNQR3JUdTRiU0ljaHl2bXRXZ1RSWkV2dHp3U2x3d0EiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMiLCJwZXJtaXNzaW9ucyI6W119.UPEnv0cBeAHs9yEg4MFWBuda575m309f1vmXmC2p_IBScW5ivJlHhGg8ESW3fnpaxiVHS0B0LsCRqpaOeF4-5lojPqrseQUkc-JAuSB_rqLFkaJB145-6URN2caLVpea9VqcZS04cTGvac6qWHWYT9UJ6qwcAFkudTBCTWEab362oiEQDJVSX-xkbKglAtKmSS035gn7gkWSfB9aSYKI3xM17kkllf1bktTC69wk2NF0nAcsWMFm0bpzoe4_f3WN57qMYXcIFXhyYzFc2Rf_fC-D9G_-Nycn0yk8bC-dI-B0LfJt-vSs0MMZHIMGHx87zLZkJhy4MMezq5a15usIEA'; // Create a token in the Tokens menu and paste it here
+  private workingLocally = false; // set to true if working locally
+  private token: string = ''; // Create a token in the Tokens menu and paste it here
   public workspaceId: string = 'demo-chatappdemo-newfeui'; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
   public messagesTopic: string = 'messages'; // get topic name from the Topics page
   public draftsTopic: string = 'drafts'; // get topic from the Topics page
