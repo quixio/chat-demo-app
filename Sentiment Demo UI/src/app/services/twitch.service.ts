@@ -18,13 +18,23 @@ export class TwitchService {
   constructor(private quixService: QuixService) { 
 	}
 
-	public activateStreamsChanged(): void {
+	/**
+	 * Listens to the actives streams changing and emitting it to
+	 * any components listening.
+	 */
+	public activeStreamsChanged(): void {
+		// console.log(`Twitch Service | Listen for channels changing`);
 		this.quixService.readerHubConnection.on('ActiveStreamsChanged', (stream: ActiveStream, action?: ActiveStreamAction) => {
 			this._activeChannels.next({ streams: [stream], action });
 		});
 	}
 
+	/**
+	 * Subscribes to all the active streams on the message topic.
+	 * This will be all the Twitch streams.
+	 */
   public subscribeToChannels(): void {
+    // console.log(`Twitch Service | Subscribing to retrieve channels`);
     this.quixService.readerHubConnection
 			.invoke('SubscribeToActiveStreams', this.quixService.messagesTopic)
 			.then((stream: ActiveStream, action?: ActiveStreamAction) => {
@@ -34,7 +44,11 @@ export class TwitchService {
 			})
   }
 
+	/**
+	 * Unsubscribes from all the active streams on the message topic. 
+	 */
 	public unsubscribeFromChannels(): void { 
+		// console.log(`Twitch Service | Unsubscribing from retrieve channels`);
 		this.quixService.readerHubConnection
 			.invoke('UnsubscribeFromActiveStreams', this.quixService.messagesTopic)
 			.then(() => {
@@ -42,7 +56,7 @@ export class TwitchService {
 			})
 	}
 
-	getActiveStreams$(): Observable<ActiveStreamSubscription | undefined> {
+	public getActiveStreams$(): Observable<ActiveStreamSubscription | undefined> {
 		return this._activeChannels?.asObservable() || of();
 	}
 

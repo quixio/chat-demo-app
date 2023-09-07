@@ -1,3 +1,11 @@
+/**
+ * Google Anonymous Profile pictures
+ * https://gist.github.com/hmnd/e1b4ef8a14d2ffcf89cface330c56b06
+ * 
+ * Below is a list of the animals supported for the anonymous
+ * profile pictures. We can randomly select a picture from this list
+ * 
+ */
 export const Animals = [
   'alligator',
   'anteater',

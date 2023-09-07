@@ -15,7 +15,7 @@ class RoomChange {
 })
 export class RoomService {
   selectedRoom: string;
-  isTwitch: boolean;
+  private _isTwitch: boolean;
 
   private _roomChanged$ = new Subject<RoomChange>();
   private _previousRooms: string[] = [];
@@ -37,8 +37,16 @@ export class RoomService {
     this._previousRooms$.next(this._previousRooms);
   }
 
+  /**
+   * Switches the user from one room to another.
+   * Conditional based on whether it's a Twitch channel or not.
+   * 
+   * @param roomName The name of the room.
+   * @param isTwitchRoom Whether it's a Twitch channel.
+   */
   public switchRoom(roomName?: string, isTwitchRoom?: boolean): void {
-    this.isTwitch = !!isTwitchRoom;
+    // console.log(`Room Service | Switching room - ${roomName}. Is Twitch - ${isTwitchRoom}`);
+    this._isTwitch = !!isTwitchRoom;
 
     if (roomName && !isTwitchRoom && !this._previousRooms.includes(roomName)) {
       this._previousRooms.push(roomName);
@@ -55,14 +63,26 @@ export class RoomService {
 
     // Perform room logic
     this.selectedRoom = roomName;
-    this._roomChanged$.next({ roomId: this.selectedRoom, isTwitch: this.isTwitch });
+    this._roomChanged$.next({ roomId: this.selectedRoom, isTwitch: this._isTwitch });
   }
 
+  /**
+   * Sends a message from the chat. 
+   * 
+   * @param payload The payload containing various information about the user and message.
+   * @param isDraft Whether it is a draft message or not.
+   */
   public sendMessage(payload: any, isDraft?: boolean) {
     const topic = isDraft ? this.quixService.draftsTopic : this.quixService.messagesTopic;
     this.quixService.sendParameterData(topic, this.selectedRoom, payload);
   }
 
+  /**
+   * Retrieves a list of the last messages for a specific room.
+   * 
+   * @param room The name of the room.
+   * @returns An observable containing all the messages.
+   */
   public getLastMessages(room: string): Observable<MessagePayload[]> {
     let payload =
     {
@@ -94,16 +114,26 @@ export class RoomService {
     return this.quixService.retrievePersistedParameterData(payload);
   }
 
+  /**
+   * Subscribes to all the relevant topics for a specific room.
+   * 
+   * @param roomName The name of the room we are joining.
+   */
   public subscribeToRoom(roomName: string): void {
-    // console.log('subscribing from', roomName);
+    // console.log(`Room Service | Subscribing to the room - ${roomName}`);
     this.quixService.subscribeToParameter(this.quixService.messagesTopic, roomName, "*");
     this.quixService.subscribeToParameter(this.quixService.draftsTopic, roomName, "*");
     this.quixService.subscribeToParameter(this.quixService.sentimentTopic, roomName, "*");
     this.quixService.subscribeToParameter(this.quixService.draftsSentimentTopic, roomName, "*");
   }
 
+  /**
+   * Unsubscribes from all the relevant topics for a specific room.
+   * 
+   * @param roomName The name of the room we are leaving. 
+   */
   public unsubscribeFromRoom(roomName: string): void {
-    // console.log('unsubscribing from', roomName);
+    // console.log(`Room Service | Unsubscribing from the room - ${roomName}`);
     this.quixService.unsubscribeFromParameter(this.quixService.messagesTopic, roomName, "*");
     this.quixService.unsubscribeFromParameter(this.quixService.draftsTopic, roomName, "*");
     this.quixService.unsubscribeFromParameter(this.quixService.sentimentTopic, roomName, "*");

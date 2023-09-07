@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, filter, skip, switchMap, take, takeUntil, tap } from 'rxjs';
+import { Subject, skip, takeUntil, tap } from 'rxjs';
 import { ConnectionStatus, QuixService } from 'src/app/services/quix.service';
 import { RoomService } from 'src/app/services/room.service';
 import { TwitchService } from 'src/app/services/twitch.service';
@@ -26,7 +26,7 @@ export class HomePageComponent implements OnInit {
           this.isTwitchRoom = !!twitchRoom;
           this.room = room || twitchRoom;
         }),
-        skip(1), 
+        skip(1), // We don't want to trigger this the first time
         takeUntil(this.unsubscribe$)
       ).subscribe(() => {
       this.roomService.switchRoom(this.room, this.isTwitchRoom);
@@ -37,7 +37,7 @@ export class HomePageComponent implements OnInit {
       if (status === ConnectionStatus.Connected) {
         this.roomService.switchRoom(this.room, this.isTwitchRoom);
 
-        this.twitchService.activateStreamsChanged();
+        this.twitchService.activeStreamsChanged();
         this.twitchService.subscribeToChannels();
       } 
     });

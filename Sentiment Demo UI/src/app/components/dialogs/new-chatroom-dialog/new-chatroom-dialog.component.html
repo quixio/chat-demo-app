@@ -6,7 +6,7 @@
 
   <p class="text-grey my-4">Create a new room to chat only with the users you invite.</p>
 
-  <form fxLayout="column" [formGroup]="form" (ngSubmit)="create()">
+  <form fxLayout="column" [formGroup]="form" (ngSubmit)="createRoom()">
     <mat-form-field appearance="outline" fxFlex>
       <mat-label>Room name</mat-label>
       <input matInput placeholder="Type your message" formControlName="name">

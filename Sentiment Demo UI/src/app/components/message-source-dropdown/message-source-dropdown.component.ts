@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { NewChatroomDialogComponent } from '../dialogs/new-chatroom-dialog/new-chatroom-dialog.component';
 import { Subject, takeUntil } from 'rxjs';
-import { ConnectionStatus, QuixService } from 'src/app/services/quix.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TwitchService } from 'src/app/services/twitch.service';
 import { ActiveStream, ActiveStreamAction } from 'src/app/models/activeStream';
@@ -29,23 +28,35 @@ export class MessageSourceDropdownComponent implements OnInit, OnDestroy {
 
   private unsubscribe = new Subject<void>();
 
-  constructor(private matDialog: MatDialog, private roomService: RoomService, private twitchService: TwitchService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private matDialog: MatDialog, private roomService: RoomService, private twitchService: TwitchService, 
+    private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    // Listen for changes in the selected room
     this.roomService.roomChanged$.pipe(takeUntil(this.unsubscribe)).subscribe(({roomId}) => {
       this.selectedRoom = roomId;
     });
 
+    // Listens for changes in the list of previous rooms
     this.roomService.previousRooms$.pipe(takeUntil(this.unsubscribe)).subscribe((rooms) => {
       this.storedRooms = rooms!;
+      console.log('Rooks', this.storedRooms);
     });
 
+    // Listener to retrieve all the active streams on twitch
     this.twitchService.getActiveStreams$().pipe(takeUntil(this.unsubscribe)).subscribe((activeStreamsSubs) => {
       this.isLoadingChannels = false;
       this.setActiveSteams(activeStreamsSubs?.streams!, activeStreamsSubs?.action);
     });
   }
 
+  /**
+   * Handles the adding and removing of twitch streams from
+   * the list in the UI. 
+   * 
+   * @param streamData the list of ActiveStreams.
+   * @param streamAction Whether to Add or Remove them.
+   */
   setActiveSteams(streamData: ActiveStream[], streamAction?: ActiveStreamAction): void {
     if (streamAction) {
       if (streamAction === ActiveStreamAction.AddUpdate) {
@@ -78,18 +89,27 @@ export class MessageSourceDropdownComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * When the user opens the menu by clicking the trigger
+   * we need to resize the material menu to be the same width
+   * as the input. 
+   */
   prepareMenu(): void {
 		setTimeout(() => {
 			// Set the width of the menu to the width of the fake select input
-			// eslint-disable-next-line no-underscore-dangle
 			const triggerEle = (this.menuTrigger as any)._viewContainerRef.element.nativeElement;
 			const menu = document.getElementById(this.menuTrigger.menu?.panelId!);
 			menu?.setAttribute('style', `width:${triggerEle?.offsetWidth}px !important`);
 		}, 0);
 	}
 
+  /**
+   *  Navigates to the current room by updating the query params
+   * 
+   * @param room The room we are switching to.
+   * @param isTwitch Whether the room is a Twitch stream or not.
+   */
   changeRoom(room?: string, isTwitch?: boolean): void {
-    // Navigate to the current route with the updated query parameters
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { [isTwitch ? 'twitchRoom' : 'room']: room },

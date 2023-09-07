@@ -71,19 +71,25 @@ export class SentimentChartComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Listen for reader messages
+    // Listens for when a new data is received from the sentiment topic.
     this.quixService.paramDataReceived$
      .pipe(takeUntil(this.unsubscribe$), filter((f) => f.topicId === this.quixService.sentimentTopic))
      .subscribe((payload) => {
-      // console.log("SentimentChart - Receiving parameter data - ", payload);
       this.sentimentMessageReceived(payload);
     });
 
+    // Listens for when the room changes and resets the chart
     this.roomService.roomChanged$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
       this.datasets!.at(0)!.data = [];
     });
   }
 
+  /**
+   * Converts the data from the payload so that it
+   * can then be added to the chart dataset.
+   * 
+   * @param payload The payload of the sentiment data.
+   */
   sentimentMessageReceived(payload: ParameterData): void {
     let [timestamp] = payload.timestamps;
     let averageSentiment = payload.numericValues["average_sentiment"]?.at(0) || 0;

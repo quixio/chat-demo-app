@@ -14,7 +14,8 @@ export class InfoComponent implements OnInit {
   }
 
   /**
-   * 
+   * Only needed for mobile users.
+   * Scrolls the chat section into view.
    */
   scrollToChat(): void {
     const chatEle = document.getElementById('chat-section');

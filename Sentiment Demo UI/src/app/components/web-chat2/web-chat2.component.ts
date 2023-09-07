@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription, debounceTime, takeUntil, timer } from 'rxjs';
 import { MessagePayload } from 'src/app/models/messagePayload';
@@ -83,10 +83,7 @@ export class WebChat2Component implements OnInit {
     });
   
     // Listen for reader messages
-    this.quixService.paramDataReceived$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((payload) => {
-      // console.log('PAYLOAD', payload);
+    this.quixService.paramDataReceived$.pipe(takeUntil(this.unsubscribe$)).subscribe((payload) => {
       this.messageReceived(payload);
     });
 
@@ -110,8 +107,6 @@ export class WebChat2Component implements OnInit {
     const message: string = this.messageFC.value || "";
     if (!isDraft) this.draftGuid = undefined;
 
-
-
     const payload = {
       timestamps: [new Date().getTime() * 1000000],
       tagValues: {
@@ -131,7 +126,6 @@ export class WebChat2Component implements OnInit {
   }
 
   private messageReceived(payload: ParameterData): void {
-    console.log("WebChat - Receiving parameter data - ", payload);
     let topicId = payload.topicId;
     let [timestamp] = payload.timestamps;
     let [name] = payload.tagValues["name"];
@@ -191,7 +185,14 @@ export class WebChat2Component implements OnInit {
     if (isScrollToBottom) setTimeout(() => (el.scrollTop = el.scrollHeight));
   }
 
-  getSentimentStats(): { smileys: string[], neutrals: string[], frowneys: string[] } {
+  /**
+   * Based on the users typing in chat, it generates statistics in the 
+   * sense of faces (Smiley, Neutral and Frowney) on the sentiment of
+   * the users draft messages.
+   * 
+   * @returns The statistics from the sentiment.
+   */
+  public getSentimentStats(): { smileys: string[], neutrals: string[], frowneys: string[] } {
     let smileys: string[] = [];
     let neutrals: string[] = [];
     let frowneys: string[] = [];
@@ -255,6 +256,13 @@ export class WebChat2Component implements OnInit {
     return 'text-grey-light';
   }
 
+  /**
+   * Takes the sentiment value of a message and returns the
+   * appropriate icon to be rendered in the template.
+   * 
+   * @param sentiment The sentiment of the message.
+   * @returns The icon name.
+   */
   public getSentimentIcon(sentiment: number): string {
     if (sentiment > POSITIVE_THRESHOLD) {
       return 'sentiment_satisfied';
@@ -288,16 +296,32 @@ export class WebChat2Component implements OnInit {
         return v.toString(16);
     });
   }
+
+  /**
+   * Util method for generating a random profile pic from
+   * a list of images.
+   * 
+   * @returns 
+   */
   private generateProfilePic(): string {
     const randomNumber = Math.floor(Math.random() * Animals?.length);
     return `https://ssl.gstatic.com/docs/common/profile/${Animals[randomNumber]}_lg.png`;
   }
 
+  /**
+   * Util method for generating a random color from
+   * a list of colors.
+   * @returns 
+   */
   private generateRandomColor(): string {
     const randomNumber = Math.floor(Math.random() * Colors?.length);
     return Colors[randomNumber];
   }
 
+  /**
+   * Only needed for mobile users.
+   * Scrolls the info section into view.
+   */
   scrollToInfo(): void {
     const chatEle = document.getElementById('info-section');
     chatEle?.scrollIntoView({

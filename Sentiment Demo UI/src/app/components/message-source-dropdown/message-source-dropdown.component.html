@@ -15,21 +15,23 @@
     <span class="mat-caption text-uppercase text-muted fw-bold text-truncate">Quix</span>
   </button>
 
-  <!-- Default Quix Chat Room -->
-  <button mat-menu-item fxLayout="row" fxLayoutAlign="start center" class="bg-white px-4 py-2 fw-bold" [class.selected]="selectedRoom === QuixChatRoom" (click)="changeRoom()">
-    <div fxLayoutAlign="start center" class="rounded-circle overflow-hidden me-2">
-      <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/58a75ce3-3ecd-422a-8c32-d01e07c09eeb-profile_image-70x70.png" height="32">
-    </div>  
-    Quix chatroom
-  </button>
-
-  <!-- Local Storage Chat rooms -->
-  <button mat-menu-item fxLayout="row" fxLayoutAlign="start center" class="bg-white px-4 py-2 fw-bold" *ngFor="let room of storedRooms" [class.selected]="selectedRoom === room" (click)="changeRoom(room)">
-    <div fxLayoutAlign="start center" class="rounded-circle overflow-hidden me-2">
-      <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/58a75ce3-3ecd-422a-8c32-d01e07c09eeb-profile_image-70x70.png" height="32">
-    </div>  
-    {{ room }}
-  </button>
+  <div [style.maxHeight.px]="250" class="overflow-auto">
+    <!-- Default Quix Chat Room -->
+    <button mat-menu-item fxLayout="row" fxLayoutAlign="start center" class="bg-white px-4 py-2 fw-bold" [class.selected]="selectedRoom === QuixChatRoom" (click)="changeRoom()">
+      <div fxLayoutAlign="start center" class="rounded-circle overflow-hidden me-2">
+        <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/58a75ce3-3ecd-422a-8c32-d01e07c09eeb-profile_image-70x70.png" height="32">
+      </div>  
+      Quix chatroom
+    </button>
+  
+    <!-- Local Storage Chat rooms -->
+    <button mat-menu-item fxLayout="row" fxLayoutAlign="start center" class="bg-white px-4 py-2 fw-bold" *ngFor="let room of storedRooms" [class.selected]="selectedRoom === room" (click)="changeRoom(room)">
+      <div fxLayoutAlign="start center" class="rounded-circle overflow-hidden me-2">
+        <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/58a75ce3-3ecd-422a-8c32-d01e07c09eeb-profile_image-70x70.png" height="32">
+      </div>  
+      {{ room }}
+    </button>
+  </div>
 
 
   <button mat-menu-item class="bg-white px-4 py-2" (click)="openCreateChatroomDialog()">
@@ -51,7 +53,7 @@
     <mat-spinner [diameter]="20"></mat-spinner>
   </div>
   
-  <cdk-virtual-scroll-viewport *ngIf="!isLoadingChannels" itemSize="100" [style.height.px]="(50 * channels.size) < 300 ? (50 * channels.size) : 300" twitchWrapper>
+  <cdk-virtual-scroll-viewport *ngIf="!isLoadingChannels" itemSize="100" [style.height.px]="(50 * channels.size) < 250 ? (50 * channels.size) : 250" twitchWrapper>
     <button mat-menu-item fxLayout="row" fxLayoutAlign="start center" class="bg-white px-4 py-2" *ngFor="let channel of channels" [class.selected]="selectedRoom === channel" (click)="changeRoom(channel, true)" [id]="'test-'+channel"> 
       <div fxLayoutAlign="start center" class="rounded-circle overflow-hidden me-2">
         <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/58a75ce3-3ecd-422a-8c32-d01e07c09eeb-profile_image-70x70.png" height="32">
