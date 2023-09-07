@@ -22,9 +22,14 @@
 
     <!-- Standard Chat Header -->
     <mat-card-header fxLayout="row" fxLayoutAlign="space-between center" *ngIf="!isTwitch">
-      <p class="fw-bold m-0 me-2">{{ roomService.selectedRoom }}</p>
+      <div fxLayoutAlign="start center">
+        <button fxHide.gt-sm mat-icon-button color="primary" class="me-1" (click)="scrollToInfo()">
+          <mat-icon>arrow_upward</mat-icon>
+        </button>
+        <p class="fw-bold m-0 me-2">{{ roomService.selectedRoom }}</p>
+      </div>
       <div fxLayout="row" fxLayoutAlign="start center">
-        <mat-chip-list aria-label="Status" class="me-2">
+        <mat-chip-list aria-label="Status" class="me-2" fxHide.lt-md>
           <mat-chip class="status-chip">
             <mat-icon fontIcon="circle" class="status-icon" 
             [class.text-success]="readerConnectionStatus === connectionState.Connected"
@@ -103,7 +108,7 @@
 
     <!-- Standard Chat Footer -->
     <mat-card-footer *ngIf="!isTwitch">
-      <form *ngIf="!isTwitch" [formGroup]="chatForm" fxLayout="row" fxLayoutGap="10" autocomplete="off" (ngSubmit)="submit()"> 
+      <form *ngIf="!isTwitch" [formGroup]="chatForm" fxLayout="row" autocomplete="off" (ngSubmit)="submit()"> 
         <!-- Username empty - Prompt user to enter username before they enter chat -->
         <ng-container *ngIf="!username">
           <mat-form-field appearance="outline" fxFlex class="small pb-0">

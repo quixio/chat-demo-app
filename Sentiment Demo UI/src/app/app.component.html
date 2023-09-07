@@ -1,15 +1,22 @@
 <mat-drawer-container class="example-container" fxFlexFill>
   <mat-drawer-content fxLayout="column">
     <header>
-      <mat-toolbar fxLayout="row" fxLayoutAlign="space-between center" 
-        [ngStyle.lt-md]="{ 'paddingLeft.px': 24, 'paddingRight.px': 24 }">
-        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="30" fxLayoutGap.lt-md="20">
-          <a routerLink="/lobby" routerLinkActive="active">
-            <img src="assets/quix-logo.svg" alt="Quix" width="40" />
+      <mat-toolbar fxLayout="row" fxLayoutAlign="space-between center" [ngClass.gt-sm]="'py-3 px-5'" class="p-4">
+        <div fxLayoutAlign="start center">
+          <a routerLink="/lobby" routerLinkActive="active" class="me-2">
+            <img src="assets/quix-logo-text.svg" alt="Quix" height="24" />
           </a>
-          <span class="mat-h3 m-0" [ngClass.lt-md]="'mat-body-2'">
-            <strong>Sentiment analysis demo</strong>
-          </span>
+          <span class="mat-h4 text-uppercase text-white mb-0">Templates</span>
+        </div>
+        <div fxLayoutAlign="start center">
+          <button fxHide.lt-md mat-flat-button color="primary" class="small me-3">
+            <img src="assets/icons/quix-logo.svg" class="me-1">
+            Look under the hood
+          </button>
+          <button mat-flat-button class="small">
+            <img src="assets/icons/github.svg" class="me-1">
+            View repo
+          </button>
         </div>
       </mat-toolbar>
     </header>

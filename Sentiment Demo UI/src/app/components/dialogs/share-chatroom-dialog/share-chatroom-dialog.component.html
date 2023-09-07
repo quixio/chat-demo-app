@@ -1,7 +1,7 @@
 <mat-card fxLayout="column" class="p-4 bg-white">
   <div fxLayout="row" fxLayoutAlign="space-between center">
     <div class="mat-h2 mb-0">Share chat</div>
-    <mat-icon class="text-grey-light">close</mat-icon>
+    <mat-icon class="text-grey-light" (click)="dialogRef.close()">close</mat-icon>
   </div>
 
   <p class="text-grey my-4">Share the chat with others via URL, or scan the QR below to connect from a mobile device.</p>

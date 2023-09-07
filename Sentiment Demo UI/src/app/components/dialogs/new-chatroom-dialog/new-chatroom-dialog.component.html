@@ -1,7 +1,7 @@
 <mat-card fxLayout="column" class="bg-white p-4">
   <div fxLayout="row" fxLayoutAlign="space-between center">
     <div class="mat-h2 mb-0">New chatroom</div>
-    <mat-icon class="text-grey-light">close</mat-icon>
+    <mat-icon (click)="dialogRef.close()" class="text-grey-light">close</mat-icon>
   </div>
 
   <p class="text-grey my-4">Create a new room to chat only with the users you invite.</p>

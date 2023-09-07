@@ -1,5 +1,11 @@
 /** --- Component Specific Material overrides --- **/
 
+::ng-deep {
+  .mat-form-field-infix {
+    width: unset !important;
+  }
+}
+
 // Message input styling
 ._message-input.mat-form-field-appearance-outline::ng-deep {
   .mat-form-field-outline {
@@ -8,6 +14,7 @@
 
   .mat-form-field-infix {
     border-top: 0;
+    width: unset !important;
   }
 
   .mat-form-field-outline-start,
