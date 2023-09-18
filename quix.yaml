@@ -52,7 +52,7 @@ deployments:
   - name: Sentiment Demo UI
     application: Sentiment Demo UI
     deploymentType: Service
-    version: 0f16cc4137cfb82577efd85ed70148a5b9c6ffeb
+    version: 3b37cab25ce46ba8873e419e37f76c0365b3db1c
     resources:
       cpu: 1000
       memory: 500
@@ -60,7 +60,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: sentimentdemoui-f203bf0
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: sentiment
         inputType: FreeText
