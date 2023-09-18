@@ -60,7 +60,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: sentimentdemoui-f203bf0
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: sentiment
         inputType: FreeText
