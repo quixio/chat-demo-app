@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { QuixService } from 'src/app/services/quix.service';
 
 @Component({
   selector: 'app-info-panel',
@@ -7,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InfoPanelComponent implements OnInit {
   
-  constructor() { 
+  workspaceId: string;
+
+  constructor(private quixService: QuixService) { 
+    this.workspaceId = this.quixService.workspaceId;
   }
 
   ngOnInit(): void {

@@ -4,15 +4,17 @@
     <div class="mat-h1 m-0">Sentiment analysis</div>
     <div class="mat-body-2 text-grey fw-normal mb-3">Real-time sentiment analysis demo</div>
     <div class="mat-h4 fw-normal mb-3">Take the emotional pulse of any conversation with a ML sentiment analysis pipeline built in Quix.</div>
-    <div>
-      <button mat-flat-button color="primary" class="small me-3">
-        <img src="assets/icons/quix-logo.svg" class="me-1">
-        Look under the hood
-      </button>
-      <button mat-flat-button class="small">
-        <img src="assets/icons/github.svg" class="me-1">
-        View repo
-      </button>
+    <div fxLayout="row">
+      <a mat-raised-button color="primary" class="small me-2" fxLayout="row" fxLayoutAlign="center center"
+        [href]="'https://portal.platform.quix.ai/pipeline?workspace=' + workspaceId" target="_blank">
+        <img src="assets/icons/quix-logo.svg" alt="Quix" height="16" class="me-2" />
+        <span>Look under the hood</span>
+      </a>
+      <a mat-raised-button color="accent" class="small" fxLayout="row" fxLayoutAlign="center center"
+        href="https://github.com/quixio/chat-demo-app" target="_blank">
+        <img src="assets/icons/github.svg" alt="Quix" height="16" class="me-2" />
+        <span>View repo</span>
+      </a>
     </div>
   </div>
 
@@ -43,12 +45,19 @@
     </div>
 
     <!-- Interested? -->
-    <div>
+    <div fxLayout="column">
       <div class="mat-h4 mb-2">Are you intrigued?</div>
       <p class="mat-body-2 text-grey mb-3">Try Quix for free to build your own pipeline. Or visit other demos to explore what else is possible.</p>
-      <div>
-        <button mat-flat-button color="primary" class="small me-2">Sign up for free</button>
-        <button mat-flat-button class="small">Explore other demos</button>
+      <div fxLayout="row">
+        <a mat-raised-button color="primary" class="small me-2" href="https://portal.platform.quix.ai/self-sign-up" target="_blank">
+          Sign up for free
+        </a>
+
+        <a mat-raised-button color="accent" class="small" fxLayout="row" fxLayoutAlign="center center"
+          href="https://github.com/orgs/quixio/repositories" target="_blank">
+          <img src="assets/icons/github.svg" alt="Quix" height="16" class="me-2" />
+          <span>Explore other demos</span>
+        </a>
       </div>
     </div>
 </section>

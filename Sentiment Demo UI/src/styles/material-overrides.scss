@@ -13,16 +13,6 @@
   }
 }
 
-.mat-flat-button,
-.mat-raised-button,
-.mat-fab,
-.mat-mini-fab {
-  &:not([color]) {
-    background-color: #434352;
-    color: white;
-  }
-}
-
 // Form field
 .mat-form-field {
   &.mat-form-field-has-label {

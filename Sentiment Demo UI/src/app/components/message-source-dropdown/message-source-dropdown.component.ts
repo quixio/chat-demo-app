@@ -40,7 +40,6 @@ export class MessageSourceDropdownComponent implements OnInit, OnDestroy {
     // Listens for changes in the list of previous rooms
     this.roomService.previousRooms$.pipe(takeUntil(this.unsubscribe)).subscribe((rooms) => {
       this.storedRooms = rooms!;
-      console.log('Rooks', this.storedRooms);
     });
 
     // Listener to retrieve all the active streams on twitch
