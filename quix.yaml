@@ -156,6 +156,39 @@ deployments:
         description: Max queue size for the sink ingestion
         required: true
         value: 50
+  - name: Sentiment Demo UI 2
+    application: Sentiment Demo UI
+    deploymentType: Service
+    version: 0f16cc4137cfb82577efd85ed70148a5b9c6ffeb
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: sentimentdemoui-0f16cc4
+    desiredStatus: Running
+    variables:
+      - name: sentiment
+        inputType: FreeText
+        description: The topic to read from
+        required: true
+        value: sentiment
+      - name: messages
+        inputType: FreeText
+        description: The topic to read from
+        required: true
+        value: messages
+      - name: drafts
+        inputType: FreeText
+        description: ''
+        required: true
+        value: drafts
+      - name: drafts_sentiment
+        inputType: FreeText
+        description: ''
+        required: false
+        value: drafts_sentiment
 
 # This section describes the Topics of the data pipeline
 topics:
