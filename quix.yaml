@@ -52,7 +52,7 @@ deployments:
   - name: Sentiment Demo UI
     application: Sentiment Demo UI
     deploymentType: Service
-    version: 3b37cab25ce46ba8873e419e37f76c0365b3db1c
+    version: 0f16cc4137cfb82577efd85ed70148a5b9c6ffeb
     resources:
       cpu: 1000
       memory: 500
@@ -159,27 +159,6 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: drafts_sentiment
-    persisted: false
-    configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 262144000
-  - name: drafts
-    persisted: false
-    configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 262144000
-  - name: messages
-    persisted: false
-    configuration:
-      partitions: 16
-      replicationFactor: 2
-      retentionInMinutes: 120
-      retentionInBytes: 104857600
   - name: sentiment
     persisted: false
     configuration:
@@ -187,3 +166,24 @@ topics:
       replicationFactor: 2
       retentionInMinutes: 120
       retentionInBytes: 10485760
+  - name: messages
+    persisted: false
+    configuration:
+      partitions: 16
+      replicationFactor: 2
+      retentionInMinutes: 120
+      retentionInBytes: 104857600
+  - name: drafts
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 262144000
+  - name: drafts_sentiment
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 262144000
