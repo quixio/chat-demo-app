@@ -41,7 +41,7 @@ export class SentimentChartComponent implements OnInit, OnDestroy {
       x: {
         type: 'realtime',
         realtime: {
-          duration: 20000,
+          duration: 40000,
           refresh: 1000,
           delay: 200,
           onRefresh: (chart: Chart) => {
