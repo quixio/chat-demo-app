@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject, Subscription, debounceTime, takeUntil, timer } from 'rxjs';
+import { Subject, Subscription, debounceTime, take, takeUntil, timer } from 'rxjs';
 import { MessagePayload } from 'src/app/models/messagePayload';
 import { ParameterData } from 'src/app/models/parameterData';
 import { ConnectionStatus, QuixService } from 'src/app/services/quix.service';
@@ -87,9 +87,17 @@ export class WebChatComponent implements OnInit {
       this.messageReceived(payload);
     });
 
-    this.roomService.roomChanged$.subscribe(({ isTwitch }) => {
+    this.roomService.roomChanged$.subscribe(({ roomId, isTwitch }) => {
       this.messages = [];
       this.isTwitch = isTwitch;
+
+      if (!isTwitch) {
+        this.roomService.getLastMessages(roomId).pipe(take(1)).subscribe(lastMessages => {
+          let sortedMessages = lastMessages.sort((a, b) => a.timestamp - b.timestamp);
+          this.messages = sortedMessages;
+          this.scrollToChatBottom();
+        });
+      }
     });
   }
 
@@ -180,9 +188,7 @@ export class WebChatComponent implements OnInit {
     }
 
     // Scroll to the button of the chart
-    const el = this.chatWrapper.nativeElement;
-    const isScrollToBottom = el.offsetHeight + el.scrollTop >= el.scrollHeight;
-    if (isScrollToBottom) setTimeout(() => (el.scrollTop = el.scrollHeight));
+    this.scrollToChatBottom(true);
   }
 
   /**
@@ -327,6 +333,18 @@ export class WebChatComponent implements OnInit {
     chatEle?.scrollIntoView({
       behavior: 'smooth'
     })
+  }
+  
+  /**
+   * Util method to scroll the user to the bottom of the chat
+   */
+  scrollToChatBottom(isCheckBottom?: boolean): void {
+    const el = this.chatWrapper.nativeElement;
+    const isScrollToBottom = el.offsetHeight + el.scrollTop >= el.scrollHeight;
+
+    if (isCheckBottom && !isScrollToBottom) return;
+    
+    setTimeout(() => (el.scrollTop = el.scrollHeight));
   }
 
   openShareChatroomDialog(): void {

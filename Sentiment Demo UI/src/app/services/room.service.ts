@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { QuixService } from "./quix.service";
-import { Observable, ReplaySubject, Subject, of } from "rxjs";
+import { Observable, ReplaySubject, Subject, map, of } from "rxjs";
 import { MessagePayload } from "../models/messagePayload";
 
 export const QuixChatRoom = 'Quix chatroom';
@@ -80,10 +80,10 @@ export class RoomService {
   /**
    * Retrieves a list of the last messages for a specific room.
    * 
-   * @param room The name of the room.
+   * @param roomId The name of the room.
    * @returns An observable containing all the messages.
    */
-  public getLastMessages(room: string): Observable<MessagePayload[]> {
+  public getLastMessages(roomId: string): Observable<MessagePayload[]> {
     let payload =
     {
       'numericParameters': [
@@ -104,14 +104,46 @@ export class RoomService {
       ],
 
       'streamIds': [
-        room + '-output'
+        roomId
       ],
       'groupBy': [
         'role',
-        'name'
+        'name',
+        'profilePic',
+        'profilePicColor'
       ],
     };
-    return this.quixService.retrievePersistedParameterData(payload);
+    return this.quixService.retrievePersistedParameterData(payload).pipe(
+      map(rows => {
+        let results: MessagePayload[] = [];
+
+        rows.timestamps.forEach((timestamp, i) => {
+          let name = rows.tagValues['name']?.at(i)!;
+          let profilePic = rows.tagValues['profilePic']?.at(i)
+          let profilePicColor = rows.tagValues['profilePicColor']?.at(i)
+          let sentiment = rows.numericValues['sentiment']?.at(i) || 0;
+          let value = rows.stringValues['chat-message']?.at(i);
+          let message = results.find((f) => f.timestamp === timestamp && f.name === name);
+
+          if (message) {
+            message.value = value;
+            message.sentiment = sentiment;
+          } else {
+            results.push({
+              timestamp,
+              value,
+              sentiment,
+              name,
+              profilePic,
+              profilePicColor
+            })
+          }
+        })
+
+        return results;
+      })
+    )
+    
   }
 
   /**

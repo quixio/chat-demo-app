@@ -251,25 +251,14 @@ export class QuixService {
   }
 
 
-  public retrievePersistedParameterData(payload: any): Observable<MessagePayload[]> {
+  public retrievePersistedParameterData(payload: any): Observable<ParameterData> {
     return this.httpClient.post<ParameterData>(
       `https://telemetry-query-${this.workspaceId}.${this.subdomain}.quix.ai/parameters/data`,
       payload,
       {
         headers: { 'Authorization': 'bearer ' + this.token }
       }
-    ).pipe(map(rows => {
-      let result: MessagePayload[] = [];
-      rows.timestamps.forEach((timestamp, i) => {
-        result.push({
-          timestamp,
-          value: rows.stringValues['chat-message'][i],
-          sentiment: rows.numericValues['sentiment'][i],
-          name: rows.tagValues['name'][i]
-        });
-      })
-      return result;
-    }));
+    );
   }
 
   private stripLineFeed(s: string): string {
