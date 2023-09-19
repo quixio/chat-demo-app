@@ -240,10 +240,11 @@ export class QuixService {
   }
 
   /**
+   * Sends parameter data to Quix using the WriterHub connection.
    * 
-   * @param topic 
-   * @param streamId 
-   * @param payload 
+   * @param topic The name of the topic we are writing to.
+   * @param streamId The id of the stream.
+   * @param payload The payload of data we are sending.
    */
   public sendParameterData(topic: string, streamId: string, payload: any): void {
     console.log("QuixService Sending parameter data!", topic, streamId, payload);
@@ -251,6 +252,13 @@ export class QuixService {
   }
 
 
+  /**
+   * Uses the telemetry data api to retrieve persisted parameter
+   * data for a specific criteria.
+   * 
+   * @param payload The payload that we are querying with.
+   * @returns The persisted parameter data.
+   */
   public retrievePersistedParameterData(payload: any): Observable<ParameterData> {
     return this.httpClient.post<ParameterData>(
       `https://telemetry-query-${this.workspaceId}.${this.subdomain}.quix.ai/parameters/data`,
