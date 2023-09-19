@@ -200,7 +200,7 @@ topics:
       retentionInMinutes: 120
       retentionInBytes: 10485760
   - name: messages
-    persisted: false
+    persisted: true
     configuration:
       partitions: 16
       replicationFactor: 2
