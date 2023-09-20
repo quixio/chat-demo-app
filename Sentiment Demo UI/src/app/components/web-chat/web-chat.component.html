@@ -97,7 +97,9 @@
         </div>
 
         <!-- Display the average sentiment of the chat -->
-        <span>avg: <span class="fw-bold">{{  (averageSentiment > 0 ? '+' : '') + averageSentiment | number : '1.2-2' }}</span></span>
+        <span *ngIf="getDraftSentimentAverage() as averageSentiment">
+          avg: <span class="fw-bold">{{  (averageSentiment > 0 ? '+' : '') + averageSentiment | number : '1.2-2' }}</span>
+        </span>
       </div>
     </mat-card-content>
 

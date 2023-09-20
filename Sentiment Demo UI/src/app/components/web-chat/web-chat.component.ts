@@ -211,6 +211,23 @@ export class WebChatComponent implements OnInit {
     return { smileys, neutrals, frowneys };
   }
 
+  /**
+   * Based on the users typing in the chat, it generates the average sentiment
+   * of all their draft messages. This can then be displayed on the typing message.
+   * 
+   * @returns An average of all the userTyping sentiments.
+   */
+  public getDraftSentimentAverage(): number {
+    // Get all the sentiments for user's currently typing
+    const sentimentsArray = [...this.usersTyping.values()].map(userTyping => userTyping.sentiment || 0);
+    // Calculate the sum of all numbers
+    const sum = sentimentsArray.reduce((acc, current) => acc + current, 0);
+    // Calculate the mean (average)
+    const mean = sum / sentimentsArray.length;
+
+    return mean;
+  }
+
 
   /**
    * Based on how many users are typing, it generates the appropriate
