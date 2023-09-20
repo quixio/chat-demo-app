@@ -117,7 +117,7 @@
             <mat-label>Enter your username</mat-label>
             <input matInput [formControl]="usernameFC">
           </mat-form-field>
-          <button mat-flat-button color="primary" class="ms-2" (click)="username = usernameFC.value!" [disabled]="usernameFC.invalid"> 
+          <button type="submit" mat-flat-button color="primary" class="ms-2" [disabled]="usernameFC.invalid"> 
             Join chat
           </button>
         </ng-container>
@@ -128,7 +128,7 @@
             <img [src]="profilePic" height="28">
           </div>
           <mat-form-field appearance="outline" fxFlex class="_message-input me-2 pb-0">
-            <input matInput placeholder="Type your message" formControlName="message">
+            <input matInput #messageInput placeholder="Type your message" formControlName="message">
           </mat-form-field>
           <button mat-mini-fab color="primary" type="submit" class="mat-elevation-z0" [disabled]="!chatForm.controls.message.value">
             <mat-icon>send</mat-icon>

@@ -32,7 +32,8 @@ export class WebChatComponent implements OnInit {
 
   isTwitch: boolean = true;
 
-  @ViewChild('chatWrapper') chatWrapper: ElementRef<HTMLElement>;
+  @ViewChild('chatWrapper') chatWrapperEle: ElementRef<HTMLElement>;
+  @ViewChild('messageInput') messageInputEle: ElementRef;
 
   connectionState = ConnectionStatus;
   readerConnectionStatus: ConnectionStatus = ConnectionStatus.Offline;
@@ -92,7 +93,7 @@ export class WebChatComponent implements OnInit {
       this.isTwitch = isTwitch;
 
       if (!isTwitch) {
-        this.roomService.getLastMessages(roomId).pipe(take(1)).subscribe(lastMessages => {
+        this.roomService.getChatMessageHistory(roomId).pipe(take(1)).subscribe(lastMessages => {
           let sortedMessages = lastMessages.sort((a, b) => a.timestamp - b.timestamp);
           this.messages = sortedMessages;
           this.scrollToChatBottom();
@@ -104,6 +105,9 @@ export class WebChatComponent implements OnInit {
   submit(): void {
     if (!this.username) {
       this.username = this.usernameFC.value!;
+      this.scrollToChatBottom();
+      setTimeout(() => this.messageInputEle.nativeElement.focus(), 0);
+      return;
     }
 
     this.sendMessage(false);
@@ -356,7 +360,7 @@ export class WebChatComponent implements OnInit {
    * Util method to scroll the user to the bottom of the chat
    */
   scrollToChatBottom(isCheckBottom?: boolean): void {
-    const el = this.chatWrapper.nativeElement;
+    const el = this.chatWrapperEle.nativeElement;
     const isScrollToBottom = el.offsetHeight + el.scrollTop >= el.scrollHeight;
 
     if (isCheckBottom && !isScrollToBottom) return;

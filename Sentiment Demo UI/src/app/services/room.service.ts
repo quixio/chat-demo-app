@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { QuixService } from "./quix.service";
 import { Observable, ReplaySubject, Subject, map, of } from "rxjs";
 import { MessagePayload } from "../models/messagePayload";
+import { ParameterData } from "../models/parameter-data";
 
 export const QuixChatRoom = 'Quix chatroom';
 
@@ -83,7 +84,7 @@ export class RoomService {
    * @param roomId The name of the room.
    * @returns An observable containing all the messages.
    */
-  public getLastMessages(roomId: string): Observable<MessagePayload[]> {
+  public getChatMessageHistory(roomId: string): Observable<MessagePayload[]> {
     let payload =
     {
       'numericParameters': [
@@ -144,6 +145,45 @@ export class RoomService {
       })
     )
     
+  }
+
+  /**
+   * Retrieved the last sentiments for the room from the last 5 minutes
+   */
+  public getChatSentimentHistory(roomId: string): Observable<ParameterData> {
+    // Calculate the timestamp of 5 mins ago in nanoseconds
+    const currentTimeInNano = Date.now() * 1e6;
+    const fiveMinutesInNano = 5 * 60 * 1e9;
+    const fiveMinutesAgoInNano = currentTimeInNano - fiveMinutesInNano;
+
+    let payload = 
+    {
+        'topic': 'sentiment',
+        'groupByTime': {
+            'timeBucketDuration': 7791291230,
+            'interpolationType': 'None'
+        },
+        'from': fiveMinutesAgoInNano,
+        'numericParameters': [
+            {
+                'parameterName': 'average_sentiment',
+                'aggregationType': 'Mean'
+            }
+        ],
+        'stringParameters': [],
+        'binaryParameters': [],
+        'eventIds': [],
+        'eventAggregation': {
+            'interpolationType': 'None',
+            'interval': 7791291230,
+            'aggregationType': 'First'
+        },
+        'streamIds': [
+            roomId
+        ],
+        'tagFilters': []
+    };
+    return this.quixService.retrievePersistedParameterData(payload);
   }
 
   /**
