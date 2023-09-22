@@ -154,6 +154,41 @@ deployments:
         description: ''
         required: false
         value: drafts_sentiment
+  - name: Twitch Chat
+    application: Twitch Chat
+    deploymentType: Service
+    version: 5d726bf8f1a8902e7fe29afb80bcc8177d5f8330
+    resources:
+      cpu: 2000
+      memory: 1000
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write messages into
+        required: true
+        value: messages
+      - name: StreamsToJoinCount
+        inputType: FreeText
+        description: Number of active stream channel to constantly be connected to
+        required: true
+        value: 100
+      - name: TwitchBotToken
+        inputType: Secret
+        description: ''
+        required: false
+        value: TwitchBotToken
+      - name: TwitchAppClientId
+        inputType: Secret
+        description: ''
+        required: false
+        value: TwitchAppClientId
+      - name: TwitchAppClientSecret
+        inputType: Secret
+        description: ''
+        required: false
+        value: TwitchAppClientSecret
 
 # This section describes the Topics of the data pipeline
 topics:
