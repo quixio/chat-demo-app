@@ -52,7 +52,7 @@ deployments:
   - name: Sentiment Demo UI
     application: Sentiment Demo UI
     deploymentType: Service
-    version: ee27a3601bddae54dfa70ebd55ba49655ae42186
+    version: 2064d51777f9381053ffd4d1f382d7c755643373
     resources:
       cpu: 1000
       memory: 500
@@ -66,12 +66,12 @@ deployments:
         inputType: FreeText
         description: The topic to read from
         required: true
-        value: sentiment
+        value: chat-with-sentiment
       - name: messages
         inputType: FreeText
         description: The topic to read from
         required: true
-        value: messages
+        value: chat-messages
       - name: drafts
         inputType: FreeText
         description: ''
