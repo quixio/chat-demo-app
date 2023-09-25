@@ -328,7 +328,7 @@ export class WebChatComponent implements OnInit {
    * Util method for generating a random profile pic from
    * a list of images.
    * 
-   * @returns 
+   * @returns The random profile pic.
    */
   private generateProfilePic(): string {
     const randomNumber = Math.floor(Math.random() * Animals?.length);
@@ -338,7 +338,8 @@ export class WebChatComponent implements OnInit {
   /**
    * Util method for generating a random color from
    * a list of colors.
-   * @returns 
+   *
+   * @returns The random color. 
    */
   private generateRandomColor(): string {
     const randomNumber = Math.floor(Math.random() * Colors?.length);
