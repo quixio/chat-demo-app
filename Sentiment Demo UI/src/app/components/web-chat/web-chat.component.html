@@ -63,10 +63,14 @@
             <p class="mb-0 me-2 text-grey-light mat-caption"> {{ getDateFromTimestamp(message.timestamp) | date:'hh:mm:ss' }}</p>
             <div 
               [class]="getColor(message?.sentiment!)" fxLayout="row" fxLayoutAlign="start center">
-              <mat-icon inline class="material-icons-outlined me-1" [style.fontSize.px]="16">
-                {{ getSentimentIcon(message?.sentiment!) }}
+              <mat-icon *ngIf="getSentimentIcon(message?.sentiment!) as icon" inline class="material-icons-outlined me-1" [style.fontSize.px]="16">
+                {{ icon }}
               </mat-icon>
-              <p class="mb-0 fw-bold">{{ (message.sentiment! > 0 ? '+' : '') + (message.sentiment | number : '1.2-2') }}</p>
+              <div *ngIf="!message.sentiment" fxLayoutAlign="start center">
+                <mat-spinner diameter="12" class="text-grey-light"></mat-spinner>
+                <p class="ms-1 mb-0">...</p>
+              </div>
+              <p *ngIf="message.sentiment" class="mb-0 fw-bold">{{  (message.sentiment! > 0 ? '+' : '') + (message.sentiment | number : '1.2-2') }}</p>
             </div>
           </div>
         </div>        

@@ -143,7 +143,7 @@ export class WebChatComponent implements OnInit {
     let [name] = payload.tagValues["name"];
     let profilePic = payload.tagValues["profilePic"]?.at(0);
     let profilePicColor = payload.tagValues["profilePicColor"]?.at(0);
-    let sentiment = payload.numericValues["sentiment"]?.at(0) || 0;
+    let sentiment = payload.numericValues["sentiment"]?.at(0) || undefined;
     let averageSentiment = payload.numericValues["average_sentiment"]?.at(0) || 0;
     let value = payload.stringValues["chat-message"]?.at(0);
     let message = this.messages.find((f) => f.timestamp === timestamp && f.name === name);
@@ -166,7 +166,7 @@ export class WebChatComponent implements OnInit {
     }
 
     if (topicId === this.quixService.draftsSentimentTopic) {
-      if (!user) return;
+      if (!user || !sentiment) return;
       user = { ...user, sentiment };
       if (sentiment > 0) this.happyTypers.add(name);
       if (sentiment < 0) this.unhappyTypers.add(name);
@@ -290,14 +290,16 @@ export class WebChatComponent implements OnInit {
    * @param sentiment The sentiment of the message.
    * @returns The icon name.
    */
-  public getSentimentIcon(sentiment: number): string {
+  public getSentimentIcon(sentiment: number): string | undefined {
     if (sentiment > POSITIVE_THRESHOLD) {
       return 'sentiment_satisfied';
     } else if (sentiment < NEGATIVE_THRESHOLD) {
       return 'sentiment_dissatisfied';
+    } else if (sentiment === 0) {
+      return 'sentiment_neutral';
     }
       
-    return 'sentiment_neutral';
+    return undefined;
   }
 
   /**

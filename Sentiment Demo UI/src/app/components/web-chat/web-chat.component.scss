@@ -69,3 +69,9 @@
   }
 
 }
+
+::ng-deep {
+  .mat-progress-spinner circle, .mat-spinner circle {
+    stroke:   #A2A2B0!important;
+  }
+}
