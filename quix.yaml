@@ -17,7 +17,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: sentimentdemoui-f203bf0
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: sentiment
         inputType: FreeText
@@ -116,7 +116,6 @@ deployments:
         inputType: HiddenText
         description: JSON string of the service account file for the BigQuery GCP project
         required: true
-        value: {{ BIG_QUERY_SERVIS_ACCOUNT_JSON }}
       - name: MAX_QUEUE_SIZE
         inputType: FreeText
         description: Max queue size for the sink ingestion
@@ -161,14 +160,14 @@ deployments:
 # This section describes the Topics of the data pipeline
 topics:
   - name: sentiment
-    persisted: true
+    persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
   - name: messages
-    persisted: true
+    persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
