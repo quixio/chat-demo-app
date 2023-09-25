@@ -52,7 +52,7 @@ deployments:
   - name: Sentiment Demo UI
     application: Sentiment Demo UI
     deploymentType: Service
-    version: f01305d872a62da1ab010102f90823f97884c83a
+    version: ee27a3601bddae54dfa70ebd55ba49655ae42186
     resources:
       cpu: 1000
       memory: 500
@@ -157,6 +157,74 @@ deployments:
         description: Max queue size for the sink ingestion
         required: true
         value: 50
+  - name: Sentiment Demo UI 2
+    application: Sentiment Demo UI
+    deploymentType: Service
+    version: ee27a3601bddae54dfa70ebd55ba49655ae42186
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: sentimentdemoui-ee27a36
+    desiredStatus: Running
+    variables:
+      - name: sentiment
+        inputType: FreeText
+        description: The topic to read from
+        required: true
+        value: sentiment
+      - name: messages
+        inputType: FreeText
+        description: The topic to read from
+        required: true
+        value: messages
+      - name: drafts
+        inputType: FreeText
+        description: ''
+        required: true
+        value: drafts
+      - name: drafts_sentiment
+        inputType: FreeText
+        description: ''
+        required: false
+        value: drafts_sentiment
+  - name: Twitch Chat
+    application: Twitch Chat
+    deploymentType: Service
+    version: 5d726bf8f1a8902e7fe29afb80bcc8177d5f8330
+    resources:
+      cpu: 2000
+      memory: 1000
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write messages into
+        required: true
+        value: messages
+      - name: StreamsToJoinCount
+        inputType: FreeText
+        description: Number of active stream channel to constantly be connected to
+        required: true
+        value: 100
+      - name: TwitchBotToken
+        inputType: Secret
+        description: ''
+        required: false
+        value: TwitchBotToken
+      - name: TwitchAppClientId
+        inputType: Secret
+        description: ''
+        required: false
+        value: TwitchAppClientId
+      - name: TwitchAppClientSecret
+        inputType: Secret
+        description: ''
+        required: false
+        value: TwitchAppClientSecret
 
 
 # This section describes the Topics of the data pipeline
@@ -169,7 +237,7 @@ topics:
       retentionInMinutes: 120
       retentionInBytes: 10485760
   - name: messages
-    persisted: false
+    persisted: true
     configuration:
       partitions: 16
       replicationFactor: 2

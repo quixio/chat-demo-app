@@ -1,0 +1,4 @@
+<div fxLayout="row" fxLayout.lt-md="column" [ngClass.gt-sm]="'overflow-hidden h-100'">
+  <app-info-panel fxFlex.gt-sm="480px" [ngClass.gt-sm]="'overflow-auto'" id="info-section" #test></app-info-panel>
+  <app-web-chat fxFlex.gt-sm [ngClass.lt-md]="'_mobile-chat'" id="chat-section"></app-web-chat>
+</div>

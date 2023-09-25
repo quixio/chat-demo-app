@@ -1,0 +1,25 @@
+<mat-card fxLayout="column" class="p-4 bg-white">
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="mat-h2 mb-0">Share chat</div>
+    <mat-icon class="text-grey-light" (click)="dialogRef.close()">close</mat-icon>
+  </div>
+
+  <p class="text-grey my-4">Share the chat with others via URL, or scan the QR below to connect from a mobile device.</p>
+
+  <mat-form-field appearance="outline" fxFlex>
+    <mat-label>URL</mat-label>
+    <input matInput readonly [value]="qrValue" [cdkCopyToClipboard]="qrValue">
+    <button mat-icon-button matSuffix matTooltip="Copy URL" [cdkCopyToClipboard]="qrValue">
+      <mat-icon color="primary">content_copy</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <div fxLayout="column" fxLayoutAlign="start center">
+    <qrcode [qrdata]="qrValue" [width]="240"></qrcode>
+  </div>
+
+  <div fxLayout="row" class="mt-2">
+    <button mat-flat-button (click)="dialogRef.close()" color="primary">Done</button>
+  </div>
+
+</mat-card>

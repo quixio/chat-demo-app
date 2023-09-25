@@ -1,0 +1,141 @@
+<section fxLayout="column" fxLayoutAlign="center center" fxLayout.lt-md="column" fxFlexFill class="_background">
+  
+  <mat-card fxLayout="column" class="p-0 h-100 w-100" [style.maxWidth.px]="440">
+
+    <!-- TwitchTV Header -->
+    <mat-card-header fxLayout="row" fxLayoutAlign="space-between center" *ngIf="isTwitch">     
+        <div fxLayoutAlign="start center">
+          <button fxHide.gt-sm mat-icon-button color="primary" class="me-1" (click)="scrollToInfo()">
+            <mat-icon>arrow_upward</mat-icon>
+          </button>
+          <div class="_profile-pic me-2" [style.background-color]="profilePicColor">
+            <img [src]="profilePic" height="28">
+          </div>
+          <p class="mat-body-2 fw-bold m-0 me-2">{{ roomService.selectedRoom }}</p>
+        </div>
+
+        <a fxLayoutAlign="start center" [href]="'https://twitch.tv/' + roomService.selectedRoom" target="_blank">
+          <mat-icon class="me-2">open_in_new</mat-icon>
+          Open in Twitch
+        </a>  
+    </mat-card-header>
+
+    <!-- Standard Chat Header -->
+    <mat-card-header fxLayout="row" fxLayoutAlign="space-between center" *ngIf="!isTwitch">
+      <div fxLayoutAlign="start center">
+        <button fxHide.gt-sm mat-icon-button color="primary" class="me-1" (click)="scrollToInfo()">
+          <mat-icon>arrow_upward</mat-icon>
+        </button>
+        <p class="fw-bold m-0 me-2">{{ roomService.selectedRoom }}</p>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <mat-chip-list aria-label="Status" class="me-2" fxHide.lt-md>
+          <mat-chip class="status-chip">
+            <mat-icon fontIcon="circle" class="status-icon" 
+            [class.text-success]="readerConnectionStatus === connectionState.Connected"
+            [class.text-warning]="readerConnectionStatus === connectionState.Reconnecting"
+            [class.text-danger]="readerConnectionStatus === connectionState.Offline"></mat-icon>
+            <strong [style.marginLeft.px]="5">{{ readerConnectionStatus }}</strong>
+          </mat-chip>
+        </mat-chip-list> 
+        <button mat-flat-button class="small mat-elevation-z4" color="primary" (click)="openShareChatroomDialog()">
+          <mat-icon inline fontIcon="share" class="material-icons-outlined me-1" [style.fontSize.px]="16"></mat-icon>
+          Share
+        </button>
+      </div>
+    </mat-card-header>
+
+
+
+    <mat-card-content fxFlex fxLayout="column" class="bg-white mb-0 overflow-hidden">
+      <div fxFlex class="overflow-auto"  #chatWrapper>
+        <div fxLayout="column" class="_message py-1 px-2 m-3 rounded-3 overflow-hidden" *ngFor="let message of messages">
+          <div fxFlex fxLayout="row" fxLayoutAlign="start start">
+            <div *ngIf="message.profilePic" [style.background-color]="message.profilePicColor" class="_profile-pic me-2">
+              <img [src]="message.profilePic" height="28">
+            </div>
+            <div fxLayout="column">
+              <p class="mb-0 fw-bold mat-body-2">{{ message.name }}</p>
+              <div class="_message-text">{{ message.value }}</div>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="end center" class="mat-caption">
+            <p class="mb-0 me-2 text-grey-light mat-caption"> {{ getDateFromTimestamp(message.timestamp) | date:'hh:mm:ss' }}</p>
+            <div 
+              [class]="getColor(message?.sentiment!)" fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon inline class="material-icons-outlined me-1" [style.fontSize.px]="16">
+                {{ getSentimentIcon(message?.sentiment!) }}
+              </mat-icon>
+              <p class="mb-0 fw-bold">{{ (message.sentiment! > 0 ? '+' : '') + (message.sentiment | number : '1.2-2') }}</p>
+            </div>
+          </div>
+        </div>        
+      </div>
+
+      <!-- Standard Chat isTyping sentiment indicator -->
+      <div *ngIf="!isTwitch && !!usersTyping.size" fxLayout="row" fxLayoutAlign="space-between center" class="mat-caption text-grey my-2 mx-3">
+        
+        <!-- Display sentiment statistics -->
+        <div *ngIf="getSentimentStats() as stats" fxLayout="row">
+          <div *ngIf="stats.smileys?.length" fxLayout="row" fxLayoutAlign="start center" class="cursor-pointer text-success me-2" [matTooltip]="stats.smileys.join(', ')">
+            <mat-icon inline fontIcon="sentiment_satisfied" class="material-icons-outlined icon14" [style.fontSize.px]="16"></mat-icon>
+            <span class="fw-bold">{{ stats.smileys.length }}</span>
+          </div>
+          <div *ngIf="stats.neutrals?.length" fxLayout="row" fxLayoutAlign="start center" class="cursor-pointer text-success me-2" [matTooltip]="stats.neutrals.join(', ')">
+            <mat-icon inline fontIcon="sentiment_neutral" class="material-icons-outlined icon14" [style.fontSize.px]="16"></mat-icon>
+            <span class="fw-bold">{{ stats.neutrals.length }}</span>
+          </div>
+          <div *ngIf="stats.frowneys?.length" fxLayout="row" fxLayoutAlign="start center" class="cursor-pointer text-danger me-2" [matTooltip]="stats.frowneys.join(', ')">
+            <mat-icon inline fontIcon="sentiment_dissatisfied" class="material-icons-outlined icon14" [style.fontSize.px]="16"></mat-icon>
+            <span class="fw-bold">{{ stats.frowneys.length }}</span>
+          </div>
+
+          <!-- Display isTyping message -->
+          <div *ngIf="getTypingMessage() as message" class="mat-caption typing">
+            <div [innerHTML]="message"></div>
+          </div>
+        </div>
+
+        <!-- Display the average sentiment of the chat -->
+        <span *ngIf="getDraftSentimentAverage() as averageSentiment">
+          avg: <span class="fw-bold">{{  (averageSentiment > 0 ? '+' : '') + averageSentiment | number : '1.2-2' }}</span>
+        </span>
+      </div>
+    </mat-card-content>
+
+    <!-- TwitchTV Footer -->
+    <mat-card-footer class="m-0 text-grey" *ngIf="isTwitch">
+      <p class="mb-0 fw-bold text-uppercase">Read only</p>
+    </mat-card-footer>
+
+    <!-- Standard Chat Footer -->
+    <mat-card-footer *ngIf="!isTwitch">
+      <form *ngIf="!isTwitch" [formGroup]="chatForm" fxLayout="row" autocomplete="off" (ngSubmit)="submit()"> 
+        <!-- Username empty - Prompt user to enter username before they enter chat -->
+        <ng-container *ngIf="!username">
+          <mat-form-field appearance="outline" fxFlex class="small pb-0">
+            <mat-label>Enter your username</mat-label>
+            <input matInput [formControl]="usernameFC">
+          </mat-form-field>
+          <button type="submit" mat-flat-button color="primary" class="ms-2" [disabled]="usernameFC.invalid"> 
+            Join chat
+          </button>
+        </ng-container>
+
+        <!-- Username provided - Allow user to send messages -->
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" *ngIf="username">
+          <div class="_profile-pic me-2" [style.background-color]="profilePicColor">
+            <img [src]="profilePic" height="28">
+          </div>
+          <mat-form-field appearance="outline" fxFlex class="_message-input me-2 pb-0">
+            <input matInput #messageInput placeholder="Type your message" formControlName="message">
+          </mat-form-field>
+          <button mat-mini-fab color="primary" type="submit" class="mat-elevation-z0" [disabled]="!chatForm.controls.message.value">
+            <mat-icon>send</mat-icon>
+          </button>
+        </div>
+      </form>
+    </mat-card-footer>
+    
+  </mat-card>
+</section>  

@@ -1,0 +1,71 @@
+/** --- Component Specific Material overrides --- **/
+
+::ng-deep {
+  .mat-form-field-infix {
+    width: unset !important;
+  }
+}
+
+// Message input styling
+._message-input.mat-form-field-appearance-outline::ng-deep {
+  .mat-form-field-outline {
+    top: 0;
+  }
+
+  .mat-form-field-infix {
+    border-top: 0;
+    width: unset !important;
+  }
+
+  .mat-form-field-outline-start,
+  .mat-form-field-outline-gap,
+  .mat-form-field-outline-end {
+    background-color: white;
+    border: none;
+  }
+}
+
+.mat-card-header {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+
+/** --- Component Specific generic classes --- **/
+
+._background {
+  padding: 40px;
+  background: linear-gradient(128deg, #0064FF 0%, #BD2EFF 53.90%, #FF7828 100%);
+}
+
+.mat-chip {
+  &.status-chip {
+    background-color: white !important;
+    color: inherit !important;
+  }
+
+  &.sentiment-chip {
+    padding: 4px 8px 4px 4px;
+    min-height: 0;
+    height: auto;
+    line-height: 1em;
+    font-size: 12px;
+  }
+}
+
+._profile-pic {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+._message {
+  border-bottom: 1px solid #E4E4E6;
+
+  ._message-text {
+    color: #222229;
+  }
+
+}

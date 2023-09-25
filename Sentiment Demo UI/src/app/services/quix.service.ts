@@ -20,9 +20,9 @@ export class QuixService {
 
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
   /*WORKING LOCALLY? UPDATE THESE!*/
-  private workingLocally = false; // set to true if working locally
-  private token: string = ''; // Create a token in the Tokens menu and paste it here
-  public workspaceId: string = 'demo-chatappdemo-istypingservice'; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
+  private workingLocally = true; // set to true if working locally
+  private token: string = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1qVTBRVE01TmtJNVJqSTNOVEpFUlVSRFF6WXdRVFF4TjBSRk56SkNNekpFUWpBNFFqazBSUSJ9.eyJodHRwczovL3F1aXguYWkvb3JnX2lkIjoiZGVtbyIsImh0dHBzOi8vcXVpeC5haS9vd25lcl9pZCI6ImF1dGgwfGM1M2QzMzIxLTgwZDItNGQzYS1hNmU3LTdmYjY1NGM5YzJmMiIsImh0dHBzOi8vcXVpeC5haS90b2tlbl9pZCI6IjNjYzFjMTZhLTVlNmEtNGYwMC1iODhhLThhYzE5MzkwMDdlYiIsImh0dHBzOi8vcXVpeC5haS9leHAiOiIyMDk5MjU3MjAwIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnF1aXguYWkvIiwic3ViIjoiV3lmT3lRSmQ3Mk94WkJQQmRMUlpiVlYwSWVma0JyVXpAY2xpZW50cyIsImF1ZCI6InF1aXgiLCJpYXQiOjE2OTUxMjE2OTYsImV4cCI6MTY5NzcxMzY5NiwiYXpwIjoiV3lmT3lRSmQ3Mk94WkJQQmRMUlpiVlYwSWVma0JyVXoiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMiLCJwZXJtaXNzaW9ucyI6W119.b_6WtwsjuQklXeZA7TpUmWbOQ9xr0bpJ_3xfyZjSc0lLVhH3aAUrci1ofUFajTOCkes-6uhe_Bu9zD5fQimpKvCJ4fplIjRGXQSuFz9aiH2AOUZD2BOLaQZipmzgEjkNnomqwLCuE3f8Q2026lm3B685XHCHt7YiCHt3JdW4yOVjiJZjAfNd4stJUtAWeTUl7og1gN9SuBMQ9Z3zHjO2TBQieQ2xAI812MbAaGDd7TWKkvPlMgdxApe6bu5nMCaE7_HLrSGNBKnkQ_Z_TTFiW_e9yaAmOojtANn2Jx21-OWfEg9aG8-FcoNSjkCaD3JTSTk0MNHEEuLGmpowxzZmGg'; // Create a token in the Tokens menu and paste it here
+  public workspaceId: string = 'demo-chatappdemo-newfeui'; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
   public messagesTopic: string = 'messages'; // get topic name from the Topics page
   public draftsTopic: string = 'drafts'; // get topic from the Topics page
   public sentimentTopic: string = 'sentiment'; // get topic name from the Topics page
@@ -222,7 +222,7 @@ export class QuixService {
    * @param parameterId The parameter want to listen for changes.
    */
   public subscribeToParameter(topic: string, streamId: string, parameterId: string) {
-    // console.log('QuixService Reader | Subscribing to parameter - ' + parameterId);
+    // console.log(`QuixService Reader | Subscribing to parameter - ${topic}, ${streamId}, ${parameterId}`);
     this.readerHubConnection.invoke("SubscribeToParameter", topic, streamId, parameterId);
   }
 
@@ -235,76 +235,43 @@ export class QuixService {
    * @param parameterId 
    */
   public unsubscribeFromParameter(topic: string, streamId: string, parameterId: string) {
-    // console.log('QuixService Reader | Unsubscribing from parameter - ' + parameterId);
+    // console.log(`QuixService Reader | Unsubscribing from parameter - ${topic}, ${streamId}, ${parameterId}`);
     this.readerHubConnection.invoke("UnsubscribeFromParameter", topic, streamId, parameterId);
   }
-  
-  public sendMessage(
-    room: string,
-    payload: any,
-    isDraft?: boolean
-  ) {
-    const topic = isDraft ? this.draftsTopic : this.messagesTopic;
-    console.log("QuixService Sending parameter data!", topic, room, payload);
-    this.writerHubConnection.invoke(
-      "SendParameterData",
-      topic,
-      room,
-      payload
-    );
-  
+
+  /**
+   * Sends parameter data to Quix using the WriterHub connection.
+   * 
+   * @param topic The name of the topic we are writing to.
+   * @param streamId The id of the stream.
+   * @param payload The payload of data we are sending.
+   */
+  public sendParameterData(topic: string, streamId: string, payload: any): void {
+    // console.log("QuixService Sending parameter data!", topic, streamId, payload);
+    this.writerHubConnection.invoke("SendParameterData", topic, streamId, payload);
   }
 
-  private stripLineFeed(s: string): string {
-    return s.replace('\n', '');
-  }
 
-  public getLastMessages(room: string): Observable<MessagePayload[]> {
-    let payload =
-    {
-      'numericParameters': [
-        {
-          'parameterName': 'sentiment',
-          'aggregationType': 'None'
-        },
-        {
-          'parameterName': 'average_sentiment',
-          'aggregationType': 'None'
-        }
-      ],
-      'stringParameters': [
-        {
-          'parameterName': 'chat-message',
-          'aggregationType': 'None'
-        }
-      ],
-
-      'streamIds': [
-        room + '-output'
-      ],
-      'groupBy': [
-        'role',
-        'name'
-      ],
-    };
-
+  /**
+   * Uses the telemetry data api to retrieve persisted parameter
+   * data for a specific criteria.
+   * 
+   * @param payload The payload that we are querying with.
+   * @returns The persisted parameter data.
+   */
+  public retrievePersistedParameterData(payload: any): Observable<ParameterData> {
     return this.httpClient.post<ParameterData>(
       `https://telemetry-query-${this.workspaceId}.${this.subdomain}.quix.ai/parameters/data`,
       payload,
       {
         headers: { 'Authorization': 'bearer ' + this.token }
       }
-    ).pipe(map(rows => {
-      let result: MessagePayload[] = [];
-      rows.timestamps.forEach((timestamp, i) => {
-        result.push({
-          timestamp,
-          value: rows.stringValues['chat-message'][i],
-          sentiment: rows.numericValues['sentiment'][i],
-          name: rows.tagValues['name'][i]
-        });
-      })
-      return result;
-    }));
+    );
   }
+
+  private stripLineFeed(s: string): string {
+    return s.replace('\n', '');
+  }
+
 }
+
