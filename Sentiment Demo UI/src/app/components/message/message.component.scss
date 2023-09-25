@@ -1,0 +1,24 @@
+::ng-deep {
+  ._loading-sentiment {
+    .mat-progress-spinner circle, .mat-spinner circle {
+      stroke:   #A2A2B0!important;
+    }
+  }
+}
+
+._message {
+  border-bottom: 1px solid #E4E4E6;
+
+  ._message-text {
+    color: #222229;
+  }
+}
+
+._profile-pic {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -60,18 +60,3 @@
   justify-content: center;
   align-items: center;
 }
-
-._message {
-  border-bottom: 1px solid #E4E4E6;
-
-  ._message-text {
-    color: #222229;
-  }
-
-}
-
-::ng-deep {
-  .mat-progress-spinner circle, .mat-spinner circle {
-    stroke:   #A2A2B0!important;
-  }
-}
