@@ -6,6 +6,39 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
+  - name: Sentiment Demo UI
+    application: Sentiment Demo UI
+    deploymentType: Service
+    version: 2064d51777f9381053ffd4d1f382d7c755643373
+    resources:
+      cpu: 1000
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: sentimentdemoui-f203bf0
+    desiredStatus: Running
+    variables:
+      - name: sentiment
+        inputType: FreeText
+        description: The topic to read from
+        required: true
+        value: chat-with-sentiment
+      - name: messages
+        inputType: FreeText
+        description: The topic to read from
+        required: true
+        value: chat-messages
+      - name: drafts
+        inputType: FreeText
+        description: ''
+        required: true
+        value: drafts
+      - name: drafts_sentiment
+        inputType: FreeText
+        description: ''
+        required: false
+        value: drafts_sentiment
   - name: Sentiment analysis
     application: Sentiment analysis
     deploymentType: Service
@@ -48,39 +81,6 @@ deployments:
         inputType: OutputTopic
         description: This is the output for the Hugging Face model score
         required: true
-        value: drafts_sentiment
-  - name: Sentiment Demo UI
-    application: Sentiment Demo UI
-    deploymentType: Service
-    version: 2064d51777f9381053ffd4d1f382d7c755643373
-    resources:
-      cpu: 1000
-      memory: 500
-      replicas: 1
-    publicAccess:
-      enabled: true
-      urlPrefix: sentimentdemoui-f203bf0
-    desiredStatus: Running
-    variables:
-      - name: sentiment
-        inputType: FreeText
-        description: The topic to read from
-        required: true
-        value: chat-with-sentiment
-      - name: messages
-        inputType: FreeText
-        description: The topic to read from
-        required: true
-        value: chat-messages
-      - name: drafts
-        inputType: FreeText
-        description: ''
-        required: true
-        value: drafts
-      - name: drafts_sentiment
-        inputType: FreeText
-        description: ''
-        required: false
         value: drafts_sentiment
   - name: BigQuery Journeys
     application: BigQuery
@@ -159,14 +159,14 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: drafts
+  - name: drafts_sentiment
     persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 262144000
-  - name: drafts_sentiment
+  - name: drafts
     persisted: false
     configuration:
       partitions: 2
