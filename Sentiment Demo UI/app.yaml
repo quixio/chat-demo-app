@@ -4,7 +4,7 @@ variables:
   - name: sentiment
     inputType: FreeText
     description: The topic to read from
-    defaultValue: sentiment
+    defaultValue: chat-with-sentiment
     required: true
   - name: messages
     inputType: FreeText
