@@ -166,13 +166,6 @@ topics:
       replicationFactor: 2
       retentionInMinutes: 120
       retentionInBytes: 10485760
-  - name: messages
-    persisted: false
-    configuration:
-      partitions: 16
-      replicationFactor: 2
-      retentionInMinutes: 120
-      retentionInBytes: 104857600
   - name: drafts
     persisted: false
     configuration:
