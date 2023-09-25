@@ -9,7 +9,7 @@ deployments:
   - name: Sentiment Demo UI
     application: Sentiment Demo UI
     deploymentType: Service
-    version: ee27a3601bddae54dfa70ebd55ba49655ae42186
+    version: 75d4692dc4e28d8a043c1253288a6a9b999ee8db
     resources:
       cpu: 1000
       memory: 500
