@@ -124,7 +124,7 @@ deployments:
   - name: Twitch Chat
     application: Twitch Chat
     deploymentType: Service
-    version: 5d726bf8f1a8902e7fe29afb80bcc8177d5f8330
+    version: d49be638a568e2d209ec50a8eb2c6e2efbcc1e0f
     resources:
       cpu: 2000
       memory: 1000
@@ -135,7 +135,7 @@ deployments:
         inputType: OutputTopic
         description: Name of the output topic to write messages into
         required: true
-        value: messages
+        value: chat-messages
       - name: StreamsToJoinCount
         inputType: FreeText
         description: Number of active stream channel to constantly be connected to
