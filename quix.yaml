@@ -116,7 +116,6 @@ deployments:
         inputType: HiddenText
         description: JSON string of the service account file for the BigQuery GCP project
         required: true
-        value: {{ BIG_QUERY_SERVIS_ACCOUNT_JSON }}
       - name: MAX_QUEUE_SIZE
         inputType: FreeText
         description: Max queue size for the sink ingestion
@@ -158,18 +157,17 @@ deployments:
         required: false
         value: TwitchAppClientSecret
 
-
 # This section describes the Topics of the data pipeline
 topics:
   - name: sentiment
-    persisted: true
+    persisted: false
     configuration:
       partitions: 16
       replicationFactor: 2
       retentionInMinutes: 120
       retentionInBytes: 10485760
   - name: messages
-    persisted: true
+    persisted: false
     configuration:
       partitions: 16
       replicationFactor: 2
@@ -189,3 +187,10 @@ topics:
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 262144000
+  - name: chat-messages
+    persisted: false
+    configuration:
+      partitions: 8
+      replicationFactor: 2
+      retentionInMinutes: 120
+      retentionInBytes: 524288000
