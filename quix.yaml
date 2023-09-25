@@ -96,7 +96,7 @@ deployments:
         inputType: InputTopic
         description: This is the input topic
         required: true
-        value: sentiment
+        value: chat-with-sentiment
       - name: PROJECT_ID
         inputType: FreeText
         description: The BigQuery GCP Project ID
