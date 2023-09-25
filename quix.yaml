@@ -9,7 +9,7 @@ deployments:
   - name: Sentiment Demo UI
     application: Sentiment Demo UI
     deploymentType: Service
-    version: ee27a3601bddae54dfa70ebd55ba49655ae42186
+    version: 453d2eea641281357b7a38ae78ad29b5d539a3a1
     resources:
       cpu: 1000
       memory: 500
@@ -116,7 +116,6 @@ deployments:
         inputType: HiddenText
         description: JSON string of the service account file for the BigQuery GCP project
         required: true
-        value: {{ BIG_QUERY_SERVIS_ACCOUNT_JSON }}
       - name: MAX_QUEUE_SIZE
         inputType: FreeText
         description: Max queue size for the sink ingestion
@@ -161,14 +160,14 @@ deployments:
 # This section describes the Topics of the data pipeline
 topics:
   - name: sentiment
-    persisted: true
+    persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
   - name: messages
-    persisted: true
+    persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
