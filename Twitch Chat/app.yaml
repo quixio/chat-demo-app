@@ -11,6 +11,11 @@ variables:
     description: Number of active stream channel to constantly be connected to
     defaultValue: 100
     required: true
+  - name: TwitchAppClientId
+    inputType: Secret
+    description: ''
+    defaultValue: TwitchAppClientId
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
