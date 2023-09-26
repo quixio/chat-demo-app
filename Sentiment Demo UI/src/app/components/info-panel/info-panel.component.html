@@ -1,0 +1,66 @@
+<section fxLayout="column" class="p-5 overflow-visible">
+  <!-- Header -->
+  <div class="mb-5">
+    <div class="mat-h1 m-0">Sentiment Analysis</div>
+    <div class="mat-body-2 text-grey fw-normal text-uppercase mb-3">Project template</div>
+    <div class="mat-h4 fw-normal mb-3">Take the emotional pulse of any conversation with a ML sentiment analysis pipeline built in Quix.</div>
+    <div fxLayout="row">
+      <a mat-raised-button color="primary" class="small me-2" fxLayout="row" fxLayoutAlign="center center"
+        [href]="'https://portal.platform.quix.ai/pipeline?workspace=' + workspaceId + '&token=' + ungatedToken" target="_blank">
+        <img src="assets/quix-logo.svg" alt="Quix" height="16" class="me-2" />
+        <span>Look under the hood</span>
+      </a>
+      <a mat-raised-button color="accent" class="small" fxLayout="row" fxLayoutAlign="center center"
+        href="https://github.com/quixio/chat-demo-app" target="_blank">
+        <img src="assets/github.svg" alt="Quix" height="16" class="me-2" />
+        <span>View repo</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Realtime messages feed -->
+  <div fxLayout="column" fxLayoutAlign="start start" class="mb-5">
+    <div class="mat-h4 mb-2">Real-time messages feed</div>
+    <p class="mat-body-2 text-grey">
+      To feed the model, the project <a [href]="'https://portal.platform.quix.ai/visualize/live/data?workspace=' + workspaceId + '&topic=messages'" target="_blank">ingests the messages</a>
+      sent by users from this very UI. You can <a [href]="'https://portal.platform.quix.ai/applications/ide/Sentiment%20Demo%20UI?workspace=' + workspaceId" target="_blank">customise the code</a> 
+      to connect any data source (customer chats, social media, forums...). For instance, try to select a Twitch chat from the following dropdown.
+    </p>
+    <app-message-source-dropdown class="w-100"></app-message-source-dropdown>
+    <button fxHide.gt-sm mat-flat-button class="mt-3 small" color="primary" (click)="scrollToChat()">
+      <div fxLayoutAlign="start center">
+        <mat-icon inline [style.fontSize.px]="16" class="me-1">download</mat-icon>
+        Explore messages
+      </div>
+    </button>
+  </div>
+
+    <!-- Sentiment analysis -->
+    <div fxLayout="column" class="mb-5">
+      <div class="mat-h4 mb-2">Sentiment analysis</div>
+      <p class="mat-body-2 text-grey">
+        Sentiment is <a [href]="'https://portal.platform.quix.ai/pipeline/deployments/0c40eef8-0b9e-46e6-965c-ea87637ee2e7?workspace=' + workspaceId" target="_blank">calculated in real time</a>
+        using a Hugging Face model. Each message is assigned a value between -1 and 1. Then, the service uses a rolling window to analyze the trend.
+      </p>
+      <app-sentiment-chart [style.height.px]="200"></app-sentiment-chart>
+    </div>
+
+    <!-- Interested? -->
+    <div fxLayout="column">
+      <div class="mat-h4 mb-2">Want to know more?</div>
+      <p class="mat-body-2 text-grey mb-3">
+        <a href="https://quix.io/docs/platform/tutorials/sentiment-analysis/index.html" target="_blank">Read the tutorial</a>
+        and try Quix for free to reproduce this project or build something similar. To discover what else is possible, see our other project templates.
+      </p>
+      <div fxLayout="row">
+        <a mat-raised-button color="primary" class="small me-2" href="https://portal.platform.quix.ai/self-sign-up" target="_blank">
+          Sign up for free
+        </a>
+
+        <a mat-raised-button color="accent" class="small" fxLayout="row" fxLayoutAlign="center center"
+          href="https://quix.io/templates" target="_blank">
+          <span>More project templates</span>
+        </a>
+      </div>
+    </div>
+</section>

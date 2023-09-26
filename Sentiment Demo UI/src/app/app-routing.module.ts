@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {WebchatComponent} from "./components/webchat/webchat.component";
-import {LobbyComponent} from "./components/lobby/lobby.component";
+import { HomePageComponent } from './pages/home-page/home-page.component';
 
 
 const routes: Routes = [
-  {path: '', redirectTo: '/lobby', pathMatch: 'full'},
-  {path: 'webchat/:room/:name', component: WebchatComponent},
-  {path: 'lobby', component: LobbyComponent},
+  {path: '', redirectTo: '/chat', pathMatch: 'full'},
+  { path: 'chat', component: HomePageComponent },
 ];
 
 @NgModule({

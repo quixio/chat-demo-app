@@ -6,56 +6,12 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: Sentiment analysis
-    application: Sentiment analysis
-    deploymentType: Service
-    version: bccbfa0ef540ad547ce8bb5c87f9db4ee819486e
-    resources:
-      cpu: 1000
-      memory: 2000
-      replicas: 1
-    desiredStatus: Running
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: This is the raw data input topic
-        required: true
-        value: messages
-      - name: output
-        inputType: OutputTopic
-        description: This is the output for the Hugging Face model score
-        required: true
-        value: sentiment
-  - name: Drafts sentiment analysis
-    application: Drafts sentiment analysis
-    deploymentType: Service
-    version: 115badbb91fde6f7ddfb8e287e0e8f06ef52f94f
-    resources:
-      cpu: 2000
-      memory: 4000
-      replicas: 1
-    state:
-      enabled: true
-      size: 1
-    libraryItemId: g207b9ff-3d52-4adb-b99f-e5e46b2642e9
-    desiredStatus: Running
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: This is the raw data input topic
-        required: true
-        value: drafts
-      - name: output
-        inputType: OutputTopic
-        description: This is the output for the Hugging Face model score
-        required: true
-        value: drafts_sentiment
   - name: Sentiment Demo UI
     application: Sentiment Demo UI
     deploymentType: Service
-    version: 47525a5ceb997df93759b703451d359f0755b30d
+    version: c8e769aef8c13bdc035fe6bdbae99d1ae28927b3
     resources:
-      cpu: 200
+      cpu: 1000
       memory: 500
       replicas: 1
     publicAccess:
@@ -67,12 +23,12 @@ deployments:
         inputType: FreeText
         description: The topic to read from
         required: true
-        value: sentiment
+        value: chat-with-sentiment
       - name: messages
         inputType: FreeText
         description: The topic to read from
         required: true
-        value: messages
+        value: chat-messages
       - name: drafts
         inputType: FreeText
         description: ''
@@ -83,6 +39,123 @@ deployments:
         description: ''
         required: false
         value: drafts_sentiment
+  - name: Sentiment analysis
+    application: Sentiment analysis
+    deploymentType: Service
+    version: d49be638a568e2d209ec50a8eb2c6e2efbcc1e0f
+    resources:
+      cpu: 2000
+      memory: 4000
+      replicas: 4
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the raw data input topic
+        required: true
+        value: chat-messages
+      - name: output
+        inputType: OutputTopic
+        description: This is the output for the Hugging Face model score
+        required: true
+        value: chat-with-sentiment
+  - name: Drafts sentiment analysis
+    application: Drafts sentiment analysis
+    deploymentType: Service
+    version: dsa-v1-dev1
+    resources:
+      cpu: 2000
+      memory: 4000
+      replicas: 1
+    state:
+      enabled: true
+      size: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the raw data input topic
+        required: true
+        value: drafts
+      - name: output
+        inputType: OutputTopic
+        description: This is the output for the Hugging Face model score
+        required: true
+        value: drafts_sentiment
+  - name: BigQuery Journeys
+    application: BigQuery
+    deploymentType: Service
+    version: bigquery-v1
+    resources:
+      cpu: 1000
+      memory: 1000
+      replicas: 1
+    desiredStatus: Stopped
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic
+        required: true
+        value: chat-with-sentiment
+      - name: PROJECT_ID
+        inputType: FreeText
+        description: The BigQuery GCP Project ID
+        required: true
+        value: chatapp-396214
+      - name: DATASET_ID
+        inputType: FreeText
+        description: The target BigQuery dataset ID
+        required: true
+        value: chatapp
+      - name: DATASET_LOCATION
+        inputType: FreeText
+        description: Location of BigQuery dataset
+        required: true
+        value: europe-west3
+      - name: SERVICE_ACCOUNT_JSON
+        inputType: HiddenText
+        description: JSON string of the service account file for the BigQuery GCP project
+        required: true
+      - name: MAX_QUEUE_SIZE
+        inputType: FreeText
+        description: Max queue size for the sink ingestion
+        required: true
+        value: 50
+  - name: Twitch Chat
+    application: Twitch Chat
+    deploymentType: Service
+    version: d49be638a568e2d209ec50a8eb2c6e2efbcc1e0f
+    resources:
+      cpu: 2000
+      memory: 1000
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write messages into
+        required: true
+        value: chat-messages
+      - name: StreamsToJoinCount
+        inputType: FreeText
+        description: Number of active stream channel to constantly be connected to
+        required: true
+        value: 100
+      - name: TwitchBotToken
+        inputType: Secret
+        description: ''
+        required: false
+        value: TwitchBotToken
+      - name: TwitchAppClientId
+        inputType: Secret
+        description: ''
+        required: false
+        value: TwitchAppClientId
+      - name: TwitchAppClientSecret
+        inputType: Secret
+        description: ''
+        required: false
+        value: TwitchAppClientSecret
 
 # This section describes the Topics of the data pipeline
 topics:
@@ -100,17 +173,17 @@ topics:
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 262144000
-  - name: messages
-    persisted: false
+  - name: chat-messages
+    persisted: true
     configuration:
-      partitions: 2
+      partitions: 8
       replicationFactor: 2
-      retentionInMinutes: 60
-      retentionInBytes: 52428800
-  - name: sentiment
-    persisted: false
+      retentionInMinutes: 120
+      retentionInBytes: 524288000
+  - name: chat-with-sentiment
+    persisted: true
     configuration:
-      partitions: 2
+      partitions: 8
       replicationFactor: 2
-      retentionInMinutes: 60
-      retentionInBytes: 52428800
+      retentionInMinutes: 120
+      retentionInBytes: 524288000

@@ -1,0 +1,23 @@
+<mat-card fxLayout="column" class="bg-white p-4">
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="mat-h2 mb-0">New chatroom</div>
+    <mat-icon (click)="dialogRef.close()" class="text-grey-light">close</mat-icon>
+  </div>
+
+  <p class="text-grey my-4">Create a new room to chat only with the users you invite.</p>
+
+  <form fxLayout="column" [formGroup]="form" (ngSubmit)="createRoom()">
+    <mat-form-field appearance="outline" fxFlex>
+      <mat-label>Room name</mat-label>
+      <input matInput placeholder="Type your message" formControlName="name" cdkTrapFocus [cdkTrapFocusAutoCapture]="true" >
+      <mat-error *ngIf="nameFC.hasError('required')">Room name is required</mat-error>
+      <mat-error *ngIf="nameFC.hasError('uniqueName')">Room name must be unique</mat-error>
+    </mat-form-field>
+
+    <div fxLayout="row" class="mt-2">
+      <button mat-flat-button type="submit" color="primary" class="me-3" [disabled]="form.invalid">Create chatroom</button>
+      <button mat-flat-button type="button" color="accent" (click)="dialogRef.close()">Cancel</button>
+    </div>
+  </form>
+
+</mat-card>
