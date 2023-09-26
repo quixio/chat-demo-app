@@ -11,11 +11,6 @@ variables:
     description: Twitch Bot token needed for reading messages from channels
     defaultValue: oauth:01qiyvmqb86s8tw18bovr81i52xerr
     required: true
-  - name: TwitchAppClientId
-    inputType: HiddenText
-    description: Twitch App client id - needed for calling Twitch API
-    defaultValue: elqo0jjhhzxyat9mhtniuowdj0tipj
-    required: true
   - name: TwitchAppClientSecret
     inputType: HiddenText
     description: Twitch App client secret - needed for calling Twitch API
