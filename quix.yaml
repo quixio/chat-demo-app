@@ -140,7 +140,7 @@ deployments:
         inputType: FreeText
         description: Number of active stream channel to constantly be connected to
         required: true
-        value: 100
+        value: 10
       - name: TwitchBotToken
         inputType: Secret
         description: ''
