@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Chart, ChartConfiguration, Legend, LinearScale, LineController, LineElement, PointElement } from 'chart.js';
 import ChartStreaming, { RealTimeScale } from 'chartjs-plugin-streaming';
-import { Subject, filter, take, takeUntil } from 'rxjs';
+import { Subject, Subscription, filter, take, takeUntil } from 'rxjs';
 import { ParameterData } from 'src/app/models/parameter-data';
 import { QuixService } from 'src/app/services/quix.service';
 import { RoomService } from 'src/app/services/room.service';
@@ -60,6 +60,8 @@ export class SentimentChartComponent implements OnInit, AfterViewInit, OnDestroy
       },
     }
   }
+  isLoadingHistory: boolean = false;
+  private historySubscription$ = new Subscription();
 
   private unsubscribe$ = new Subject<void>();
   
@@ -78,7 +80,10 @@ export class SentimentChartComponent implements OnInit, AfterViewInit, OnDestroy
   ngOnInit(): void {
     // Listens for when a new data is received from the sentiment topic.
     this.quixService.paramDataReceived$
-     .pipe(takeUntil(this.unsubscribe$), filter((f) => f.topicId === this.quixService.sentimentTopic))
+     .pipe(
+      takeUntil(this.unsubscribe$), 
+      filter((f) => !this.isLoadingHistory && f.topicId === this.quixService.sentimentTopic)
+      )
      .subscribe((payload) => {
       this.sentimentMessageReceived(payload);
     });
@@ -100,8 +105,17 @@ export class SentimentChartComponent implements OnInit, AfterViewInit, OnDestroy
    * Retrieves the previous sentiment for a specific chat room.
    */
   loadPreviousSentiment(roomId: string): void {
-    this.roomService.getChatSentimentHistory(roomId).pipe(take(1)).subscribe((sentiment) => {
-      this.sentimentMessageReceived(sentiment);
+    // Ensure that we cancel the old one before creating new subscription
+    if (this.historySubscription$) this.historySubscription$.unsubscribe();
+
+    this.isLoadingHistory = true;
+    this.historySubscription$ = this.roomService.getChatSentimentHistory(roomId).pipe(take(1)).subscribe({
+      next: (sentiment) => {
+        this.sentimentMessageReceived(sentiment);
+      },
+      complete: () => {
+        this.isLoadingHistory = false;
+      }
     })
   }
 
@@ -115,7 +129,7 @@ export class SentimentChartComponent implements OnInit, AfterViewInit, OnDestroy
     const dataPoints: any[] = [];
     payload.timestamps.forEach((timestamp, i) => {
       const nanoTimestamp= timestamp / 1000000;
-      let averageSentiment = payload.numericValues["sentiment"]?.at(i) || payload.numericValues["mean(average_sentiment)"]?.at(i) || 0;
+      let averageSentiment = payload.numericValues["average_sentiment"]?.at(i) || payload.numericValues["mean(average_sentiment)"]?.at(i) || 0;
       const dataPoint = { x: nanoTimestamp, y: averageSentiment };
       dataPoints.push(dataPoint);
     });

@@ -1,0 +1,25 @@
+<div fxLayout="column" class="_message py-1 px-2 m-3 rounded-3 overflow-hidden">
+  <div fxFlex fxLayout="row" fxLayoutAlign="start start">
+    <div *ngIf="message.profilePic" [style.background-color]="message.profilePicColor" class="_profile-pic me-2">
+      <img [src]="message.profilePic" height="28">
+    </div>
+    <div fxLayout="column">
+      <p class="mb-0 fw-bold mat-body-2">{{ message.name }}</p>
+      <div class="_message-text">{{ message.value }}</div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="end center" class="mat-caption">
+    <p class="mb-0 me-2 text-grey-light mat-caption"> {{ getDateFromTimestamp(message.timestamp) | date:'hh:mm:ss' }}</p>
+    <div 
+      [class]="getColor(message?.sentiment!)" fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon *ngIf="getSentimentIcon(message?.sentiment!) as icon" inline class="material-icons-outlined me-1" [style.fontSize.px]="16">
+        {{ icon }}
+      </mat-icon>
+      <div class="_loading-sentiment" *ngIf="!message.sentiment" fxLayoutAlign="start center">
+        <mat-spinner diameter="12"></mat-spinner>
+        <p class="ms-1 mb-0">...</p>
+      </div>
+      <p *ngIf="message.sentiment" class="mb-0 fw-bold">{{  (message.sentiment! > 0 ? '+' : '') + (message.sentiment | number : '1.2-2') }}</p>
+    </div>
+  </div>
+</div>   

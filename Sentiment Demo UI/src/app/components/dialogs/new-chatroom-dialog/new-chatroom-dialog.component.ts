@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { QuixChatRoom } from 'src/app/services/room.service';
@@ -29,7 +29,7 @@ function uniqueRoomValidator(existingRooms: string[]): ValidatorFn {
 })
 export class NewChatroomDialogComponent implements OnInit {
 
-  existingChatRooms: string[];
+  @Input() existingChatRooms: string[];
 
   nameFC = new FormControl('', [Validators.required]);
   form = new FormGroup({
@@ -43,7 +43,7 @@ export class NewChatroomDialogComponent implements OnInit {
     this.existingChatRooms = this.data.existingChatRooms;
     this.existingChatRooms.push(QuixChatRoom);
 
-    this.nameFC.addValidators(uniqueRoomValidator(this.existingChatRooms));
+    this.nameFC.addValidators(uniqueRoomValidator(Array.from(this.existingChatRooms)));
   }
 
   createRoom(): void {

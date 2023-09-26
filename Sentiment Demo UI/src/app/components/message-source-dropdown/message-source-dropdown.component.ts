@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { NewChatroomDialogComponent } from '../dialogs/new-chatroom-dialog/new-chatroom-dialog.component';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TwitchService } from 'src/app/services/twitch.service';
 import { ActiveStream, ActiveStreamAction } from 'src/app/models/activeStream';
@@ -75,11 +75,13 @@ export class MessageSourceDropdownComponent implements OnInit, OnDestroy {
       maxWidth: '480px',
       autoFocus: false,
       data: {
-        existingChatRooms: this.storedRooms
+        existingChatRooms: [...this.storedRooms]
       }
     });
 
-    dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe)).subscribe((result) => {    
+    dialogRef.afterClosed().pipe(take(1)).subscribe((result) => {  
+      if (!result) return;
+      
       const {newRoom} = result;
       if (newRoom) {
         this.selectedRoom = newRoom;
