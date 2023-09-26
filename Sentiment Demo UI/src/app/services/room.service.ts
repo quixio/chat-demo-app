@@ -158,7 +158,7 @@ export class RoomService {
 
     let payload = 
     {
-        'topic': 'sentiment',
+        'topic': 'chat-with-sentiment',
         'groupByTime': {
             'timeBucketDuration': 7791291230,
             'interpolationType': 'None'

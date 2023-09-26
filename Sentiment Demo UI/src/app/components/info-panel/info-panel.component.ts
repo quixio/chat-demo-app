@@ -9,9 +9,11 @@ import { QuixService } from 'src/app/services/quix.service';
 export class InfoPanelComponent implements OnInit {
   
   workspaceId: string;
+  ungatedToken: string;
 
   constructor(private quixService: QuixService) { 
     this.workspaceId = this.quixService.workspaceId;
+    this.ungatedToken = this.quixService.ungatedToken;
   }
 
   ngOnInit(): void {
