@@ -23,12 +23,12 @@ deployments:
         inputType: FreeText
         description: The topic to read from
         required: true
-        value: sentiment
+        value: chat-with-sentiment
       - name: messages
         inputType: FreeText
         description: The topic to read from
         required: true
-        value: messages
+        value: chat-messages
       - name: drafts
         inputType: FreeText
         description: ''
@@ -42,7 +42,7 @@ deployments:
   - name: Sentiment analysis
     application: Sentiment analysis
     deploymentType: Service
-    version: sa-v1-dev1
+    version: d49be638a568e2d209ec50a8eb2c6e2efbcc1e0f
     resources:
       cpu: 2000
       memory: 4000
@@ -53,12 +53,12 @@ deployments:
         inputType: InputTopic
         description: This is the raw data input topic
         required: true
-        value: messages
+        value: chat-messages
       - name: output
         inputType: OutputTopic
         description: This is the output for the Hugging Face model score
         required: true
-        value: sentiment
+        value: chat-with-sentiment
   - name: Drafts sentiment analysis
     application: Drafts sentiment analysis
     deploymentType: Service
@@ -96,7 +96,7 @@ deployments:
         inputType: InputTopic
         description: This is the input topic
         required: true
-        value: sentiment
+        value: chat-with-sentiment
       - name: PROJECT_ID
         inputType: FreeText
         description: The BigQuery GCP Project ID
@@ -124,7 +124,7 @@ deployments:
   - name: Twitch Chat
     application: Twitch Chat
     deploymentType: Service
-    version: 5d726bf8f1a8902e7fe29afb80bcc8177d5f8330
+    version: d49be638a568e2d209ec50a8eb2c6e2efbcc1e0f
     resources:
       cpu: 2000
       memory: 1000
@@ -135,7 +135,7 @@ deployments:
         inputType: OutputTopic
         description: Name of the output topic to write messages into
         required: true
-        value: messages
+        value: chat-messages
       - name: StreamsToJoinCount
         inputType: FreeText
         description: Number of active stream channel to constantly be connected to
@@ -159,20 +159,6 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: sentiment
-    persisted: true
-    configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: 60
-      retentionInBytes: 52428800
-  - name: messages
-    persisted: true
-    configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: 60
-      retentionInBytes: 52428800
   - name: drafts_sentiment
     persisted: false
     configuration:
@@ -187,3 +173,17 @@ topics:
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 262144000
+  - name: chat-messages
+    persisted: true
+    configuration:
+      partitions: 8
+      replicationFactor: 2
+      retentionInMinutes: 120
+      retentionInBytes: 524288000
+  - name: chat-with-sentiment
+    persisted: true
+    configuration:
+      partitions: 8
+      replicationFactor: 2
+      retentionInMinutes: 120
+      retentionInBytes: 524288000

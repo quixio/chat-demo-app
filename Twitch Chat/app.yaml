@@ -4,7 +4,7 @@ variables:
   - name: output
     inputType: OutputTopic
     description: Name of the output topic to write messages into
-    defaultValue: messages
+    defaultValue: chat-messages
     required: true
   - name: TwitchBotToken
     inputType: HiddenText
