@@ -50,9 +50,6 @@ def get_top_streams(limit: int = 50) -> List["TwitchStream"]:
     oauth_token = get_oauth_token(CLIENT_ID, CLIENT_SECRET)
     top_streams = _get_top_streams(oauth_token, limit)
 
-    if len(top_streams) > 0:
-        print(top_streams[0])
-
     return [TwitchStream.from_dict(stream) for stream in top_streams]
 
 def get_live_streams_by_users(user_logins: List[str]) -> List["TwitchStream"]:
