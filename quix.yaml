@@ -116,7 +116,6 @@ deployments:
         inputType: HiddenText
         description: JSON string of the service account file for the BigQuery GCP project
         required: true
-        value: {{ BIG_QUERY_SERVIS_ACCOUNT_JSON }}
       - name: MAX_QUEUE_SIZE
         inputType: FreeText
         description: Max queue size for the sink ingestion
