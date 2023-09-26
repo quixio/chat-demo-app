@@ -22,8 +22,8 @@
   <div fxLayout="column" fxLayoutAlign="start start" class="mb-5">
     <div class="mat-h4 mb-2">Real-time messages feed</div>
     <p class="mat-body-2 text-grey">
-      To feed the model, the project <a [href]="'https://portal.platform.quix.ai/visualize/live/data?workspace=' + workspaceId + '&topic=messages'" target="_blank">ingests the messages</a>
-      sent by users from this very UI. You can <a [href]="'https://portal.platform.quix.ai/applications/ide/Sentiment%20Demo%20UI?workspace=' + workspaceId" target="_blank">customise the code</a> 
+      To feed the model, the project <a [href]="'https://portal.platform.quix.ai/visualize/live/data?workspace=' + workspaceId + '&topic=chat-messages' + '&token=' + ungatedToken" target="_blank">ingests the messages</a>
+      sent by users from this very UI. You can <a [href]="'https://portal.platform.quix.ai/applications/ide/Sentiment%20Demo%20UI?branch=main&workspace=' + workspaceId + '&token=' + ungatedToken" target="_blank">customise the code</a> 
       to connect any data source (customer chats, social media, forums...). For instance, try to select a Twitch chat from the following dropdown.
     </p>
     <app-message-source-dropdown class="w-100"></app-message-source-dropdown>
@@ -39,7 +39,7 @@
     <div fxLayout="column" class="mb-5">
       <div class="mat-h4 mb-2">Sentiment analysis</div>
       <p class="mat-body-2 text-grey">
-        Sentiment is <a [href]="'https://portal.platform.quix.ai/pipeline/deployments/0c40eef8-0b9e-46e6-965c-ea87637ee2e7?workspace=' + workspaceId" target="_blank">calculated in real time</a>
+        Sentiment is <a [href]="'https://portal.platform.quix.ai/pipeline/deployments/b7f393c8-9182-4bb5-bfc4-37414d1a0052?workspace=' + workspaceId + '&token=' + ungatedToken" target="_blank">calculated in real time</a>
         using a Hugging Face model. Each message is assigned a value between -1 and 1. Then, the service uses a rolling window to analyze the trend.
       </p>
       <app-sentiment-chart [style.height.px]="200"></app-sentiment-chart>
