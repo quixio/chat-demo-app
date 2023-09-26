@@ -15,6 +15,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { A11yModule } from "@angular/cdk/a11y";
 
 @NgModule({
   exports: [
@@ -33,7 +34,8 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     ScrollingModule,
     MatDialogModule,
     ClipboardModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    A11yModule
   ]
 })
 export class MaterialModule { }

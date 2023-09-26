@@ -1,6 +1,6 @@
 <mat-form-field appearance="outline" [class.mat-focused]="menuTrigger?.menuOpen" 
   class="w-100 cursor-pointer mb-0 mt-2 p-0" [matMenuTriggerFor]="menu" (menuOpened)="prepareMenu()">
-  <mat-label>Message source</mat-label>
+  <mat-label>Messages source</mat-label>
   <input matInput [value]="selectedRoom" class="pe-none" readonly>
   <mat-icon matSuffix>{{ menuTrigger?.menuOpen ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
 </mat-form-field>

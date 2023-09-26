@@ -16,17 +16,24 @@ import { SentimentChartComponent } from './components/sentiment-chart/sentiment-
 import { NewChatroomDialogComponent } from './components/dialogs/new-chatroom-dialog/new-chatroom-dialog.component';
 import { ShareChatroomDialogComponent } from './components/dialogs/share-chatroom-dialog/share-chatroom-dialog.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import { MessageComponent } from './components/message/message.component';
 
 @NgModule({
   declarations: [
+    // Page Components
+    HomePageComponent,
+    
+    // General Components
     AppComponent,
     WebChatComponent,
     InfoPanelComponent,
-    HomePageComponent,
     MessageSourceDropdownComponent,
     SentimentChartComponent,
+    MessageComponent,
+
+    // Dialog Components
     NewChatroomDialogComponent,
-    ShareChatroomDialogComponent,
+    ShareChatroomDialogComponent
   ],
   imports: [
     BrowserModule,

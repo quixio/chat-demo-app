@@ -8,9 +8,6 @@
           <button fxHide.gt-sm mat-icon-button color="primary" class="me-1" (click)="scrollToInfo()">
             <mat-icon>arrow_upward</mat-icon>
           </button>
-          <div class="_profile-pic me-2" [style.background-color]="profilePicColor">
-            <img [src]="profilePic" height="28">
-          </div>
           <p class="mat-body-2 fw-bold m-0 me-2">{{ roomService.selectedRoom }}</p>
         </div>
 
@@ -49,27 +46,7 @@
 
     <mat-card-content fxFlex fxLayout="column" class="bg-white mb-0 overflow-hidden">
       <div fxFlex class="overflow-auto"  #chatWrapper>
-        <div fxLayout="column" class="_message py-1 px-2 m-3 rounded-3 overflow-hidden" *ngFor="let message of messages">
-          <div fxFlex fxLayout="row" fxLayoutAlign="start start">
-            <div *ngIf="message.profilePic" [style.background-color]="message.profilePicColor" class="_profile-pic me-2">
-              <img [src]="message.profilePic" height="28">
-            </div>
-            <div fxLayout="column">
-              <p class="mb-0 fw-bold mat-body-2">{{ message.name }}</p>
-              <div class="_message-text">{{ message.value }}</div>
-            </div>
-          </div>
-          <div fxLayout="row" fxLayoutAlign="end center" class="mat-caption">
-            <p class="mb-0 me-2 text-grey-light mat-caption"> {{ getDateFromTimestamp(message.timestamp) | date:'hh:mm:ss' }}</p>
-            <div 
-              [class]="getColor(message?.sentiment!)" fxLayout="row" fxLayoutAlign="start center">
-              <mat-icon inline class="material-icons-outlined me-1" [style.fontSize.px]="16">
-                {{ getSentimentIcon(message?.sentiment!) }}
-              </mat-icon>
-              <p class="mb-0 fw-bold">{{ (message.sentiment! > 0 ? '+' : '') + (message.sentiment | number : '1.2-2') }}</p>
-            </div>
-          </div>
-        </div>        
+        <app-message *ngFor="let message of messages" [message]="message"></app-message> 
       </div>
 
       <!-- Standard Chat isTyping sentiment indicator -->
