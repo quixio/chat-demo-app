@@ -36,7 +36,7 @@ class Bot(commands.Bot):
 
     # Joining top streams in batches of 20 because of joining rate limit
     async def join_top_streams_in_batches(self, streams_to_join: int):
-        top_live_channel_names = get_top_streams(limit=streams_to_join)
+        top_live_channel_names = [stream.user_login for stream in get_top_streams(limit=streams_to_join)]
 
         joined_channel_names = [channel.name for channel in self.connected_channels]
         channels_to_join = list(set(top_live_channel_names) - set(joined_channel_names))
@@ -46,10 +46,9 @@ class Bot(commands.Bot):
 
         for i in range(0, len(channels_to_join[:max_streams_to_join]), 20):
             batch = channels_to_join[i:i + 20]
-            channel_names = [stream.user_login for stream in batch]
 
-            print(f"Joining channels {len(batch)}: {channel_names}")
-            await self.join_channels(channel_names)
+            print(f"Joining channels {len(batch)}: {batch}")
+            await self.join_channels(batch)
             await asyncio.sleep(15)  # Wait for 15 seconds between batches
 
     async def part_offline_channels(self):
