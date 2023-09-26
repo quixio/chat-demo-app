@@ -174,7 +174,7 @@ topics:
       retentionInMinutes: -1
       retentionInBytes: 262144000
   - name: chat-messages
-    persisted: false
+    persisted: true
     configuration:
       partitions: 8
       replicationFactor: 2
