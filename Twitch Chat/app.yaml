@@ -6,11 +6,6 @@ variables:
     description: Name of the output topic to write messages into
     defaultValue: chat-messages
     required: true
-  - name: TwitchAppClientId
-    inputType: HiddenText
-    description: Twitch App client id - needed for calling Twitch API
-    defaultValue: elqo0jjhhzxyat9mhtniuowdj0tipj
-    required: true
   - name: TwitchAppClientSecret
     inputType: HiddenText
     description: Twitch App client secret - needed for calling Twitch API
