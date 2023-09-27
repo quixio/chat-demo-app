@@ -9,7 +9,7 @@ variables:
   - name: StreamsToJoinCount
     inputType: FreeText
     description: Number of active stream channel to constantly be connected to
-    defaultValue: 100
+    defaultValue: 10
     required: true
   - name: TwitchBotToken
     inputType: Secret
