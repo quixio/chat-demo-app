@@ -13,7 +13,7 @@ variables:
     required: true
   - name: TwitchBotToken
     inputType: Secret
-    description: ''
+    description: Twitch Bot token needed for reading messages from channels
     defaultValue: TwitchBotToken
     required: true
   - name: TwitchAppClientId
