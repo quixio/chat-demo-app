@@ -6,11 +6,6 @@ variables:
     description: Name of the output topic to write messages into
     defaultValue: chat-messages
     required: true
-  - name: TwitchAppClientSecret
-    inputType: HiddenText
-    description: Twitch App client secret - needed for calling Twitch API
-    defaultValue: ifb1km2w404mtcbh2s7moewiud77bs
-    required: true
   - name: StreamsToJoinCount
     inputType: FreeText
     description: Number of active stream channel to constantly be connected to
