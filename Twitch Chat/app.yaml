@@ -18,7 +18,7 @@ variables:
     required: true
   - name: TwitchAppClientId
     inputType: Secret
-    description: ''
+    description: Twitch App client id - needed for calling Twitch API
     defaultValue: TwitchAppClientId
     required: true
   - name: TwitchAppClientSecret
