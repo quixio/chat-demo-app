@@ -6,39 +6,6 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: Chat sentiment analysis UI
-    application: Sentiment Demo UI
-    deploymentType: Service
-    version: 6ae28895789f1379615369b314a4badc68eca633
-    resources:
-      cpu: 1000
-      memory: 500
-      replicas: 1
-    publicAccess:
-      enabled: true
-      urlPrefix: sentimentdemoui
-    desiredStatus: Running
-    variables:
-      - name: sentiment
-        inputType: FreeText
-        description: The topic to read from
-        required: true
-        value: chat-with-sentiment
-      - name: messages
-        inputType: FreeText
-        description: The topic to read from
-        required: true
-        value: chat-messages
-      - name: drafts
-        inputType: FreeText
-        description: ''
-        required: true
-        value: drafts
-      - name: drafts_sentiment
-        inputType: FreeText
-        description: ''
-        required: false
-        value: drafts_sentiment
   - name: Sentiment analysis
     application: Sentiment analysis
     deploymentType: Service
@@ -124,12 +91,12 @@ deployments:
   - name: Twitch Chat
     application: Twitch Chat
     deploymentType: Service
-    version: d49be638a568e2d209ec50a8eb2c6e2efbcc1e0f
+    version: b1bd9106b18a6da5c38f99b02dfdd7f5920bc2d6
     resources:
       cpu: 2000
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: output
         inputType: OutputTopic
@@ -156,17 +123,50 @@ deployments:
         description: ''
         required: false
         value: TwitchAppClientSecret
+  - name: Chat sentiment analysis UI
+    application: Sentiment Demo UI
+    deploymentType: Service
+    version: 7a8ebdfa8bbd3baa8e95a55c1544241575b584a1
+    resources:
+      cpu: 1000
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: sentimentdemoui
+    desiredStatus: Running
+    variables:
+      - name: sentiment
+        inputType: FreeText
+        description: The topic to read from
+        required: true
+        value: chat-with-sentiment
+      - name: messages
+        inputType: FreeText
+        description: The topic to read from
+        required: true
+        value: chat-messages
+      - name: drafts
+        inputType: FreeText
+        description: ''
+        required: true
+        value: drafts
+      - name: drafts_sentiment
+        inputType: FreeText
+        description: ''
+        required: false
+        value: drafts_sentiment
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: drafts_sentiment
+  - name: drafts
     persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 262144000
-  - name: drafts
+  - name: drafts_sentiment
     persisted: false
     configuration:
       partitions: 2
