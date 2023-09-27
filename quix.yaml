@@ -181,7 +181,7 @@ topics:
       retentionInMinutes: 120
       retentionInBytes: 524288000
   - name: chat-with-sentiment
-    persisted: false
+    persisted: true
     configuration:
       partitions: 8
       replicationFactor: 2
