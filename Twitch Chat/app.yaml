@@ -21,6 +21,11 @@ variables:
     description: ''
     defaultValue: TwitchAppClientId
     required: true
+  - name: TwitchAppClientSecret
+    inputType: Secret
+    description: ''
+    defaultValue: TwitchAppClientSecret
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
