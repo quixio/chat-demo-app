@@ -23,7 +23,7 @@ variables:
     required: true
   - name: TwitchAppClientSecret
     inputType: Secret
-    description: ''
+    description: Twitch App client secret - needed for calling Twitch API
     defaultValue: TwitchAppClientSecret
     required: true
 dockerfile: build/dockerfile
