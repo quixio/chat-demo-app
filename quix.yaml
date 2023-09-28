@@ -102,7 +102,7 @@ deployments:
         inputType: OutputTopic
         description: Name of the output topic to write messages into
         required: true
-        value: chat-messages
+        value: twitch-messages
       - name: StreamsToJoinCount
         inputType: FreeText
         description: Number of active stream channel to constantly be connected to
@@ -110,18 +110,18 @@ deployments:
         value: 10
       - name: TwitchBotToken
         inputType: Secret
-        description: ''
-        required: false
+        description: Twitch Bot token needed for reading messages from channels
+        required: true
         value: TwitchBotToken
       - name: TwitchAppClientId
         inputType: Secret
-        description: ''
-        required: false
+        description: Twitch App client id - needed for calling Twitch API
+        required: true
         value: TwitchAppClientId
       - name: TwitchAppClientSecret
         inputType: Secret
-        description: ''
-        required: false
+        description: Twitch App client secret - needed for calling Twitch API
+        required: true
         value: TwitchAppClientSecret
   - name: Chat sentiment analysis UI
     application: Sentiment Demo UI
