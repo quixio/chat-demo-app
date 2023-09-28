@@ -164,7 +164,7 @@ deployments:
   - name: Twitch sentiment analysis
     application: Sentiment analysis
     deploymentType: Service
-    version: a0d0a20863006e9652b055c602638d696dcfab9e
+    version: sa-v2.0
     resources:
       cpu: 2000
       memory: 1000
@@ -175,12 +175,17 @@ deployments:
         inputType: InputTopic
         description: This is the raw data input topic
         required: true
-        value: twitch-messages
+        value: chat-messages
       - name: output
         inputType: OutputTopic
         description: This is the output for the Hugging Face model score
         required: true
         value: chat-with-sentiment
+      - name: buffer_delay
+        inputType: FreeText
+        description: ''
+        required: true
+        value: 200
 
 # This section describes the Topics of the data pipeline
 topics:
