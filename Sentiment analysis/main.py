@@ -5,6 +5,8 @@ import os
 
 classifier = pipeline('sentiment-analysis')
 
+buffer_delay = int(os.environ["buffer_delay"])
+
 # Quix injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
 client = qx.QuixStreamingClient()
@@ -30,8 +32,8 @@ def read_stream(consumer_stream: qx.StreamConsumer):
     quix_function = QuixFunction(consumer_stream, producer_stream, classifier)
 
     buffer = consumer_stream.timeseries.create_buffer()
-    buffer.time_span_in_milliseconds = 200
-    buffer.buffer_timeout = 200
+    buffer.time_span_in_milliseconds = buffer_delay
+    buffer.buffer_timeout = buffer_delay
 
     # React to new data received from input topic.
     buffer.on_dataframe_released = quix_function.on_dataframe_handler
