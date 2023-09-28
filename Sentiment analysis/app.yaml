@@ -11,6 +11,11 @@ variables:
     description: This is the output for the Hugging Face model score
     defaultValue: chat-with-sentiment
     required: true
+  - name: buffer_delay
+    inputType: FreeText
+    description: ''
+    defaultValue: 0
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: quix_function.py
