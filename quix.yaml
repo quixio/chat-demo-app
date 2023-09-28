@@ -175,7 +175,7 @@ deployments:
         inputType: InputTopic
         description: This is the raw data input topic
         required: true
-        value: chat-messages
+        value: twitch-messages
       - name: output
         inputType: OutputTopic
         description: This is the output for the Hugging Face model score
@@ -185,7 +185,7 @@ deployments:
         inputType: FreeText
         description: ''
         required: true
-        value: 200
+        value: 0
 
 # This section describes the Topics of the data pipeline
 topics:
