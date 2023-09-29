@@ -46,7 +46,7 @@
 
     <mat-card-content fxFlex fxLayout="column" class="bg-white mb-0 overflow-hidden">
       <div fxFlex class="overflow-auto"  #chatWrapper>
-        <app-message *ngFor="let message of messages" [message]="message"></app-message> 
+        <app-message *ngFor="let message of messages | sentimentFilter: isTwitch" [message]="message"></app-message> 
       </div>
 
       <!-- Standard Chat isTyping sentiment indicator -->
