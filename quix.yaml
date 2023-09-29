@@ -165,7 +165,7 @@ deployments:
         inputType: FreeText
         description: ''
         required: false
-        value: twitch_messages
+        value: twitch-messages
   - name: Twitch sentiment analysis
     application: Sentiment analysis
     deploymentType: Service
