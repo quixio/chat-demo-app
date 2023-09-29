@@ -28,7 +28,7 @@ export class UserTyping {
 @Pipe({
   name: 'sentimentFilter'
 })
-export class SentimentFilter implements PipeTransform {
+export class SentimentFilterPipe implements PipeTransform {
   transform(messages: MessagePayload[], isTwitch: boolean): any[] {
     if (!messages || !isTwitch) {
       return messages;
