@@ -131,7 +131,7 @@ deployments:
   - name: Chat sentiment analysis UI
     application: Sentiment Demo UI
     deploymentType: Service
-    version: 7a8ebdfa8bbd3baa8e95a55c1544241575b584a1
+    version: 746c50669749ef77ef75fb7832ffb18ab58b3d81
     resources:
       cpu: 1000
       memory: 500
@@ -161,6 +161,16 @@ deployments:
         description: ''
         required: false
         value: drafts_sentiment
+      - name: sentimentAnalysisDeploymentId
+        inputType: Secret
+        description: The id of the deployment
+        required: false
+        value: sentimentAnalysisDeploymentId
+      - name: twitchSentimentAnalysisDeploymentId
+        inputType: Secret
+        description: The id of the deployment
+        required: false
+        value: twitchSentimentAnalysisDeploymentId
   - name: Twitch sentiment analysis
     application: Sentiment analysis
     deploymentType: Service
