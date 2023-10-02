@@ -21,5 +21,10 @@ variables:
     description: ''
     defaultValue: drafts_sentiment
     required: false
+  - name: sentimentAnalysisDeploymentId
+    inputType: Secret
+    description: The id of the deployment
+    defaultValue: sentimentAnalysisDeploymentId
+    required: false
 dockerfile: src/build/dockerfile
 defaultFile: src/app/services/quix.service.ts
