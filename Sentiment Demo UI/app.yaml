@@ -26,5 +26,10 @@ variables:
     description: The id of the deployment
     defaultValue: sentimentAnalysisDeploymentId
     required: false
+  - name: twitchSentimentAnalysisDeploymentId
+    inputType: Secret
+    description: The id of the deployment
+    defaultValue: twitchSentimentAnalysisDeploymentId
+    required: false
 dockerfile: src/build/dockerfile
 defaultFile: src/app/services/quix.service.ts
