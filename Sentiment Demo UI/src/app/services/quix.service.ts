@@ -18,13 +18,14 @@ export enum ConnectionStatus {
 })
 export class QuixService {
   public ungatedToken: string = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1qVTBRVE01TmtJNVJqSTNOVEpFUlVSRFF6WXdRVFF4TjBSRk56SkNNekpFUWpBNFFqazBSUSJ9.eyJodHRwczovL3F1aXguYWkvb3JnX2lkIjoiZGVtbyIsImh0dHBzOi8vcXVpeC5haS9vd25lcl9pZCI6ImF1dGgwfDI4YWQ4NWE4LWY1YjctNGFjNC1hZTVkLTVjYjY3OGIxYjA1MiIsImh0dHBzOi8vcXVpeC5haS90b2tlbl9pZCI6ImMzNzljNmVlLWNkMmYtNDExZC1iOGYyLTMyMDU0ZDc5MTY2YSIsImh0dHBzOi8vcXVpeC5haS9leHAiOiIxNzM3ODI5NDc5LjIyMyIsImlzcyI6Imh0dHBzOi8vYXV0aC5xdWl4LmFpLyIsInN1YiI6ImtyMXU4MGRqRllvUUZlb01nMGhqcXZia29lRkxFRDVBQGNsaWVudHMiLCJhdWQiOiJxdWl4IiwiaWF0IjoxNjk1NzE2MDI4LCJleHAiOjE2OTgzMDgwMjgsImF6cCI6ImtyMXU4MGRqRllvUUZlb01nMGhqcXZia29lRkxFRDVBIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIiwicGVybWlzc2lvbnMiOltdfQ.Ndm0K2iNHPxDq1ohF-yb-6LzIqx_UY8Ptcq0kAwSNye12S3deX_eDkC4XqZqW2NoSLd3GsmWV9PZGetGGp2IlqshQFZtUMp6WP6hq917ZC1i8JFx93PAbY7NT_88nFDovVlaRcoTpWvI-03KbryLkAoB28c6qb3EFwjCWFBuy_yA4yjQ8uF0-AZ0R9Qi4IBaekXWqcgO0a91gVRg0oA_hnzJFoR-EnZ2G1ZSxtuVgnyyPuQTMUvzJuUT_IJTLzEB_kejX0pcXRZBIwHP8MWLB4mE5DtIdz4jm8WIA4eZJZ7ZCG4dk-adQwZ2BdkNknV5eEwRgRJL4ybaplkaDlR-dg';
+  private token: string = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1qVTBRVE01TmtJNVJqSTNOVEpFUlVSRFF6WXdRVFF4TjBSRk56SkNNekpFUWpBNFFqazBSUSJ9.eyJodHRwczovL3F1aXguYWkvb3JnX2lkIjoiZGVtbyIsImh0dHBzOi8vcXVpeC5haS9vd25lcl9pZCI6ImF1dGgwfGM1M2QzMzIxLTgwZDItNGQzYS1hNmU3LTdmYjY1NGM5YzJmMiIsImh0dHBzOi8vcXVpeC5haS90b2tlbl9pZCI6IjNjYzFjMTZhLTVlNmEtNGYwMC1iODhhLThhYzE5MzkwMDdlYiIsImh0dHBzOi8vcXVpeC5haS9leHAiOiIyMDk5MjU3MjAwIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnF1aXguYWkvIiwic3ViIjoiV3lmT3lRSmQ3Mk94WkJQQmRMUlpiVlYwSWVma0JyVXpAY2xpZW50cyIsImF1ZCI6InF1aXgiLCJpYXQiOjE2OTUxMjE2OTYsImV4cCI6MTY5NzcxMzY5NiwiYXpwIjoiV3lmT3lRSmQ3Mk94WkJQQmRMUlpiVlYwSWVma0JyVXoiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMiLCJwZXJtaXNzaW9ucyI6W119.b_6WtwsjuQklXeZA7TpUmWbOQ9xr0bpJ_3xfyZjSc0lLVhH3aAUrci1ofUFajTOCkes-6uhe_Bu9zD5fQimpKvCJ4fplIjRGXQSuFz9aiH2AOUZD2BOLaQZipmzgEjkNnomqwLCuE3f8Q2026lm3B685XHCHt7YiCHt3JdW4yOVjiJZjAfNd4stJUtAWeTUl7og1gN9SuBMQ9Z3zHjO2TBQieQ2xAI812MbAaGDd7TWKkvPlMgdxApe6bu5nMCaE7_HLrSGNBKnkQ_Z_TTFiW_e9yaAmOojtANn2Jx21-OWfEg9aG8-FcoNSjkCaD3JTSTk0MNHEEuLGmpowxzZmGg'; // Create a token in the Tokens menu and paste it here
 
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
   /*WORKING LOCALLY? UPDATE THESE!*/
   private workingLocally = false; // set to true if working locally
-  private token: string = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1qVTBRVE01TmtJNVJqSTNOVEpFUlVSRFF6WXdRVFF4TjBSRk56SkNNekpFUWpBNFFqazBSUSJ9.eyJodHRwczovL3F1aXguYWkvb3JnX2lkIjoiZGVtbyIsImh0dHBzOi8vcXVpeC5haS9vd25lcl9pZCI6ImF1dGgwfGM1M2QzMzIxLTgwZDItNGQzYS1hNmU3LTdmYjY1NGM5YzJmMiIsImh0dHBzOi8vcXVpeC5haS90b2tlbl9pZCI6IjNjYzFjMTZhLTVlNmEtNGYwMC1iODhhLThhYzE5MzkwMDdlYiIsImh0dHBzOi8vcXVpeC5haS9leHAiOiIyMDk5MjU3MjAwIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnF1aXguYWkvIiwic3ViIjoiV3lmT3lRSmQ3Mk94WkJQQmRMUlpiVlYwSWVma0JyVXpAY2xpZW50cyIsImF1ZCI6InF1aXgiLCJpYXQiOjE2OTUxMjE2OTYsImV4cCI6MTY5NzcxMzY5NiwiYXpwIjoiV3lmT3lRSmQ3Mk94WkJQQmRMUlpiVlYwSWVma0JyVXoiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMiLCJwZXJtaXNzaW9ucyI6W119.b_6WtwsjuQklXeZA7TpUmWbOQ9xr0bpJ_3xfyZjSc0lLVhH3aAUrci1ofUFajTOCkes-6uhe_Bu9zD5fQimpKvCJ4fplIjRGXQSuFz9aiH2AOUZD2BOLaQZipmzgEjkNnomqwLCuE3f8Q2026lm3B685XHCHt7YiCHt3JdW4yOVjiJZjAfNd4stJUtAWeTUl7og1gN9SuBMQ9Z3zHjO2TBQieQ2xAI812MbAaGDd7TWKkvPlMgdxApe6bu5nMCaE7_HLrSGNBKnkQ_Z_TTFiW_e9yaAmOojtANn2Jx21-OWfEg9aG8-FcoNSjkCaD3JTSTk0MNHEEuLGmpowxzZmGg'; // Create a token in the Tokens menu and paste it here
   public workspaceId: string = 'demo-chatappdemo-prod'; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
   public messagesTopic: string = 'chat-messages'; // get topic name from the Topics page
+  public twitchMessagesTopic: string = 'twitch-messages'; // get topic name from the Topics page
   public draftsTopic: string = 'drafts'; // get topic from the Topics page
   public sentimentTopic: string = 'chat-with-sentiment'; // get topic name from the Topics page
   public draftsSentimentTopic: string = 'drafts_sentiment'; // get topic name from the Topics page
@@ -60,6 +61,7 @@ export class QuixService {
 
     if(this.workingLocally){
       this.messagesTopic = this.workspaceId + '-' + this.messagesTopic;
+      this.twitchMessagesTopic = this.workspaceId + '-' + this.twitchMessagesTopic;
       this.draftsTopic = this.workspaceId + '-' + this.draftsTopic;
       this.sentimentTopic = this.workspaceId + '-' + this.sentimentTopic;
       this.draftsSentimentTopic = this.workspaceId + '-' + this.draftsSentimentTopic;
@@ -69,6 +71,7 @@ export class QuixService {
       const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
       let workspaceId$ = this.httpClient.get(this.server + 'workspace_id', {headers, responseType: 'text'});
       let messagesTopic$ = this.httpClient.get(this.server + 'messages_topic', {headers, responseType: 'text'});
+      let twitchMessageTopic$ = this.httpClient.get(this.server + 'twitch_messages_topic', {headers, responseType: 'text'});
       let draftTopic$ = this.httpClient.get(this.server + 'drafts_topic', {headers, responseType: 'text'});
       let sentimentTopic$ = this.httpClient.get(this.server + 'sentiment_topic', {headers, responseType: 'text'});
       let draftsSentimentTopic$ = this.httpClient.get(this.server + 'drafts_sentiment_topic', {headers, responseType: 'text'});
@@ -77,17 +80,19 @@ export class QuixService {
       let value$ = combineLatest([
         workspaceId$,
         messagesTopic$,
+        twitchMessageTopic$,
         draftTopic$,
         sentimentTopic$,
         draftsSentimentTopic$,
         portalApi$
-      ]).pipe(map(([workspaceId, messagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, portalApi]) => {
-        return {workspaceId, messagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, portalApi};
+      ]).pipe(map(([workspaceId, messagesTopic, twitchMessagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, portalApi]) => {
+        return {workspaceId, messagesTopic, twitchMessagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, portalApi};
       }));
 
-      value$.subscribe(({ workspaceId, messagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, portalApi }) => {
+      value$.subscribe(({ workspaceId, messagesTopic, twitchMessagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, portalApi }) => {
         this.workspaceId = this.stripLineFeed(workspaceId);
         this.messagesTopic = this.stripLineFeed(this.workspaceId + '-' + messagesTopic);
+        this.twitchMessagesTopic = this.stripLineFeed(this.workspaceId + '-' + twitchMessagesTopic);
         this.draftsTopic = this.stripLineFeed(this.workspaceId + '-' + draftTopic);
         this.sentimentTopic = this.stripLineFeed(this.workspaceId + '-' + sentimentTopic);
         this.draftsSentimentTopic = this.stripLineFeed(this.workspaceId + '-' + draftsSentimentTopic);

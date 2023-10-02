@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { WebChatComponent } from "./components/web-chat/web-chat.component";
+import { SentimentFilterPipe, WebChatComponent } from "./components/web-chat/web-chat.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgChartsModule } from "ng2-charts";
 import { MaterialModule } from './material.module';
@@ -33,7 +33,10 @@ import { MessageComponent } from './components/message/message.component';
 
     // Dialog Components
     NewChatroomDialogComponent,
-    ShareChatroomDialogComponent
+    ShareChatroomDialogComponent,
+
+    // Pipe
+    SentimentFilterPipe
   ],
   imports: [
     BrowserModule,
