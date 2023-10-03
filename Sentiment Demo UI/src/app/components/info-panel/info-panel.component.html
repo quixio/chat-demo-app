@@ -39,7 +39,7 @@
     <div fxLayout="column" class="mb-5">
       <div class="mat-h4 mb-2">Sentiment analysis</div>
       <p class="mat-body-2 text-grey">
-        Sentiment is <a [href]="'https://portal.platform.quix.ai/pipeline/deployments/b7f393c8-9182-4bb5-bfc4-37414d1a0052?workspace=' + workspaceId + '&token=' + ungatedToken" target="_blank">calculated in real time</a>
+        Sentiment is <a [href]="'https://portal.platform.quix.ai/pipeline/deployments/' + deploymentId + '?workspace=' + workspaceId + '&token=' + ungatedToken" target="_blank">calculated in real time</a>
         using a Hugging Face model. Each message is assigned a value between -1 and 1. Then, the service uses a rolling window to analyze the trend.
       </p>
       <app-sentiment-chart [style.height.px]="200"></app-sentiment-chart>
