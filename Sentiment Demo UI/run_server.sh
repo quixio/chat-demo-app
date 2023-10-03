@@ -7,6 +7,6 @@ echo "${messages}" > /usr/share/nginx/html/messages_topic
 echo "${twitch_messages}" > /usr/share/nginx/html/twitch_messages_topic
 echo "${drafts}" > /usr/share/nginx/html/drafts_topic
 echo "${drafts_sentiment}" > /usr/share/nginx/html/drafts_sentiment_topic
-echo "${sentimentAnalysisDeploymentId}" > /usr/share/nginx/html/computerVisionProjectDeploymentId
-echo "${twitchSentimentAnalysisDeploymentId}" > /usr/share/nginx/html/maxVehicleWindowProjectDeploymentId
+echo "${sentimentAnalysisDeploymentId}" > /usr/share/nginx/html/sentimentAnalysisDeploymentId
+echo "${twitchSentimentAnalysisDeploymentId}" > /usr/share/nginx/html/twitchSentimentAnalysisDeploymentId
 nginx -g "daemon off;"
