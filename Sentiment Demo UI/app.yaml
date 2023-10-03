@@ -26,5 +26,10 @@ variables:
     description: ''
     defaultValue: twitch_messages
     required: false
+  - name: bearer_token
+    inputType: Secret
+    description: ''
+    defaultValue: bearerToken
+    required: false
 dockerfile: src/build/dockerfile
 defaultFile: src/app/services/quix.service.ts
