@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "${bearerToken}" > /usr/share/nginx/html/bearer_token
+echo "${bearer_token}" > /usr/share/nginx/html/bearer_token
 echo "${Quix__Workspace__Id}" > /usr/share/nginx/html/workspace_id
 echo "${Quix__Portal__Api}" > /usr/share/nginx/html/portal_api
 echo "${sentiment}" > /usr/share/nginx/html/sentiment_topic
