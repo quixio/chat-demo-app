@@ -2,11 +2,12 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { NewChatroomDialogComponent } from '../dialogs/new-chatroom-dialog/new-chatroom-dialog.component';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, map, take, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TwitchService } from 'src/app/services/twitch.service';
 import { ActiveStream, ActiveStreamAction } from 'src/app/models/activeStream';
 import { QuixChatRoom, RoomService } from 'src/app/services/room.service';
+import { QuixService } from 'src/app/services/quix.service';
 
 
 @Component({
@@ -28,7 +29,11 @@ export class MessageSourceDropdownComponent implements OnInit, OnDestroy {
 
   private unsubscribe = new Subject<void>();
 
-  constructor(private matDialog: MatDialog, private roomService: RoomService, private twitchService: TwitchService, 
+  constructor(
+    private matDialog: MatDialog,
+    private quixService: QuixService, 
+    private roomService: RoomService, 
+    private twitchService: TwitchService, 
     private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -43,9 +48,17 @@ export class MessageSourceDropdownComponent implements OnInit, OnDestroy {
     });
 
     // Listener to retrieve all the active streams on twitch
-    this.twitchService.getActiveStreams$().pipe(takeUntil(this.unsubscribe)).subscribe((activeStreamsSubs) => {
+    this.twitchService.getActiveStreams$().pipe(
+      map((streamSub) => {
+        if (streamSub?.streams) {
+          streamSub.streams = streamSub?.streams?.filter((f) => f.topicId === this.quixService.twitchMessagesTopic)
+        }
+        return streamSub;
+      }),
+      takeUntil(this.unsubscribe)
+    ).subscribe((streamSub) => {
       this.isLoadingChannels = false;
-      this.setActiveSteams(activeStreamsSubs?.streams!, activeStreamsSubs?.action);
+      this.setActiveSteams(streamSub?.streams!, streamSub?.action);
     });
   }
 
