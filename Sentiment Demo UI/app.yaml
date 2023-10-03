@@ -26,5 +26,20 @@ variables:
     description: ''
     defaultValue: twitch_messages
     required: false
+  - name: sentimentAnalysisDeploymentId
+    inputType: Secret
+    description: The ID of the Sentiment Analysis deployment
+    defaultValue: sentimentAnalysisDeploymentId
+    required: false
+  - name: twitchSentimentAnalysisDeploymentId
+    inputType: Secret
+    description: The ID of the Twitch Sentiment Analysis deployment
+    defaultValue: twitchSentimentAnalysisDeploymentId
+    required: false
+  - name: bearer_token
+    inputType: Secret
+    description: ''
+    defaultValue: bearerToken
+    required: true
 dockerfile: src/build/dockerfile
 defaultFile: src/app/services/quix.service.ts
