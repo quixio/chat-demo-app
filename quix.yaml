@@ -181,7 +181,7 @@ deployments:
         description: ''
         required: true
         value: bearerToken
-  - name: Twitch sentiment analysis
+  - name: Twitch Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
     version: sa-v2.0
