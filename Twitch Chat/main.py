@@ -7,7 +7,7 @@ from twitch_api import TwitchStream
 from twitch_bot import Bot
 
 
-streams_to_join_count = max(int(os.environ["StreamsToJoinCount"]), 100) # Current max is 100 duo to API limitations, can be increased with additional work
+streams_to_join_count = min(int(os.environ["StreamsToJoinCount"]), 100) # Current max is 100 duo to API limitations, can be increased with additional work
 client = qx.QuixStreamingClient()
 
 topic_producer = client.get_topic_producer(os.environ["output"])

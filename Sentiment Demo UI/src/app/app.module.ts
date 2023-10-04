@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { WebChatComponent } from "./components/web-chat/web-chat.component";
+import { SentimentFilterPipe, WebChatComponent } from "./components/web-chat/web-chat.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgChartsModule } from "ng2-charts";
 import { MaterialModule } from './material.module';
@@ -16,17 +16,27 @@ import { SentimentChartComponent } from './components/sentiment-chart/sentiment-
 import { NewChatroomDialogComponent } from './components/dialogs/new-chatroom-dialog/new-chatroom-dialog.component';
 import { ShareChatroomDialogComponent } from './components/dialogs/share-chatroom-dialog/share-chatroom-dialog.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import { MessageComponent } from './components/message/message.component';
 
 @NgModule({
   declarations: [
+    // Page Components
+    HomePageComponent,
+    
+    // General Components
     AppComponent,
     WebChatComponent,
     InfoPanelComponent,
-    HomePageComponent,
     MessageSourceDropdownComponent,
     SentimentChartComponent,
+    MessageComponent,
+
+    // Dialog Components
     NewChatroomDialogComponent,
     ShareChatroomDialogComponent,
+
+    // Pipe
+    SentimentFilterPipe
   ],
   imports: [
     BrowserModule,

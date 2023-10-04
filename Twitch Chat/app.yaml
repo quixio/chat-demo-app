@@ -4,27 +4,27 @@ variables:
   - name: output
     inputType: OutputTopic
     description: Name of the output topic to write messages into
-    defaultValue: messages
+    defaultValue: chat-messages
     required: true
   - name: StreamsToJoinCount
     inputType: FreeText
     description: Number of active stream channel to constantly be connected to
-    defaultValue: 100
+    defaultValue: 10
+    required: true
+  - name: TwitchBotToken
+    inputType: Secret
+    description: Twitch Bot token needed for reading messages from channels
+    defaultValue: TwitchBotToken
     required: true
   - name: TwitchAppClientId
     inputType: Secret
-    description: ''
+    description: Twitch App client id - needed for calling Twitch API
     defaultValue: TwitchAppClientId
     required: true
   - name: TwitchAppClientSecret
     inputType: Secret
-    description: ''
+    description: Twitch App client secret - needed for calling Twitch API
     defaultValue: TwitchAppClientSecret
-    required: true
-  - name: TwitchBotToken
-    inputType: Secret
-    description: ''
-    defaultValue: TwitchBotToken
     required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py

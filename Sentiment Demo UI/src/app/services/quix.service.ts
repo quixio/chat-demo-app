@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder, IHttpConnectionOptions } from '@microsoft/signalr';
-import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
+import { combineLatest, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MessagePayload } from '../models/messagePayload';
 import { ParameterData } from '../models/parameterData';
@@ -17,16 +17,26 @@ export enum ConnectionStatus {
   providedIn: 'root'
 })
 export class QuixService {
+  // this is the token that will authenticate the user into the ungated product experience.
+  // ungated means no password or login is needed.
+  // the token is locked down to the max and everything is read only.
+  public ungatedToken: string = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1qVTBRVE01TmtJNVJqSTNOVEpFUlVSRFF6WXdRVFF4TjBSRk56SkNNekpFUWpBNFFqazBSUSJ9.eyJodHRwczovL3F1aXguYWkvb3JnX2lkIjoiZGVtbyIsImh0dHBzOi8vcXVpeC5haS9vd25lcl9pZCI6ImF1dGgwfDI4YWQ4NWE4LWY1YjctNGFjNC1hZTVkLTVjYjY3OGIxYjA1MiIsImh0dHBzOi8vcXVpeC5haS90b2tlbl9pZCI6ImMzNzljNmVlLWNkMmYtNDExZC1iOGYyLTMyMDU0ZDc5MTY2YSIsImh0dHBzOi8vcXVpeC5haS9leHAiOiIxNzM3ODI5NDc5LjIyMyIsImlzcyI6Imh0dHBzOi8vYXV0aC5xdWl4LmFpLyIsInN1YiI6ImtyMXU4MGRqRllvUUZlb01nMGhqcXZia29lRkxFRDVBQGNsaWVudHMiLCJhdWQiOiJxdWl4IiwiaWF0IjoxNjk1NzE2MDI4LCJleHAiOjE2OTgzMDgwMjgsImF6cCI6ImtyMXU4MGRqRllvUUZlb01nMGhqcXZia29lRkxFRDVBIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIiwicGVybWlzc2lvbnMiOltdfQ.Ndm0K2iNHPxDq1ohF-yb-6LzIqx_UY8Ptcq0kAwSNye12S3deX_eDkC4XqZqW2NoSLd3GsmWV9PZGetGGp2IlqshQFZtUMp6WP6hq917ZC1i8JFx93PAbY7NT_88nFDovVlaRcoTpWvI-03KbryLkAoB28c6qb3EFwjCWFBuy_yA4yjQ8uF0-AZ0R9Qi4IBaekXWqcgO0a91gVRg0oA_hnzJFoR-EnZ2G1ZSxtuVgnyyPuQTMUvzJuUT_IJTLzEB_kejX0pcXRZBIwHP8MWLB4mE5DtIdz4jm8WIA4eZJZ7ZCG4dk-adQwZ2BdkNknV5eEwRgRJL4ybaplkaDlR-dg';
 
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
   /*WORKING LOCALLY? UPDATE THESE!*/
-  private workingLocally = true; // set to true if working locally
-  private token: string = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1qVTBRVE01TmtJNVJqSTNOVEpFUlVSRFF6WXdRVFF4TjBSRk56SkNNekpFUWpBNFFqazBSUSJ9.eyJodHRwczovL3F1aXguYWkvb3JnX2lkIjoiZGVtbyIsImh0dHBzOi8vcXVpeC5haS9vd25lcl9pZCI6ImF1dGgwfGM1M2QzMzIxLTgwZDItNGQzYS1hNmU3LTdmYjY1NGM5YzJmMiIsImh0dHBzOi8vcXVpeC5haS90b2tlbl9pZCI6IjNjYzFjMTZhLTVlNmEtNGYwMC1iODhhLThhYzE5MzkwMDdlYiIsImh0dHBzOi8vcXVpeC5haS9leHAiOiIyMDk5MjU3MjAwIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnF1aXguYWkvIiwic3ViIjoiV3lmT3lRSmQ3Mk94WkJQQmRMUlpiVlYwSWVma0JyVXpAY2xpZW50cyIsImF1ZCI6InF1aXgiLCJpYXQiOjE2OTUxMjE2OTYsImV4cCI6MTY5NzcxMzY5NiwiYXpwIjoiV3lmT3lRSmQ3Mk94WkJQQmRMUlpiVlYwSWVma0JyVXoiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMiLCJwZXJtaXNzaW9ucyI6W119.b_6WtwsjuQklXeZA7TpUmWbOQ9xr0bpJ_3xfyZjSc0lLVhH3aAUrci1ofUFajTOCkes-6uhe_Bu9zD5fQimpKvCJ4fplIjRGXQSuFz9aiH2AOUZD2BOLaQZipmzgEjkNnomqwLCuE3f8Q2026lm3B685XHCHt7YiCHt3JdW4yOVjiJZjAfNd4stJUtAWeTUl7og1gN9SuBMQ9Z3zHjO2TBQieQ2xAI812MbAaGDd7TWKkvPlMgdxApe6bu5nMCaE7_HLrSGNBKnkQ_Z_TTFiW_e9yaAmOojtANn2Jx21-OWfEg9aG8-FcoNSjkCaD3JTSTk0MNHEEuLGmpowxzZmGg'; // Create a token in the Tokens menu and paste it here
-  public workspaceId: string = 'demo-chatappdemo-newfeui'; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
-  public messagesTopic: string = 'messages'; // get topic name from the Topics page
+  private token: string = ''; // Create a token in the Tokens menu and paste it here
+  private workingLocally = false; // set to true if working locally
+  public workspaceId: string = 'demo-chatappdemo-prod'; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
+  public messagesTopic: string = 'chat-messages'; // get topic name from the Topics page
+  public twitchMessagesTopic: string = 'twitch-messages'; // get topic name from the Topics page
   public draftsTopic: string = 'drafts'; // get topic from the Topics page
-  public sentimentTopic: string = 'sentiment'; // get topic name from the Topics page
+  public sentimentTopic: string = 'chat-with-sentiment'; // get topic name from the Topics page
   public draftsSentimentTopic: string = 'drafts_sentiment'; // get topic name from the Topics page
+
+  /* optional */
+  public sentimentAnalysisDeploymentId: string = ""; // links from the info text in the left hand panel use this to link you to the project in the platform. Easier to leave it blank.
+  public twitchSentimentAnalysisDeploymentId: string = ""; // links from the info text in the left hand panel use this to link you to the project in the platform. Easier to leave it blank.
+
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
 
   private subdomain = 'platform'; // leave as 'platform'
@@ -59,6 +69,7 @@ export class QuixService {
 
     if(this.workingLocally){
       this.messagesTopic = this.workspaceId + '-' + this.messagesTopic;
+      this.twitchMessagesTopic = this.workspaceId + '-' + this.twitchMessagesTopic;
       this.draftsTopic = this.workspaceId + '-' + this.draftsTopic;
       this.sentimentTopic = this.workspaceId + '-' + this.sentimentTopic;
       this.draftsSentimentTopic = this.workspaceId + '-' + this.draftsSentimentTopic;
@@ -66,33 +77,52 @@ export class QuixService {
     }
     else {
       const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
+      let bearerToken$ = this.httpClient.get(this.server + "bearer_token", {headers, responseType: 'text'});
       let workspaceId$ = this.httpClient.get(this.server + 'workspace_id', {headers, responseType: 'text'});
       let messagesTopic$ = this.httpClient.get(this.server + 'messages_topic', {headers, responseType: 'text'});
+      let twitchMessagesTopic$ = this.httpClient.get(this.server + 'twitch_messages_topic', {headers, responseType: 'text'});
+
       let draftTopic$ = this.httpClient.get(this.server + 'drafts_topic', {headers, responseType: 'text'});
       let sentimentTopic$ = this.httpClient.get(this.server + 'sentiment_topic', {headers, responseType: 'text'});
       let draftsSentimentTopic$ = this.httpClient.get(this.server + 'drafts_sentiment_topic', {headers, responseType: 'text'});
-      let token$ = this.httpClient.get(this.server + 'sdk_token', {headers, responseType: 'text'});
       let portalApi$ = this.httpClient.get(this.server + "portal_api", {headers, responseType: 'text'})
 
+      // if the solution is deployed in the platform. as part of the ungated / demo experience, set these so the links work correctly.
+      // if running locally or cloned to another repo then these aren't important and the solution will still run
+      let sentimentAnalysisDeploymentId$ = this.httpClient.get(this.server + "sentimentAnalysisDeploymentId", { headers, responseType: 'text' })
+      let twitchSentimentAnalysisDeploymentId$ = this.httpClient.get(this.server + "twitchSentimentAnalysisDeploymentId", { headers, responseType: 'text' })
+
       let value$ = combineLatest([
+        // General
+        bearerToken$,
         workspaceId$,
+        portalApi$,
+
+        // Topics
         messagesTopic$,
+        twitchMessagesTopic$,
         draftTopic$,
         sentimentTopic$,
         draftsSentimentTopic$,
-        token$,
-        portalApi$
-      ]).pipe(map(([workspaceId, messagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, token, portalApi]) => {
-        return {workspaceId, messagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, token, portalApi};
+
+        // Deployments
+        sentimentAnalysisDeploymentId$,
+        twitchSentimentAnalysisDeploymentId$
+
+      ]).pipe(map(([bearerToken, workspaceId,  portalApi, messagesTopic, twitchMessagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, sentimentAnalysisDeploymentId, twitchSentimentAnalysisDeploymentId]) => {
+        return {bearerToken, workspaceId, portalApi, messagesTopic, twitchMessagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, sentimentAnalysisDeploymentId, twitchSentimentAnalysisDeploymentId};
       }));
 
-      value$.subscribe(({ workspaceId, messagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, token, portalApi }) => {
+      value$.subscribe(({ bearerToken, workspaceId, portalApi, messagesTopic, twitchMessagesTopic, draftTopic, sentimentTopic, draftsSentimentTopic, sentimentAnalysisDeploymentId, twitchSentimentAnalysisDeploymentId }) => {
+        this.token = this.stripLineFeed(bearerToken);
         this.workspaceId = this.stripLineFeed(workspaceId);
         this.messagesTopic = this.stripLineFeed(this.workspaceId + '-' + messagesTopic);
+        this.twitchMessagesTopic = this.stripLineFeed(this.workspaceId + '-' + twitchMessagesTopic);
         this.draftsTopic = this.stripLineFeed(this.workspaceId + '-' + draftTopic);
         this.sentimentTopic = this.stripLineFeed(this.workspaceId + '-' + sentimentTopic);
         this.draftsSentimentTopic = this.stripLineFeed(this.workspaceId + '-' + draftsSentimentTopic);
-        this.token = token.replace('\n', '');
+        this.sentimentAnalysisDeploymentId = this.stripLineFeed(this.workspaceId + '-' + sentimentAnalysisDeploymentId);
+        this.twitchSentimentAnalysisDeploymentId = this.stripLineFeed(this.workspaceId + '-' + twitchSentimentAnalysisDeploymentId);
 
         portalApi = portalApi.replace("\n", "");
         let matches = portalApi.match(this.domainRegex);
@@ -126,7 +156,8 @@ export class QuixService {
    * @param url The url of the SignalR connection.
    * @param options The options for the hub.
    * @param isReader Whether it's the ReaderHub or WriterHub.
-   * @returns 
+   *
+   * @returns The newly created hub connection.
    */
   private createHubConnection(url: string, options: IHttpConnectionOptions, isReader: boolean): HubConnection {
     const hubConnection = new HubConnectionBuilder()

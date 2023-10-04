@@ -4,12 +4,17 @@ variables:
   - name: input
     inputType: InputTopic
     description: This is the raw data input topic
-    defaultValue: messages
+    defaultValue: chat-messages
     required: true
   - name: output
     inputType: OutputTopic
     description: This is the output for the Hugging Face model score
-    defaultValue: sentiment
+    defaultValue: chat-with-sentiment
+    required: true
+  - name: buffer_delay
+    inputType: FreeText
+    description: ''
+    defaultValue: 0
     required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py

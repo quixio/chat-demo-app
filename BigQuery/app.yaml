@@ -4,7 +4,7 @@ variables:
   - name: input
     inputType: InputTopic
     description: This is the input topic
-    defaultValue: sentiment
+    defaultValue: chat-with-sentiment
     required: true
   - name: PROJECT_ID
     inputType: FreeText

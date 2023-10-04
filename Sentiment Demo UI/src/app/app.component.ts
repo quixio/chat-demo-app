@@ -9,8 +9,10 @@ import { QuixService } from './services/quix.service';
 export class AppComponent{
 
   workspaceId: string;
+  ungatedToken: string;
 
   constructor(private quixService: QuixService) {
     this.workspaceId = this.quixService.workspaceId;
+    this.ungatedToken = this.quixService.ungatedToken;
   }
 }

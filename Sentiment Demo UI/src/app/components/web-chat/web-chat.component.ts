@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, Pipe, PipeTransform } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject, Subscription, debounceTime, take, takeUntil, timer } from 'rxjs';
+import { Subject, Subscription, debounceTime, filter, take, takeUntil, timer } from 'rxjs';
 import { MessagePayload } from 'src/app/models/messagePayload';
 import { ParameterData } from 'src/app/models/parameterData';
 import { ConnectionStatus, QuixService } from 'src/app/services/quix.service';
@@ -11,12 +11,32 @@ import { ShareChatroomDialogComponent } from '../dialogs/share-chatroom-dialog/s
 import { RoomService } from 'src/app/services/room.service';
 import { Colors } from 'src/app/constants/colors';
 
-const POSITIVE_THRESHOLD = 0.5;
-const NEGATIVE_THRESHOLD = -0.5;
+export const POSITIVE_THRESHOLD = 0.5;
+export const NEGATIVE_THRESHOLD = -0.5;
 
 export class UserTyping {
   timeout?: Subscription;
   sentiment?: number;
+}
+
+
+/**
+ * Custom Pipe to filter the list of messages, so that
+ * it only shows the messages in the chat where a sentiment
+ * is present.
+ */
+@Pipe({
+  name: 'sentimentFilter'
+})
+export class SentimentFilterPipe implements PipeTransform {
+  transform(messages: MessagePayload[], isTwitch: boolean): any[] {
+    if (!messages || !isTwitch) {
+      return messages;
+    }
+
+    // Filter the messages to only show the ones where sentiment is present
+    return messages.filter(message => message.sentiment !== undefined);
+  }
 }
 
 @Component({
@@ -31,6 +51,7 @@ export class WebChatComponent implements OnInit {
   profilePicColor: string;
 
   isTwitch: boolean = true;
+  scrollTimeoutId: any;
 
   @ViewChild('chatWrapper') chatWrapperEle: ElementRef<HTMLElement>;
   @ViewChild('messageInput') messageInputEle: ElementRef;
@@ -84,7 +105,10 @@ export class WebChatComponent implements OnInit {
     });
   
     // Listen for reader messages
-    this.quixService.paramDataReceived$.pipe(takeUntil(this.unsubscribe$)).subscribe((payload) => {
+    this.quixService.paramDataReceived$.pipe(
+      takeUntil(this.unsubscribe$), 
+      filter((f) => f.streamId === this.roomService.selectedRoom) // Ensure there is no message leaks
+    ).subscribe((payload) => {
       this.messageReceived(payload);
     });
 
@@ -143,7 +167,7 @@ export class WebChatComponent implements OnInit {
     let [name] = payload.tagValues["name"];
     let profilePic = payload.tagValues["profilePic"]?.at(0);
     let profilePicColor = payload.tagValues["profilePicColor"]?.at(0);
-    let sentiment = payload.numericValues["sentiment"]?.at(0) || 0;
+    let sentiment = payload.numericValues["sentiment"]?.at(0) || undefined;
     let averageSentiment = payload.numericValues["average_sentiment"]?.at(0) || 0;
     let value = payload.stringValues["chat-message"]?.at(0);
     let message = this.messages.find((f) => f.timestamp === timestamp && f.name === name);
@@ -166,14 +190,14 @@ export class WebChatComponent implements OnInit {
     }
 
     if (topicId === this.quixService.draftsSentimentTopic) {
-      if (!user) return;
+      if (!user || !sentiment) return;
       user = { ...user, sentiment };
       if (sentiment > 0) this.happyTypers.add(name);
       if (sentiment < 0) this.unhappyTypers.add(name);
       this.usersTyping.set(name, user);
     }
 
-    if (topicId === this.quixService.messagesTopic) {
+    if (topicId === this.quixService.messagesTopic || topicId === this.quixService.twitchMessagesTopic) {
        // If the user is in the typing map then remove them
        if (user) {
         user?.timeout?.unsubscribe();
@@ -185,10 +209,13 @@ export class WebChatComponent implements OnInit {
 
     if (topicId === this.quixService.sentimentTopic) {
       if (!message) return;
+
       // Update existing message with the sentiment
       message.sentiment = sentiment;
       this.averageSentiment = averageSentiment;
-
+      
+      // Trigger change detection for the pipe
+      this.messages = [...this.messages];
     }
 
     // Scroll to the button of the chart
@@ -239,76 +266,31 @@ export class WebChatComponent implements OnInit {
    * 
    * @returns The Html message.
    */
-    public getTypingMessage(): string | undefined {  
+  public getTypingMessage(): string | undefined {  
 
-      const users = Array.from(this.usersTyping.entries())
-      .map(([key, value]) => ({
-        name: this.titleCasePipe.transform(key),
-        sentiment: value.sentiment!,
-      }));
+    const users = Array.from(this.usersTyping.entries())
+    .map(([key, value]) => ({
+      name: this.titleCasePipe.transform(key),
+      sentiment: value.sentiment!,
+    }));
 
-      if (!users.length) return undefined;
+    if (!users.length) return undefined;
 
-      if (users.length === 1) {
-        const [user] = users;
-        return `<b>${user.name}</b> is typing...`;
-      }
-
-      if (users.length < 3) {
-        const usersJoined = users.map((m) => m.name).join(' and ');
-        return `<b>${usersJoined}</b> are typing...`; 
-      }
-
-      if (users.length >= 3) {
-        return `<b>${users.length}</b> users are typing...`;    
-      }
-
-      return undefined
+    if (users.length === 1) {
+      const [user] = users;
+      return `<b>${user.name}</b> is typing...`;
     }
 
-  /**
-   * Takes the sentiment value of a message and returns the
-   * appropriate color to be rendered in the template.
-   * 
-   * @param sentiment The sentiment of the message.
-   * @returns The Html class.
-   */
-  public getColor(sentiment: number): string {
-    if (sentiment > POSITIVE_THRESHOLD) {
-      return 'text-success';
-    } else if (sentiment < NEGATIVE_THRESHOLD) {
-      return 'text-danger';
-    } 
-      
-    return 'text-grey-light';
-  }
-
-  /**
-   * Takes the sentiment value of a message and returns the
-   * appropriate icon to be rendered in the template.
-   * 
-   * @param sentiment The sentiment of the message.
-   * @returns The icon name.
-   */
-  public getSentimentIcon(sentiment: number): string {
-    if (sentiment > POSITIVE_THRESHOLD) {
-      return 'sentiment_satisfied';
-    } else if (sentiment < NEGATIVE_THRESHOLD) {
-      return 'sentiment_dissatisfied';
+    if (users.length < 3) {
+      const usersJoined = users.map((m) => m.name).join(' and ');
+      return `<b>${usersJoined}</b> are typing...`; 
     }
-      
-    return 'sentiment_neutral';
-  }
 
-  /**
-   * Takes the date timestamp, divides it by 1000000
-   * and then creates a JS date from it to be used in the template.
-   * 
-   * @param timestamp The date timestamp.
-   * @returns The new Date. 
-   */
-  public getDateFromTimestamp(timestamp: number) {
-    return new Date(timestamp / 1000000)
+    if (users.length >= 3) {
+      return `<b>${users.length}</b> users are typing...`;    
+    }
+
+    return undefined
   }
 
   /**
@@ -361,12 +343,15 @@ export class WebChatComponent implements OnInit {
    * Util method to scroll the user to the bottom of the chat
    */
   scrollToChatBottom(isCheckBottom?: boolean): void {
+    const threshold = 30;
     const el = this.chatWrapperEle.nativeElement;
-    const isScrollToBottom = el.offsetHeight + el.scrollTop >= el.scrollHeight;
+    const isScrollToBottom = Math.round(el.scrollTop + el.clientHeight) >= el.scrollHeight - threshold;
 
     if (isCheckBottom && !isScrollToBottom) return;
-    
-    setTimeout(() => (el.scrollTop = el.scrollHeight));
+  
+    // Clear the existing timeout if it exists
+    if (this.scrollTimeoutId) clearTimeout(this.scrollTimeoutId);
+    this.scrollTimeoutId = setTimeout(() => el.scrollTop = el.scrollHeight, 0);
   }
 
   openShareChatroomDialog(): void {

@@ -158,7 +158,7 @@ export class RoomService {
 
     let payload = 
     {
-        'topic': 'sentiment',
+        'topic': 'chat-with-sentiment',
         'groupByTime': {
             'timeBucketDuration': 7791291230,
             'interpolationType': 'None'
@@ -194,6 +194,7 @@ export class RoomService {
   public subscribeToRoom(roomName: string): void {
     // console.log(`Room Service | Subscribing to the room - ${roomName}`);
     this.quixService.subscribeToParameter(this.quixService.messagesTopic, roomName, "*");
+    this.quixService.subscribeToParameter(this.quixService.twitchMessagesTopic, roomName, "*");
     this.quixService.subscribeToParameter(this.quixService.draftsTopic, roomName, "*");
     this.quixService.subscribeToParameter(this.quixService.sentimentTopic, roomName, "*");
     this.quixService.subscribeToParameter(this.quixService.draftsSentimentTopic, roomName, "*");
@@ -207,6 +208,7 @@ export class RoomService {
   public unsubscribeFromRoom(roomName: string): void {
     // console.log(`Room Service | Unsubscribing from the room - ${roomName}`);
     this.quixService.unsubscribeFromParameter(this.quixService.messagesTopic, roomName, "*");
+    this.quixService.unsubscribeFromParameter(this.quixService.twitchMessagesTopic, roomName, "*");
     this.quixService.unsubscribeFromParameter(this.quixService.draftsTopic, roomName, "*");
     this.quixService.unsubscribeFromParameter(this.quixService.sentimentTopic, roomName, "*");
     this.quixService.unsubscribeFromParameter(this.quixService.draftsSentimentTopic, roomName, "*");

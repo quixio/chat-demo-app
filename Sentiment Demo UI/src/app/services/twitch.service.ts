@@ -36,7 +36,7 @@ export class TwitchService {
   public subscribeToChannels(): void {
     // console.log(`Twitch Service | Subscribing to retrieve channels`);
     this.quixService.readerHubConnection
-			.invoke('SubscribeToActiveStreams', this.quixService.messagesTopic)
+			.invoke('SubscribeToActiveStreams', this.quixService.twitchMessagesTopic)
 			.then((stream: ActiveStream, action?: ActiveStreamAction) => {
 				if (!stream) return;
 				const streamsArray = Array.isArray(stream) ? stream : [stream];
@@ -50,7 +50,7 @@ export class TwitchService {
 	public unsubscribeFromChannels(): void { 
 		// console.log(`Twitch Service | Unsubscribing from retrieve channels`);
 		this.quixService.readerHubConnection
-			.invoke('UnsubscribeFromActiveStreams', this.quixService.messagesTopic)
+			.invoke('UnsubscribeFromActiveStreams', this.quixService.twitchMessagesTopic)
 			.then(() => {
 				this._activeChannels.next({ streams: [], action: ActiveStreamAction.Remove });
 			})
