@@ -23,9 +23,25 @@ def publish_chat_message(user: str, message: str, channel: str, timestamp: datet
 async def join_channels_in_batches():
     while True:
         print(f"Connected channels: {len(bot.connected_channels)}")  
-        await bot.join_top_streams_in_batches(int(streams_to_join_count))
+        async for joined_channels in bot.join_top_streams_in_batches(int(streams_to_join_count)):
+            for channel in joined_channels:
+                stream = topic_producer.get_or_create_stream(channel.user_login)
+                stream.properties.metadata = {
+                    "game_name": channel.game_name,
+                    "tags": channel.tags,
+                    "thumbnail_url": channel.thumbnail_url,
+                    "title": channel.title,
+                    "viewer_count": channel.viewer_count
+                }
+        
+        
         await asyncio.sleep(900)  # Wait for 15 minutes
-        await bot.part_offline_channels()
+        
+        parted_channels = await bot.part_offline_channels()
+        for parted_channel in parted_channels:
+            stream = topic_producer.get_or_create_stream(channel.user_login)
+            stream.close()
+        
         await asyncio.sleep(10)  # Wait for 10 seconds
         
 twitch_token = os.environ["TwitchBotToken"]
