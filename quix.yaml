@@ -11,8 +11,8 @@ deployments:
     deploymentType: Service
     version: sa-v2.0
     resources:
-      cpu: 2000
-      memory: 4000
+      cpu: 800
+      memory: 1000
       replicas: 2
     desiredStatus: Running
     variables:
@@ -36,8 +36,8 @@ deployments:
     deploymentType: Service
     version: d49be638a568e2d209ec50a8eb2c6e2efbcc1e0f
     resources:
-      cpu: 2000
-      memory: 4000
+      cpu: 800
+      memory: 1000
       replicas: 1
     state:
       enabled: true
@@ -59,8 +59,8 @@ deployments:
     deploymentType: Service
     version: bigquery-v1
     resources:
-      cpu: 1000
-      memory: 1000
+      cpu: 500
+      memory: 500
       replicas: 1
     desiredStatus: Stopped
     variables:
@@ -98,8 +98,8 @@ deployments:
     deploymentType: Service
     version: b1bd9106b18a6da5c38f99b02dfdd7f5920bc2d6
     resources:
-      cpu: 2000
-      memory: 1000
+      cpu: 500
+      memory: 500
       replicas: 1
     desiredStatus: Running
     variables:
@@ -133,7 +133,7 @@ deployments:
     deploymentType: Service
     version: d13785267bc942b698b1abb9b6b65a55f014d876
     resources:
-      cpu: 1000
+      cpu: 500
       memory: 500
       replicas: 1
     publicAccess:
@@ -186,7 +186,7 @@ deployments:
     deploymentType: Service
     version: sa-v2.0
     resources:
-      cpu: 2000
+      cpu: 800
       memory: 1000
       replicas: 4
     desiredStatus: Running
@@ -214,26 +214,26 @@ topics:
     configuration:
       partitions: 2
       replicationFactor: 2
-      retentionInMinutes: -1
+      retentionInMinutes: 120
       retentionInBytes: 262144000
   - name: drafts_sentiment
     persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
-      retentionInMinutes: -1
+      retentionInMinutes: 120
       retentionInBytes: 262144000
   - name: chat-messages
     persisted: true
     configuration:
-      partitions: 8
+      partitions: 2
       replicationFactor: 2
       retentionInMinutes: 120
       retentionInBytes: 524288000
   - name: chat-with-sentiment
     persisted: true
     configuration:
-      partitions: 8
+      partitions: 2
       replicationFactor: 2
       retentionInMinutes: 120
       retentionInBytes: 524288000
