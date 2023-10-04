@@ -2,6 +2,7 @@ import os
 import datetime
 import asyncio
 import quixstreams as qx
+from twitch_api import TwitchStream
 from twitch_bot import Bot
 
 
