@@ -165,7 +165,8 @@ deployments:
         inputType: FreeText
         description: ''
         required: false
-        value: twitch_messages
+        value: twitch-messages
+
       - name: sentimentAnalysisDeploymentId
         inputType: Secret
         description: The ID of the Sentiment Analysis deployment
