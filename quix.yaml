@@ -128,7 +128,7 @@ deployments:
         description: Twitch App client secret - needed for calling Twitch API
         required: true
         value: TwitchAppClientSecret
-  - name: Chat sentiment analysis UI
+  - name: Project Front End
     application: Sentiment Demo UI
     deploymentType: Service
     version: 775fc2defc6665f774815a29d77b298f27e0a50b
