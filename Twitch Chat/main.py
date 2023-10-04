@@ -1,6 +1,7 @@
 import os
 import datetime
 import asyncio
+from typing import List
 import quixstreams as qx
 from twitch_api import TwitchStream
 from twitch_bot import Bot
@@ -21,27 +22,35 @@ def publish_chat_message(user: str, message: str, channel: str, timestamp: datet
     stream_producer = topic_producer.get_or_create_stream(channel)
     stream_producer.timeseries.publish(timeseries_data)
 
+async def update_stream_properties(channel: TwitchStream, topic_producer):
+    stream = topic_producer.get_or_create_stream(channel.user_login)
+    stream.properties.metadata = {
+        "game_name": channel.game_name,
+        "tags": channel.tags,
+        "thumbnail_url": channel.thumbnail_url,
+        "title": channel.title,
+        "viewer_count": channel.viewer_count
+    }
+
+async def close_offline_streams(parted_channels: List[str], topic_producer):
+    for parted_channel in parted_channels:
+        stream = topic_producer.get_or_create_stream(parted_channel.user_login)
+        stream.close()
+
 async def join_channels_in_batches():
     while True:
         print(f"Connected channels: {len(bot.connected_channels)}")  
+
+        # Join top twitch channels and update stream properties
         async for joined_channels in bot.join_top_streams_in_batches(int(streams_to_join_count)):
             for channel in joined_channels:
-                stream = topic_producer.get_or_create_stream(channel.user_login)
-                stream.properties.metadata = {
-                    "game_name": channel.game_name,
-                    "tags": channel.tags,
-                    "thumbnail_url": channel.thumbnail_url,
-                    "title": channel.title,
-                    "viewer_count": channel.viewer_count
-                }
-        
-        
+                await update_stream_properties(channel, topic_producer)
+
         await asyncio.sleep(900)  # Wait for 15 minutes
-        
+
+        # Disconnect from offline channels and close streams
         parted_channels = await bot.part_offline_channels()
-        for parted_channel in parted_channels:
-            stream = topic_producer.get_or_create_stream(channel.user_login)
-            stream.close()
+        await close_offline_streams(parted_channels, topic_producer)
         
         await asyncio.sleep(10)  # Wait for 10 seconds
         
