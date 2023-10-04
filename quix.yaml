@@ -124,7 +124,7 @@ deployments:
   - name: Twitch Chat
     application: Twitch Chat
     deploymentType: Service
-    version: 5d726bf8f1a8902e7fe29afb80bcc8177d5f8330
+    version: d2513e74831b128676e8581a3b911495c1bb3a39
     resources:
       cpu: 2000
       memory: 1000
@@ -141,11 +141,6 @@ deployments:
         description: Number of active stream channel to constantly be connected to
         required: true
         value: 100
-      - name: TwitchBotToken
-        inputType: Secret
-        description: ''
-        required: false
-        value: TwitchBotToken
       - name: TwitchAppClientId
         inputType: Secret
         description: ''
@@ -156,6 +151,11 @@ deployments:
         description: ''
         required: false
         value: TwitchAppClientSecret
+      - name: TwitchBotToken
+        inputType: Secret
+        description: ''
+        required: false
+        value: TwitchBotToken
 
 # This section describes the Topics of the data pipeline
 topics:
