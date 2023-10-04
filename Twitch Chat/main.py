@@ -32,9 +32,9 @@ async def update_stream_properties(channel: TwitchStream, topic_producer: qx.Top
         # "viewer_count": channel.viewer_count
     }
 
-async def close_offline_streams(parted_channels: List[str], topic_producer: qx.TopicProducer):
-    for parted_channel in parted_channels:
-        stream = topic_producer.get_or_create_stream(parted_channel.user_login)
+async def close_streams(stream_ids: List[str], topic_producer: qx.TopicProducer):
+    for stream_id in stream_ids:
+        stream = topic_producer.get_or_create_stream(stream_id)
         stream.close()
 
 async def join_channels_in_batches():
@@ -50,7 +50,7 @@ async def join_channels_in_batches():
 
         # Disconnect from offline channels and close streams
         parted_channels = await bot.part_offline_channels()
-        await close_offline_streams(parted_channels, topic_producer)
+        await close_streams(parted_channels, topic_producer)
         
         await asyncio.sleep(10)  # Wait for 10 seconds
         
