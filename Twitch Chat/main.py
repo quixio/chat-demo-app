@@ -24,13 +24,12 @@ def publish_chat_message(user: str, message: str, channel: str, timestamp: datet
 
 async def update_stream_properties(channel: TwitchStream, topic_producer: qx.TopicProducer):
     stream = topic_producer.get_or_create_stream(channel.user_login)
-    stream.properties.metadata = {
-        "game_name": "channel.game_name"
-        # "tags": channel.tags,
-        # "thumbnail_url": channel.thumbnail_url,
-        # "title": channel.title,
-        # "viewer_count": channel.viewer_count
-    }
+    meta = stream.properties.metadata
+    meta['game_name']= channel.game_name
+    meta['tags'] = channel.thumbnail_url
+    meta['thumbnail_url'] = channel.tags
+    meta['title'] = channel.title
+    meta['viewer_count'] = channel.viewer_count
 
 async def close_streams(stream_ids: List[str], topic_producer: qx.TopicProducer):
     for stream_id in stream_ids:
