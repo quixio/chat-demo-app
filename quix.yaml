@@ -131,7 +131,7 @@ deployments:
   - name: Project Front End
     application: Sentiment Demo UI
     deploymentType: Service
-    version: 775fc2defc6665f774815a29d77b298f27e0a50b
+    version: d13785267bc942b698b1abb9b6b65a55f014d876
     resources:
       cpu: 1000
       memory: 500
@@ -166,7 +166,6 @@ deployments:
         description: ''
         required: false
         value: twitch-messages
-
       - name: sentimentAnalysisDeploymentId
         inputType: Secret
         description: The ID of the Sentiment Analysis deployment
