@@ -27,7 +27,6 @@ async def update_stream_properties(channel: TwitchStream, topic_producer: qx.Top
     meta = stream.properties.metadata
     meta['game_name']= channel.game_name
     meta['thumbnail_url'] = channel.thumbnail_url
-    meta['tags'] = ", ".join(channel.tags)
     meta['title'] = channel.title
     meta['viewer_count'] = str(channel.viewer_count)
 
