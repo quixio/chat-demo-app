@@ -6,7 +6,7 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: Sentiment analysis
+  - name: Chat Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
     version: sa-v2.0
@@ -31,10 +31,10 @@ deployments:
         description: ''
         required: true
         value: 0
-  - name: Drafts sentiment analysis
+  - name: Drafts Sentiment Analysis
     application: Drafts sentiment analysis
     deploymentType: Service
-    version: dsa-v1-dev1
+    version: d49be638a568e2d209ec50a8eb2c6e2efbcc1e0f
     resources:
       cpu: 2000
       memory: 4000
@@ -128,7 +128,7 @@ deployments:
         description: Twitch App client secret - needed for calling Twitch API
         required: true
         value: TwitchAppClientSecret
-  - name: Chat sentiment analysis UI
+  - name: Project Front End
     application: Sentiment Demo UI
     deploymentType: Service
     version: 775fc2defc6665f774815a29d77b298f27e0a50b
@@ -166,6 +166,7 @@ deployments:
         description: ''
         required: false
         value: twitch-messages
+
       - name: sentimentAnalysisDeploymentId
         inputType: Secret
         description: The ID of the Sentiment Analysis deployment
@@ -181,7 +182,7 @@ deployments:
         description: ''
         required: true
         value: bearerToken
-  - name: Twitch sentiment analysis
+  - name: Twitch Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
     version: sa-v2.0
