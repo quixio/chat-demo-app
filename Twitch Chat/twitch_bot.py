@@ -1,15 +1,17 @@
 import asyncio
 from typing import List, AsyncGenerator
 import twitchio
+import quixstreams as qx
 from twitchio.ext import commands
 from twitch_api import get_top_streams, get_live_streams_by_users
 
 
 class Bot(commands.Bot):
     
-    def __init__(self, token: str, on_ready_handler, on_message_handler):
+    def __init__(self, token: str, topic_producer: qx.TopicProducer, on_ready_handler, on_message_handler):
         self.on_message_handler = on_message_handler 
         self.on_ready_handler = on_ready_handler
+        self.topic_producer = topic_producer
         super().__init__(token=token, prefix="!")
 
     async def event_ready(self):
