@@ -1,4 +1,5 @@
 import asyncio
+from typing import List, AsyncGenerator
 import twitchio
 from twitchio.ext import commands
 from twitch_api import get_top_streams, get_live_streams_by_users
@@ -35,23 +36,25 @@ class Bot(commands.Bot):
         self.on_message_handler(user=user, message=msg_content, channel=channel, timestamp=timestamp)
 
     # Joining top streams in batches of 20 because of joining rate limit
-    async def join_top_streams_in_batches(self, streams_to_join: int):
-        top_live_channel_names = [stream.user_login for stream in get_top_streams(limit=streams_to_join)]
+    async def join_top_streams_in_batches(self, streams_to_join: int) -> AsyncGenerator[List[str], None]:
+        top_live_channel_dict = {stream.user_login: stream for stream in get_top_streams(limit=streams_to_join)}
 
         joined_channel_names = [channel.name for channel in self.connected_channels]
-        channels_to_join = list(set(top_live_channel_names) - set(joined_channel_names))
+        channels_to_join = list(set(top_live_channel_dict.keys()) - set(joined_channel_names))
 
         max_streams_to_join = streams_to_join - len(joined_channel_names)
         print(f"Total channels to join: {max_streams_to_join}")
 
         for i in range(0, len(channels_to_join[:max_streams_to_join]), 20):
-            batch = channels_to_join[i:i + 20]
+            channels_names_batch = channels_to_join[i:i + 20]
+            channels_dict_batch = [top_live_channel_dict[name] for name in channels_names_batch]
 
-            print(f"Joining channels {len(batch)}: {batch}")
-            await self.join_channels(batch)
+            print(f"Joining channels {len(channels_names_batch)}: {channels_names_batch}")
+            await self.join_channels(channels_names_batch)
+            yield channels_dict_batch  # Yield joined channel names
             await asyncio.sleep(15)  # Wait for 15 seconds between batches
 
-    async def part_offline_channels(self):
+    async def part_offline_channels(self) -> List[str]:
         joined_channel_names = [channel.name for channel in self.connected_channels]
         live_channel_names = [stream.user_login for stream in get_live_streams_by_users(joined_channel_names)]
         
@@ -59,3 +62,4 @@ class Bot(commands.Bot):
         await self.part_channels(offline_channel_names)
 
         print(f'Parted from {len(offline_channel_names)} channels: {offline_channel_names}')
+        return offline_channel_names
