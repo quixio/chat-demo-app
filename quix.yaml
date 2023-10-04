@@ -6,7 +6,7 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: Sentiment analysis
+  - name: Chat Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
     version: sa-v2.0
