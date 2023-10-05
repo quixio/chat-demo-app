@@ -42,10 +42,10 @@ class Bot(commands.Bot):
         joined_channel_names = [channel.name for channel in self.connected_channels]
         channels_to_join = list(set(top_live_channel_dict.keys()) - set(joined_channel_names))
 
-        max_streams_to_join = streams_to_join - len(joined_channel_names)
-        print(f"Total channels to join: {max_streams_to_join}")
+        max_channels_to_join = streams_to_join - len(joined_channel_names)
+        print(f"Total channels to join: {max_channels_to_join}")
 
-        for i in range(0, len(channels_to_join[:max_streams_to_join]), 20):
+        for i in range(0, len(channels_to_join[:max_channels_to_join]), 20):
             channels_names_batch = channels_to_join[i:i + 20]
             channels_dict_batch = [top_live_channel_dict[name] for name in channels_names_batch]
 
