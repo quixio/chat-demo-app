@@ -6,6 +6,80 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
+  - name: BigQuery Journeys
+    application: BigQuery
+    deploymentType: Service
+    version: bigquery-v1
+    resources:
+      cpu: 1000
+      memory: 1000
+      replicas: 1
+    desiredStatus: Stopped
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic
+        required: true
+        value: chat-with-sentiment
+      - name: PROJECT_ID
+        inputType: FreeText
+        description: The BigQuery GCP Project ID
+        required: true
+        value: chatapp-396214
+      - name: DATASET_ID
+        inputType: FreeText
+        description: The target BigQuery dataset ID
+        required: true
+        value: chatapp
+      - name: DATASET_LOCATION
+        inputType: FreeText
+        description: Location of BigQuery dataset
+        required: true
+        value: europe-west3
+      - name: SERVICE_ACCOUNT_JSON
+        inputType: HiddenText
+        description: JSON string of the service account file for the BigQuery GCP project
+        required: true
+      - name: MAX_QUEUE_SIZE
+        inputType: FreeText
+        description: Max queue size for the sink ingestion
+        required: true
+        value: 50
+  - name: Twitch Chat
+    application: Twitch Chat
+    deploymentType: Service
+    version: 9166a1ba2f8c4ec6759a92c5efa4abdf669847ac
+    resources:
+      cpu: 2000
+      memory: 1000
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write messages into
+        required: true
+        value: twitch-messages
+      - name: StreamsToJoinCount
+        inputType: FreeText
+        description: Number of active stream channel to constantly be connected to
+        required: true
+        value: 10
+      - name: TwitchBotToken
+        inputType: Secret
+        description: Twitch Bot token needed for reading messages from channels
+        required: true
+        value: TwitchBotToken
+      - name: TwitchAppClientId
+        inputType: Secret
+        description: Twitch App client id - needed for calling Twitch API
+        required: true
+        value: TwitchAppClientId
+      - name: TwitchAppClientSecret
+        inputType: Secret
+        description: Twitch App client secret - needed for calling Twitch API
+        required: true
+        value: TwitchAppClientSecret
   - name: Chat Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
@@ -54,80 +128,6 @@ deployments:
         description: This is the output for the Hugging Face model score
         required: true
         value: drafts_sentiment
-  - name: BigQuery Journeys
-    application: BigQuery
-    deploymentType: Service
-    version: bigquery-v1
-    resources:
-      cpu: 1000
-      memory: 1000
-      replicas: 1
-    desiredStatus: Stopped
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: This is the input topic
-        required: true
-        value: chat-with-sentiment
-      - name: PROJECT_ID
-        inputType: FreeText
-        description: The BigQuery GCP Project ID
-        required: true
-        value: chatapp-396214
-      - name: DATASET_ID
-        inputType: FreeText
-        description: The target BigQuery dataset ID
-        required: true
-        value: chatapp
-      - name: DATASET_LOCATION
-        inputType: FreeText
-        description: Location of BigQuery dataset
-        required: true
-        value: europe-west3
-      - name: SERVICE_ACCOUNT_JSON
-        inputType: HiddenText
-        description: JSON string of the service account file for the BigQuery GCP project
-        required: true
-      - name: MAX_QUEUE_SIZE
-        inputType: FreeText
-        description: Max queue size for the sink ingestion
-        required: true
-        value: 50
-  - name: Twitch Chat
-    application: Twitch Chat
-    deploymentType: Service
-    version: d2513e74831b128676e8581a3b911495c1bb3a39
-    resources:
-      cpu: 2000
-      memory: 1000
-      replicas: 1
-    desiredStatus: Running
-    variables:
-      - name: output
-        inputType: OutputTopic
-        description: Name of the output topic to write messages into
-        required: true
-        value: twitch-messages
-      - name: StreamsToJoinCount
-        inputType: FreeText
-        description: Number of active stream channel to constantly be connected to
-        required: true
-        value: 10
-      - name: TwitchBotToken
-        inputType: Secret
-        description: Twitch Bot token needed for reading messages from channels
-        required: true
-        value: TwitchBotToken
-      - name: TwitchAppClientId
-        inputType: Secret
-        description: Twitch App client id - needed for calling Twitch API
-        required: true
-        value: TwitchAppClientId
-      - name: TwitchAppClientSecret
-        inputType: Secret
-        description: Twitch App client secret - needed for calling Twitch API
-        required: true
-        value: TwitchAppClientSecret
   - name: Project Front End
     application: Sentiment Demo UI
     deploymentType: Service
@@ -209,14 +209,14 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: drafts
+  - name: drafts_sentiment
     persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 262144000
-  - name: drafts_sentiment
+  - name: drafts
     persisted: false
     configuration:
       partitions: 2
