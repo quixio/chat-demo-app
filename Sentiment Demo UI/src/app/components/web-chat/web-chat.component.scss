@@ -33,8 +33,12 @@
 /** --- Component Specific generic classes --- **/
 
 ._background {
+  background-color: #0A0B24;
+}
+
+._background-gradient {
   padding: 40px;
-  background: linear-gradient(128deg, #0064FF 0%, #BD2EFF 53.90%, #FF7828 100%);
+  background: radial-gradient(98.61% 99.18% at 50% 0%, rgba(0, 100, 255, 0.24) 0%, rgba(0, 100, 255, 0.00) 100%);
 }
 
 .mat-chip {
