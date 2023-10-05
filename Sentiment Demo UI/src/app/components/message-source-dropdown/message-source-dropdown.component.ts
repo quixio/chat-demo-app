@@ -2,12 +2,10 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { NewChatroomDialogComponent } from '../dialogs/new-chatroom-dialog/new-chatroom-dialog.component';
-import { Subject, map, take, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TwitchService } from 'src/app/services/twitch.service';
-import { ActiveStream, ActiveStreamAction } from 'src/app/models/activeStream';
+import { TwitchChannel, TwitchService } from 'src/app/services/twitch.service';
 import { QuixChatRoom, RoomService } from 'src/app/services/room.service';
-import { QuixService } from 'src/app/services/quix.service';
 
 
 @Component({
@@ -24,19 +22,21 @@ export class MessageSourceDropdownComponent implements OnInit, OnDestroy {
   storedRooms: string[];
   @ViewChild(MatMenuTrigger, { static: true }) menuTrigger: MatMenuTrigger;
 
-  channels = new Set<string>();
+  channels: TwitchChannel[] = [];
   isLoadingChannels: boolean = true;
 
   private unsubscribe = new Subject<void>();
 
   constructor(
     private matDialog: MatDialog,
-    private quixService: QuixService, 
     private roomService: RoomService, 
     private twitchService: TwitchService, 
-    private router: Router, private route: ActivatedRoute) { }
+    private router: Router, 
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.isLoadingChannels = true;
+
     // Listen for changes in the selected room
     this.roomService.roomChanged$.pipe(takeUntil(this.unsubscribe)).subscribe(({roomId}) => {
       this.selectedRoom = roomId;
@@ -47,40 +47,11 @@ export class MessageSourceDropdownComponent implements OnInit, OnDestroy {
       this.storedRooms = rooms!;
     });
 
-    // Listener to retrieve all the active streams on twitch
-    this.twitchService.getActiveStreams$().pipe(
-      map((streamSub) => {
-        if (streamSub?.streams) {
-          streamSub.streams = streamSub?.streams?.filter((f) => f.topicId === this.quixService.twitchMessagesTopic)
-        }
-        return streamSub;
-      }),
-      takeUntil(this.unsubscribe)
-    ).subscribe((streamSub) => {
+    // Listen for changes in the list of Twitch channels
+    this.twitchService.channelsChanged$.pipe(takeUntil(this.unsubscribe)).subscribe((channels) => {
       this.isLoadingChannels = false;
-      this.setActiveSteams(streamSub?.streams!, streamSub?.action);
+      this.channels = channels;
     });
-  }
-
-  /**
-   * Handles the adding and removing of twitch streams from
-   * the list in the UI. 
-   * 
-   * @param streamData the list of ActiveStreams.
-   * @param streamAction Whether to Add or Remove them.
-   */
-  setActiveSteams(streamData: ActiveStream[], streamAction?: ActiveStreamAction): void {
-    if (streamAction) {
-      if (streamAction === ActiveStreamAction.AddUpdate) {
-        if (streamData[0]) this.channels.add(streamData[0].streamId);
-      } else if (streamAction === ActiveStreamAction.Remove) {
-				this.channels.delete(streamData[0]?.streamId);
-			}
-    } else {
-      const streams = streamData.map((m) => m.streamId);
-      this.channels = new Set(streams);
-    }
-
   }
 
   openCreateChatroomDialog(): void {

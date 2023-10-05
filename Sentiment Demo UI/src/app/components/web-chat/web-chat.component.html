@@ -8,6 +8,9 @@
           <button fxHide.gt-sm mat-icon-button color="primary" class="me-1" (click)="scrollToInfo()">
             <mat-icon>arrow_upward</mat-icon>
           </button>
+          <div *ngIf="(twitchChannel$ | async)?.profilePic as profilePic" class="_profile-pic me-2">
+            <img [src]="profilePic" height="32">
+          </div>
           <p class="mat-body-2 fw-bold m-0 me-2">{{ roomService.selectedRoom }}</p>
         </div>
 
