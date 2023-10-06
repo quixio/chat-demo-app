@@ -11,9 +11,9 @@ deployments:
     deploymentType: Service
     version: sa-v2.0
     resources:
-      cpu: 800
+      cpu: 500
       memory: 1000
-      replicas: 2
+      replicas: 1
     desiredStatus: Running
     variables:
       - name: input
@@ -36,7 +36,7 @@ deployments:
     deploymentType: Service
     version: d49be638a568e2d209ec50a8eb2c6e2efbcc1e0f
     resources:
-      cpu: 800
+      cpu: 500
       memory: 1000
       replicas: 1
     state:
@@ -60,7 +60,7 @@ deployments:
     version: bigquery-v1
     resources:
       cpu: 500
-      memory: 500
+      memory: 1000
       replicas: 1
     desiredStatus: Stopped
     variables:
@@ -99,7 +99,7 @@ deployments:
     version: b1bd9106b18a6da5c38f99b02dfdd7f5920bc2d6
     resources:
       cpu: 500
-      memory: 500
+      memory: 1000
       replicas: 1
     desiredStatus: Running
     variables:
@@ -186,9 +186,9 @@ deployments:
     deploymentType: Service
     version: sa-v2.0
     resources:
-      cpu: 800
+      cpu: 500
       memory: 1000
-      replicas: 4
+      replicas: 1
     desiredStatus: Running
     variables:
       - name: input
@@ -212,35 +212,35 @@ topics:
   - name: drafts
     persisted: false
     configuration:
-      partitions: 2
+      partitions: 1
       replicationFactor: 2
       retentionInMinutes: 120
-      retentionInBytes: 262144000
+      retentionInBytes: 1024
   - name: drafts_sentiment
     persisted: false
     configuration:
-      partitions: 2
+      partitions: 1
       replicationFactor: 2
       retentionInMinutes: 120
-      retentionInBytes: 262144000
+      retentionInBytes: 1024
   - name: chat-messages
     persisted: true
     configuration:
-      partitions: 2
+      partitions: 1
       replicationFactor: 2
       retentionInMinutes: 120
-      retentionInBytes: 524288000
+      retentionInBytes: 1024
   - name: chat-with-sentiment
     persisted: true
     configuration:
-      partitions: 2
+      partitions: 1
       replicationFactor: 2
       retentionInMinutes: 120
-      retentionInBytes: 524288000
+      retentionInBytes: 1024
   - name: twitch-messages
     persisted: false
     configuration:
-      partitions: 4
+      partitions: 1
       replicationFactor: 2
       retentionInMinutes: 60
-      retentionInBytes: 52428800
+      retentionInBytes: 1024
