@@ -83,7 +83,7 @@ deployments:
   - name: Chat Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
-    version: sa-v2.0
+    version: 171e5dd6af8ac9a4441930bc2605168a9aed96f2
     resources:
       cpu: 2000
       memory: 4000
@@ -110,13 +110,13 @@ deployments:
     deploymentType: Service
     version: d49be638a568e2d209ec50a8eb2c6e2efbcc1e0f
     resources:
-      cpu: 2000
-      memory: 4000
+      cpu: 1000
+      memory: 1000
       replicas: 1
     state:
       enabled: true
       size: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -184,9 +184,9 @@ deployments:
   - name: Twitch Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
-    version: sa-v2.0
+    version: 171e5dd6af8ac9a4441930bc2605168a9aed96f2
     resources:
-      cpu: 2000
+      cpu: 1500
       memory: 1000
       replicas: 4
     desiredStatus: Running
