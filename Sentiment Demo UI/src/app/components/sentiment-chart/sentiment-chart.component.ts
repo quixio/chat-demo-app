@@ -47,7 +47,7 @@ export class SentimentChartComponent implements OnInit, AfterViewInit, OnDestroy
         x: {
           type: 'realtime',
           realtime: {
-            duration: 30000,
+            duration: 300000,
             refresh: 1000,
             delay: 200
           }
@@ -136,6 +136,7 @@ export class SentimentChartComponent implements OnInit, AfterViewInit, OnDestroy
 
     // Add new points to the dataset and update the chart
     this.chartConfiguration.data.datasets?.at(0)?.data?.push(...dataPoints);
+    this.chart.update();
   }
 
   ngOnDestroy(): void {
