@@ -24,8 +24,8 @@ export class QuixService {
 
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
   /*WORKING LOCALLY? UPDATE THESE!*/
-  private token: string = ''; // Create a token in the Tokens menu and paste it here
   private workingLocally = false; // set to true if working locally
+  private token: string = ''; // Create a token in the Tokens menu and paste it here
   public workspaceId: string = 'demo-chatappdemo-prod'; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
   public messagesTopic: string = 'chat-messages'; // get topic name from the Topics page
   public twitchMessagesTopic: string = 'twitch-messages'; // get topic name from the Topics page

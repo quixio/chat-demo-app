@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import os
 import requests
 from typing import List
@@ -45,14 +46,52 @@ def _get_live_streams_by_users(oauth_token: str, user_logins: List[str]):
     response = requests.get(f"{BASE_URL}streams", headers=headers, params=params)
     return response.json().get('data', [])
 
-def get_top_streams(limit: int = 50):
+def get_top_streams(limit: int = 50) -> List["TwitchStream"]:
     oauth_token = get_oauth_token(CLIENT_ID, CLIENT_SECRET)
     top_streams = _get_top_streams(oauth_token, limit)
 
-    return [stream["user_login"] for stream in top_streams]
+    return [TwitchStream.from_dict(stream) for stream in top_streams]
 
-def get_live_streams_by_users(user_logins: List[str]):
+def get_live_streams_by_users(user_logins: List[str]) -> List["TwitchStream"]:
     oauth_token = get_oauth_token(CLIENT_ID, CLIENT_SECRET)
     live_streams = _get_live_streams_by_users(oauth_token, user_logins)
 
-    return [stream["user_login"] for stream in live_streams]
+    return [TwitchStream.from_dict(stream) for stream in live_streams]
+
+@dataclass
+class TwitchStream:
+    id: str
+    user_id: str
+    user_login: str
+    user_name: str
+    game_id: str
+    game_name: str
+    type: str
+    title: str
+    viewer_count: int
+    started_at: str
+    language: str
+    thumbnail_url: str
+    tag_ids: List[str]
+    tags: List[str]
+    is_mature: bool
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            id=data['id'],
+            user_id=data['user_id'],
+            user_login=data['user_login'],
+            user_name=data['user_name'],
+            game_id=data['game_id'],
+            game_name=data['game_name'],
+            type=data['type'],
+            title=data['title'],
+            viewer_count=data['viewer_count'],
+            started_at=data['started_at'],
+            language=data['language'],
+            thumbnail_url=data['thumbnail_url'],
+            tag_ids=data['tag_ids'],
+            tags=data['tags'],
+            is_mature=data['is_mature']
+        )

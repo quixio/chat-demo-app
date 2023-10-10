@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild, Pipe, PipeTransform } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject, Subscription, debounceTime, filter, take, takeUntil, timer } from 'rxjs';
+import { Observable, Subject, Subscription, debounceTime, filter, take, takeUntil, tap, timer } from 'rxjs';
 import { MessagePayload } from 'src/app/models/messagePayload';
 import { ParameterData } from 'src/app/models/parameterData';
 import { ConnectionStatus, QuixService } from 'src/app/services/quix.service';
@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ShareChatroomDialogComponent } from '../dialogs/share-chatroom-dialog/share-chatroom-dialog.component';
 import { RoomService } from 'src/app/services/room.service';
 import { Colors } from 'src/app/constants/colors';
+import { TwitchChannel, TwitchService } from 'src/app/services/twitch.service';
 
 export const POSITIVE_THRESHOLD = 0.5;
 export const NEGATIVE_THRESHOLD = -0.5;
@@ -51,6 +52,7 @@ export class WebChatComponent implements OnInit {
   profilePicColor: string;
 
   isTwitch: boolean = true;
+  twitchChannel$: Observable<TwitchChannel | undefined>;
   scrollTimeoutId: any;
 
   @ViewChild('chatWrapper') chatWrapperEle: ElementRef<HTMLElement>;
@@ -78,7 +80,12 @@ export class WebChatComponent implements OnInit {
 
   private unsubscribe$ = new Subject<void>();
   
-  constructor(public quixService: QuixService, public roomService: RoomService, private titleCasePipe: TitleCasePipe, private matDialog: MatDialog) { }
+  constructor(
+    public quixService: QuixService, 
+    public roomService: RoomService, 
+    public twitchService: TwitchService,
+    private titleCasePipe: TitleCasePipe, 
+    private matDialog: MatDialog) { }
 
   ngOnInit(): void {
     this.profilePic = this.generateProfilePic();
@@ -122,6 +129,9 @@ export class WebChatComponent implements OnInit {
           this.messages = sortedMessages;
           this.scrollToChatBottom();
         });
+      } else {
+        // Retrieve the Twitch Channel so we can use it in the template
+        this.twitchChannel$ = this.twitchService.getTwitchChannel(roomId);
       }
     });
   }

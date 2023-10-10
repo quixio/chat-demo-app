@@ -1,7 +1,9 @@
 import os
 import datetime
 import asyncio
+from typing import List
 import quixstreams as qx
+from twitch_api import TwitchStream
 from twitch_bot import Bot
 
 
@@ -20,12 +22,34 @@ def publish_chat_message(user: str, message: str, channel: str, timestamp: datet
     stream_producer = topic_producer.get_or_create_stream(channel)
     stream_producer.timeseries.publish(timeseries_data)
 
+async def update_stream_properties(channel: TwitchStream, topic_producer: qx.TopicProducer):
+    stream = topic_producer.get_or_create_stream(channel.user_login)
+    meta = stream.properties.metadata
+    meta['game_name']= channel.game_name
+    meta['thumbnail_url'] = channel.thumbnail_url
+    meta['title'] = channel.title
+    meta['viewer_count'] = str(channel.viewer_count)
+
+async def close_streams(stream_ids: List[str], topic_producer: qx.TopicProducer):
+    for stream_id in stream_ids:
+        stream = topic_producer.get_or_create_stream(stream_id)
+        stream.close()
+
 async def join_channels_in_batches():
     while True:
         print(f"Connected channels: {len(bot.connected_channels)}")  
-        await bot.join_top_streams_in_batches(int(streams_to_join_count))
+
+        # Join top twitch channels and update stream properties
+        async for joined_channels in bot.join_top_streams_in_batches(int(streams_to_join_count)):
+            for channel in joined_channels:
+                await update_stream_properties(channel, topic_producer)
+
         await asyncio.sleep(900)  # Wait for 15 minutes
-        await bot.part_offline_channels()
+
+        # Disconnect from offline channels and close streams
+        parted_channels = await bot.part_offline_channels()
+        await close_streams(parted_channels, topic_producer)
+        
         await asyncio.sleep(10)  # Wait for 10 seconds
         
 twitch_token = os.environ["TwitchBotToken"]

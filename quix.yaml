@@ -6,54 +6,6 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: Chat Sentiment Analysis
-    application: Sentiment analysis
-    deploymentType: Service
-    version: sa-v2.0
-    resources:
-      cpu: 2000
-      memory: 4000
-      replicas: 2
-    desiredStatus: Running
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: This is the raw data input topic
-        required: true
-        value: chat-messages
-      - name: output
-        inputType: OutputTopic
-        description: This is the output for the Hugging Face model score
-        required: true
-        value: chat-with-sentiment
-      - name: buffer_delay
-        inputType: FreeText
-        description: ''
-        required: true
-        value: 0
-  - name: Drafts Sentiment Analysis
-    application: Drafts sentiment analysis
-    deploymentType: Service
-    version: d49be638a568e2d209ec50a8eb2c6e2efbcc1e0f
-    resources:
-      cpu: 2000
-      memory: 4000
-      replicas: 1
-    state:
-      enabled: true
-      size: 1
-    desiredStatus: Running
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: This is the raw data input topic
-        required: true
-        value: drafts
-      - name: output
-        inputType: OutputTopic
-        description: This is the output for the Hugging Face model score
-        required: true
-        value: drafts_sentiment
   - name: BigQuery Journeys
     application: BigQuery
     deploymentType: Service
@@ -96,7 +48,7 @@ deployments:
   - name: Twitch Chat
     application: Twitch Chat
     deploymentType: Service
-    version: b1bd9106b18a6da5c38f99b02dfdd7f5920bc2d6
+    version: 9166a1ba2f8c4ec6759a92c5efa4abdf669847ac
     resources:
       cpu: 2000
       memory: 1000
@@ -128,10 +80,58 @@ deployments:
         description: Twitch App client secret - needed for calling Twitch API
         required: true
         value: TwitchAppClientSecret
+  - name: Chat Sentiment Analysis
+    application: Sentiment analysis
+    deploymentType: Service
+    version: 171e5dd6af8ac9a4441930bc2605168a9aed96f2
+    resources:
+      cpu: 2000
+      memory: 4000
+      replicas: 2
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the raw data input topic
+        required: true
+        value: chat-messages
+      - name: output
+        inputType: OutputTopic
+        description: This is the output for the Hugging Face model score
+        required: true
+        value: chat-with-sentiment
+      - name: buffer_delay
+        inputType: FreeText
+        description: ''
+        required: true
+        value: 0
+  - name: Drafts Sentiment Analysis
+    application: Drafts sentiment analysis
+    deploymentType: Service
+    version: d49be638a568e2d209ec50a8eb2c6e2efbcc1e0f
+    resources:
+      cpu: 1000
+      memory: 1000
+      replicas: 1
+    state:
+      enabled: true
+      size: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the raw data input topic
+        required: true
+        value: drafts
+      - name: output
+        inputType: OutputTopic
+        description: This is the output for the Hugging Face model score
+        required: true
+        value: drafts_sentiment
   - name: Project Front End
     application: Sentiment Demo UI
     deploymentType: Service
-    version: d13785267bc942b698b1abb9b6b65a55f014d876
+    version: f30b73f64694ed55dfc58492cd613e67f42f81f7
     resources:
       cpu: 1000
       memory: 500
@@ -184,9 +184,9 @@ deployments:
   - name: Twitch Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
-    version: sa-v2.0
+    version: 171e5dd6af8ac9a4441930bc2605168a9aed96f2
     resources:
-      cpu: 2000
+      cpu: 1500
       memory: 1000
       replicas: 4
     desiredStatus: Running
@@ -209,14 +209,14 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: drafts
+  - name: drafts_sentiment
     persisted: false
     configuration:
       partitions: 2
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 262144000
-  - name: drafts_sentiment
+  - name: drafts
     persisted: false
     configuration:
       partitions: 2
