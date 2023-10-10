@@ -111,7 +111,7 @@ deployments:
     version: d49be638a568e2d209ec50a8eb2c6e2efbcc1e0f
     resources:
       cpu: 1000
-      memory: 500
+      memory: 1000
       replicas: 1
     state:
       enabled: true
