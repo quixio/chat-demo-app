@@ -184,9 +184,9 @@ deployments:
   - name: Twitch Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
-    version: sa-v2.0
+    version: 171e5dd6af8ac9a4441930bc2605168a9aed96f2
     resources:
-      cpu: 2000
+      cpu: 1500
       memory: 1000
       replicas: 4
     desiredStatus: Running
