@@ -26,44 +26,48 @@ class QuixFunction:
 
     def on_committing(self, topic_consumer: qx.TopicConsumer):
         logger.debug("on_committing")
-        self.mutex.acquire()
-        logger.debug("on_committing entered")
-        
-        self.param_insert_queue.join()
-        self.event_insert_queue.join()
-        self.mutex.release()
-        logger.debug("on_committing done")
 
+        try:
+            self.mutex.acquire()
+            logger.debug("on_committing entered")
+
+            self.param_insert_queue.join()
+            self.event_insert_queue.join()
+        finally:
+            self.mutex.release()
+
+        logger.debug("on_committing done")
 
     # Callback triggered for each new time-series data.
     def on_data_handler(self, stream: qx.StreamConsumer, data: qx.TimeseriesData):
+        try:
+            self.mutex.acquire()
 
-        self.mutex.acquire()
+            for ts in data.timestamps:
+                row = {'timestamp': format_nanoseconds(ts.timestamp_nanoseconds), 'stream_id': self.stream_consumer.stream_id}
+                if type(self.data_start) == Null:
+                    self.data_start = ts.timestamp_nanoseconds
+                    self.data_end = ts.timestamp_nanoseconds
+                self.data_start = min(self.data_start, ts.timestamp_nanoseconds)
+                self.data_end = max(self.data_end, ts.timestamp_nanoseconds)
 
-        for ts in data.timestamps:
-            row = {'timestamp': format_nanoseconds(ts.timestamp_nanoseconds), 'stream_id': self.stream_consumer.stream_id}
-            if type(self.data_start) == Null:
-                self.data_start = ts.timestamp_nanoseconds
-                self.data_end = ts.timestamp_nanoseconds
-            self.data_start = min(self.data_start, ts.timestamp_nanoseconds)
-            self.data_end = max(self.data_end, ts.timestamp_nanoseconds)
+                for k, v in ts.tags.items():
+                    k = re.sub('[^0-9a-zA-Z]+', '_', k)
+                    row['TAG_' + k] = v
 
-            for k, v in ts.tags.items():
-                k = re.sub('[^0-9a-zA-Z]+', '_', k)
-                row['TAG_' + k] = v
+                for k, v in ts.parameters.items():
+                    k = re.sub('[^0-9a-zA-Z]+', '_', k)
+                    if v.numeric_value:
+                        row[k + '_n'] = v.numeric_value
 
-            for k, v in ts.parameters.items():
-                k = re.sub('[^0-9a-zA-Z]+', '_', k)
-                if v.numeric_value:
-                    row[k + '_n'] = v.numeric_value
+                    if v.string_value:
+                        row[k + '_s'] = v.string_value
 
-                if v.string_value:
-                    row[k + '_s'] = v.string_value
+                # Add to Queue
+                self.param_insert_queue.put(row, block = True)
 
-            # Add to Queue
-            self.param_insert_queue.put(row, block = True)
-
-        self.mutex.release()
+        finally:
+            self.mutex.release()
 
     def insert_metadata(self):
         cols = ["stream_id"]
