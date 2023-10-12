@@ -166,16 +166,6 @@ deployments:
         description: ''
         required: false
         value: twitch-messages
-      - name: sentimentAnalysisDeploymentId
-        inputType: Secret
-        description: The ID of the Sentiment Analysis deployment
-        required: false
-        value: sentimentAnalysisDeploymentId
-      - name: twitchSentimentAnalysisDeploymentId
-        inputType: Secret
-        description: The ID of the Twitch Sentiment Analysis deployment
-        required: false
-        value: twitchSentimentAnalysisDeploymentId
       - name: bearer_token
         inputType: Secret
         description: ''
