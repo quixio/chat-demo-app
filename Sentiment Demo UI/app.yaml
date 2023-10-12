@@ -26,11 +26,6 @@ variables:
     description: ''
     defaultValue: twitch_messages
     required: false
-  - name: twitchSentimentAnalysisDeploymentId
-    inputType: Secret
-    description: The ID of the Twitch Sentiment Analysis deployment
-    defaultValue: twitchSentimentAnalysisDeploymentId
-    required: false
   - name: bearer_token
     inputType: Secret
     description: ''
