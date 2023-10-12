@@ -34,8 +34,8 @@ export class QuixService {
   public draftsSentimentTopic: string = 'drafts_sentiment'; // get topic name from the Topics page
 
   /* optional */
-  public sentimentAnalysisDeploymentId: string = ""; // links from the info text in the left hand panel use this to link you to the project in the platform. Easier to leave it blank.
-  public twitchSentimentAnalysisDeploymentId: string = ""; // links from the info text in the left hand panel use this to link you to the project in the platform. Easier to leave it blank.
+  public sentimentAnalysisDeploymentId: string = "64aa05e9-b8d7-41d0-89d9-8c7996bd3a15"; // links from the info text in the left hand panel use this to link you to the project in the platform. Easier to leave it blank.
+  public twitchSentimentAnalysisDeploymentId: string = "bcab2636-5092-4ea7-920f-f921c2cbae0f"; // links from the info text in the left hand panel use this to link you to the project in the platform. Easier to leave it blank.
 
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
 
