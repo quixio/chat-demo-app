@@ -167,10 +167,10 @@ deployments:
         required: false
         value: twitch-messages
       - name: bearer_token
-        inputType: FreeText
+        inputType: Secret
         description: ''
         required: true
-        value: {{ bearerToken }}
+        value: bearerToken
   - name: Twitch Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
