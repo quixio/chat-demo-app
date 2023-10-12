@@ -27,7 +27,7 @@ variables:
     defaultValue: twitch_messages
     required: false
   - name: bearer_token
-    inputType: Secret
+    inputType: FreeText
     description: ''
     defaultValue: bearerToken
     required: true
