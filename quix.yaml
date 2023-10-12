@@ -139,7 +139,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: sentimentdemoui
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: sentiment
         inputType: FreeText
@@ -170,7 +170,6 @@ deployments:
         inputType: FreeText
         description: ''
         required: true
-        value: {{ bearerToken }}
   - name: Twitch Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
