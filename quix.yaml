@@ -13,7 +13,7 @@ deployments:
     resources:
       cpu: 500
       memory: 1000
-      replicas: 2
+      replicas: 1
     desiredStatus: Running
     variables:
       - name: input
@@ -178,7 +178,7 @@ deployments:
     resources:
       cpu: 500
       memory: 1000
-      replicas: 4
+      replicas: 1
     desiredStatus: Running
     variables:
       - name: input
