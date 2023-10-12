@@ -11,9 +11,9 @@ deployments:
     deploymentType: Service
     version: 5c0c0186768787e172733b00dcc815a9c2625cce
     resources:
-      cpu: 500
-      memory: 1000
-      replicas: 1
+      cpu: 2000
+      memory: 4000
+      replicas: 2
     desiredStatus: Running
     variables:
       - name: input
@@ -36,7 +36,7 @@ deployments:
     deploymentType: Service
     version: 5c0c0186768787e172733b00dcc815a9c2625cce
     resources:
-      cpu: 500
+      cpu: 1000
       memory: 1000
       replicas: 1
     state:
@@ -59,7 +59,7 @@ deployments:
     deploymentType: Service
     version: bigquery-v1
     resources:
-      cpu: 500
+      cpu: 1000
       memory: 1000
       replicas: 1
     desiredStatus: Stopped
@@ -98,7 +98,7 @@ deployments:
     deploymentType: Service
     version: 9166a1ba2f8c4ec6759a92c5efa4abdf669847ac
     resources:
-      cpu: 500
+      cpu: 2000
       memory: 1000
       replicas: 1
     desiredStatus: Running
@@ -133,13 +133,13 @@ deployments:
     deploymentType: Service
     version: 3dd797dff3d4ca59d1f2387a857b0565b80a1078
     resources:
-      cpu: 500
+      cpu: 1000
       memory: 500
       replicas: 1
     publicAccess:
       enabled: true
       urlPrefix: sentimentdemoui
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: sentiment
         inputType: FreeText
@@ -170,15 +170,15 @@ deployments:
         inputType: FreeText
         description: ''
         required: true
-        value: {{bearerToken}}
+        value: {{ bearerToken }}
   - name: Twitch Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
     version: 5c0c0186768787e172733b00dcc815a9c2625cce
     resources:
-      cpu: 500
+      cpu: 1500
       memory: 1000
-      replicas: 1
+      replicas: 4
     desiredStatus: Running
     variables:
       - name: input
@@ -202,35 +202,35 @@ topics:
   - name: drafts
     persisted: false
     configuration:
-      partitions: 1
+      partitions: 2
       replicationFactor: 2
-      retentionInMinutes: 60
-      retentionInBytes: 2621
+      retentionInMinutes: -1
+      retentionInBytes: 262144000
   - name: drafts_sentiment
     persisted: false
     configuration:
-      partitions: 1
+      partitions: 2
       replicationFactor: 2
-      retentionInMinutes: 60
-      retentionInBytes: 2621
+      retentionInMinutes: -1
+      retentionInBytes: 262144000
   - name: chat-messages
     persisted: true
     configuration:
-      partitions: 1
+      partitions: 8
       replicationFactor: 2
       retentionInMinutes: 120
-      retentionInBytes: 5242
+      retentionInBytes: 524288000
   - name: chat-with-sentiment
     persisted: true
     configuration:
-      partitions: 1
+      partitions: 8
       replicationFactor: 2
       retentionInMinutes: 120
-      retentionInBytes: 5242
+      retentionInBytes: 524288000
   - name: twitch-messages
     persisted: false
     configuration:
-      partitions: 1
+      partitions: 4
       replicationFactor: 2
       retentionInMinutes: 60
-      retentionInBytes: 5242
+      retentionInBytes: 52428800
