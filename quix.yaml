@@ -11,8 +11,8 @@ deployments:
     deploymentType: Service
     version: 5c0c0186768787e172733b00dcc815a9c2625cce
     resources:
-      cpu: 2000
-      memory: 4000
+      cpu: 500
+      memory: 1000
       replicas: 2
     desiredStatus: Running
     variables:
@@ -36,7 +36,7 @@ deployments:
     deploymentType: Service
     version: 5c0c0186768787e172733b00dcc815a9c2625cce
     resources:
-      cpu: 1000
+      cpu: 500
       memory: 1000
       replicas: 1
     state:
@@ -59,7 +59,7 @@ deployments:
     deploymentType: Service
     version: bigquery-v1
     resources:
-      cpu: 1000
+      cpu: 500
       memory: 1000
       replicas: 1
     desiredStatus: Stopped
@@ -98,7 +98,7 @@ deployments:
     deploymentType: Service
     version: 9166a1ba2f8c4ec6759a92c5efa4abdf669847ac
     resources:
-      cpu: 2000
+      cpu: 500
       memory: 1000
       replicas: 1
     desiredStatus: Running
@@ -133,7 +133,7 @@ deployments:
     deploymentType: Service
     version: 3dd797dff3d4ca59d1f2387a857b0565b80a1078
     resources:
-      cpu: 1000
+      cpu: 500
       memory: 500
       replicas: 1
     publicAccess:
@@ -176,7 +176,7 @@ deployments:
     deploymentType: Service
     version: 5c0c0186768787e172733b00dcc815a9c2625cce
     resources:
-      cpu: 1500
+      cpu: 500
       memory: 1000
       replicas: 4
     desiredStatus: Running
