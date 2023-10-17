@@ -25,7 +25,7 @@ export class QuixService {
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
   /*WORKING LOCALLY? UPDATE THESE!*/
   private workingLocally = false; // set to true if working locally
-  private token: string = ''; // Create a token in the Tokens menu and paste it here
+  private token: string = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1qVTBRVE01TmtJNVJqSTNOVEpFUlVSRFF6WXdRVFF4TjBSRk56SkNNekpFUWpBNFFqazBSUSJ9.eyJodHRwczovL3F1aXguYWkvb3JnX2lkIjoiZGVtbyIsImh0dHBzOi8vcXVpeC5haS9vd25lcl9pZCI6ImF1dGgwfGM1NzNiNzdiLTczYTUtNGU3OS05MjJlLTRiMDM5YTk3NGQ0NCIsImh0dHBzOi8vcXVpeC5haS90b2tlbl9pZCI6ImZjMjI2NWI2LWZiMzQtNDYyOC05ZDU3LWQ4ODAwYmI3MmE5NyIsImh0dHBzOi8vcXVpeC5haS9leHAiOiIxNzExODM5NjAwIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnF1aXguYWkvIiwic3ViIjoiOUdwcno3WE51V3VxQ0Fxb0cwa09JQTAyMUNSOFZmRUVAY2xpZW50cyIsImF1ZCI6InF1aXgiLCJpYXQiOjE2OTY5MjgyNTYsImV4cCI6MTY5OTUyMDI1NiwiYXpwIjoiOUdwcno3WE51V3VxQ0Fxb0cwa09JQTAyMUNSOFZmRUUiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMiLCJwZXJtaXNzaW9ucyI6W119.CTI9ohxNx9Jsu1yLkfZjww4cQWL8mjRMsattMnno7SwC5qJiER5CuV6AGxLOBOfgZR3W67QdO9VrZN9pr8qgvFJ-I0rH1qtXRMGsnrYAGko5NDpswd96bF8jsmxDxkCqdNztrCOELYBlC35hCfrfTdzYGYAwMIWdk0K5H6kGV1mkMEffM0wj_z8FAP-1s8h7_GkWCFZ8HdA4z7fLLjYFXPxzPUOodZktpj5QuluS1gpVjfuN-nm3787T7H7n3hS_Jdwtwp8QhseWoPRJikJBYKhI6FIRQQHvuEyPkBQSpKbIFW9dyK2TlrHqEFAGRRv3p63oovPU0H34SNIgeFSL4g'; // Create a token in the Tokens menu and paste it here
   public workspaceId: string = 'demo-chatappdemo-prod'; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
   public messagesTopic: string = 'chat-messages'; // get topic name from the Topics page
   public twitchMessagesTopic: string = 'twitch-messages'; // get topic name from the Topics page
@@ -65,7 +65,7 @@ export class QuixService {
 
   constructor(private httpClient: HttpClient) {
 
-    if(this.workingLocally){
+    if(this.workingLocally || location.hostname === "localhost" || location.hostname === "127.0.0.1"){
       this.messagesTopic = this.workspaceId + '-' + this.messagesTopic;
       this.twitchMessagesTopic = this.workspaceId + '-' + this.twitchMessagesTopic;
       this.draftsTopic = this.workspaceId + '-' + this.draftsTopic;

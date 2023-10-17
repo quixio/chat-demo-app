@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Chart, ChartConfiguration, Legend, LinearScale, LineController, LineElement, PointElement } from 'chart.js';
 import ChartStreaming, { RealTimeScale } from 'chartjs-plugin-streaming';
-import { Subject, Subscription, filter, take, takeUntil } from 'rxjs';
+import { Subject, Subscription, filter, take, takeUntil, throttleTime } from 'rxjs';
 import { ParameterData } from 'src/app/models/parameter-data';
 import { QuixService } from 'src/app/services/quix.service';
 import { RoomService } from 'src/app/services/room.service';
@@ -47,7 +47,7 @@ export class SentimentChartComponent implements OnInit, AfterViewInit, OnDestroy
         x: {
           type: 'realtime',
           realtime: {
-            duration: 30000,
+            duration: 300000,
             refresh: 1000,
             delay: 200
           }
@@ -82,7 +82,8 @@ export class SentimentChartComponent implements OnInit, AfterViewInit, OnDestroy
     this.quixService.paramDataReceived$
      .pipe(
       takeUntil(this.unsubscribe$), 
-      filter((f) => !this.isLoadingHistory && f.topicId === this.quixService.sentimentTopic)
+      filter((f) => !this.isLoadingHistory && f.topicId === this.quixService.sentimentTopic),
+      throttleTime(5000) // reduce number of point just printing one every 5 seconds
       )
      .subscribe((payload) => {
       this.sentimentMessageReceived(payload);
