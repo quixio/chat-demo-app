@@ -131,7 +131,7 @@ deployments:
   - name: Project Front End
     application: Sentiment Demo UI
     deploymentType: Service
-    version: 881f9cf0aa75efa8b3efdd7c67143991acd37d62
+    version: c5aac175bac64e222fda4c948dbbe5aeced544f7
     resources:
       cpu: 1000
       memory: 500
@@ -214,14 +214,14 @@ topics:
       retentionInMinutes: -1
       retentionInBytes: 262144000
   - name: chat-messages
-    persisted: true
+    persisted: false
     configuration:
       partitions: 8
       replicationFactor: 2
       retentionInMinutes: 120
       retentionInBytes: 524288000
   - name: chat-with-sentiment
-    persisted: true
+    persisted: false
     configuration:
       partitions: 8
       replicationFactor: 2
