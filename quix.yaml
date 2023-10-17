@@ -131,7 +131,7 @@ deployments:
   - name: Project Front End
     application: Sentiment Demo UI
     deploymentType: Service
-    version: 881f9cf0aa75efa8b3efdd7c67143991acd37d62
+    version: 67a08b68ed1a152ca4af5647f94919220908dd3a
     resources:
       cpu: 1000
       memory: 500
