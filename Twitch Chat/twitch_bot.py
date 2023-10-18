@@ -58,8 +58,11 @@ class Bot(commands.Bot):
 
 
     async def part_channels(self, top_streams: List[TwitchStream]) -> List[str]:
+        print("top_streams:")
         print(top_streams)
         joined_channel_names = [channel.name for channel in self.connected_channels]
+        print("joined_channel_names:")
+        print(joined_channel_names)
         top_stream_names = [stream.user_login for stream in top_streams]
         
         channels_to_part = list(set(joined_channel_names) - set(top_stream_names))
