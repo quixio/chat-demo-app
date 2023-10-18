@@ -29,7 +29,8 @@ def _get_top_streams(oauth_token: str, limit: int):
     }
     params = {
         'first': limit,
-        'type': 'live'
+        'type': 'live',
+        'language': 'en'
     }
     response = requests.get(f"{BASE_URL}streams", headers=headers, params=params)
     return response.json().get('data', [])
