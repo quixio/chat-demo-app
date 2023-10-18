@@ -1,9 +1,56 @@
+from streamingdataframes import Application
+from streamingdataframes.models import (
+    QuixTimeseriesDeserializer,
+    QuixTimeseriesSerializer,
+    JSONDeserializer
+)
+import os
 import quixstreams as qx
 from quix_function import QuixFunction
 from transformers import pipeline
 import os
 
 classifier = pipeline('sentiment-analysis')
+
+def expand(v):
+    des = QuixTimeseriesDeserializer()
+    ret = des.deserialize(model_key='TimeseriesData', value=v['V'])
+    
+    return list(ret)
+
+def call_model(row):
+    print(row)
+    classifications = classifier(list(row["chat-message"]))
+    print(classifications)
+
+    classification = classifications[0]
+
+    row["sentiment"] = classification["score"] 
+    if classification["label"] == "NEGATIVE":
+        row["sentiment"] = -row["sentiment"] 
+
+app = Application.Quix(consumer_group="sentiment-v10", auto_offset_reset="earliest")
+
+source_topic = app.topic(os.environ["input"], value_deserializer=JSONDeserializer())
+output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSerializer())
+
+sdf = app.dataframe([source_topic])
+sdf = sdf.apply(expand, expand=True)
+sdf["Timestamp"] = sdf["__Q_Timestamp"]
+
+sdf = sdf.apply(call_model)
+
+sdf.apply(lambda row: print(row))
+
+sdf = sdf.to_topic(output_topic)
+
+app.run(sdf)
+
+
+
+
+
+
 
 buffer_delay = int(os.environ["buffer_delay"])
 
