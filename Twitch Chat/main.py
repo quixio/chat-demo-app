@@ -45,7 +45,7 @@ async def join_channels_in_batches():
             await update_stream_properties(channel, topic_producer)
 
         # Disconnect from offline channels and close streams
-        parted_channels = await bot.part_offline_channels()
+        parted_channels = await bot.part_offline_channels(top_streams: joined_channels)
         await close_streams(parted_channels, topic_producer)
         
         await asyncio.sleep(900)  # Wait for 15 minutes
