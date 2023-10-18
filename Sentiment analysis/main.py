@@ -37,9 +37,10 @@ output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSe
 sdf = app.dataframe([source_topic])
 sdf = sdf.apply(expand, expand=True)
 sdf["Timestamp"] = sdf["__Q_Timestamp"]
+sdf.apply(lambda row: print(row))
+
 sdf = sdf.apply(call_model)
 
-sdf.apply(lambda row: print(row))
 
 app.run(sdf)
 
