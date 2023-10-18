@@ -19,6 +19,7 @@ def expand(v):
     return list(ret)
 
 def call_model(row):
+    print(row)
     classifications = classifier(list(row["chat-message"]))
     print(classifications)
 
