@@ -8,13 +8,22 @@ import os
 print(os.environ["input"])
 print(os.environ["Quix__Sdk__Token"])
 
+def expand(v):
+    timestamps = v['V']['Timestamps']
+    items = []
+    for field_name, values in v['V']['StringValues'].items():
+        for value, timestamp in zip(values, timestamps):
+            items.append({field_name: value, 'timestamp': timestamp})
+    return items
+
 app = Application.Quix(consumer_group="sentiment-v7", auto_offset_reset="earliest")
 
 source_topic = app.topic(os.environ["input"], value_deserializer=JSONDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSerializer())
 
 sdf = app.dataframe([source_topic])
-sdf = sdf[sdf["V"] is not None and sdf["V"]is not None]
+sdf = sdf.apply(expand, expand=True)
+
 sdf.apply(lambda row: print(row))
 
 app.run(sdf)
