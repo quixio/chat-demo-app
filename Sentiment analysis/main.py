@@ -9,8 +9,8 @@ print(os.environ["Quix__Sdk__Token"])
 
 app = Application.Quix(consumer_group="sentiment")
 
-source_topic = app.topic("input", value_deserializer=QuixTimeseriesDeserializer())
-output_topic = app.topic("output", value_serializer=QuixTimeseriesSerializer())
+source_topic = app.topic(os.environ["input"], value_deserializer=QuixTimeseriesDeserializer())
+output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSerializer())
 
 sdf = app.dataframe([source_topic])
 sdf.apply(lambda row: print(row))
