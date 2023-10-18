@@ -4,7 +4,7 @@ from streamingdataframes.models import (
     QuixTimeseriesSerializer,
 )
 import os
-
+print(os.environ["input"])
 print(os.environ["Quix__Sdk__Token"])
 
 app = Application.Quix(consumer_group="sentiment")
