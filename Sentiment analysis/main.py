@@ -2,6 +2,7 @@ from streamingdataframes import Application
 from streamingdataframes.models import (
     QuixTimeseriesDeserializer,
     QuixTimeseriesSerializer,
+    JSONDeserializer
 )
 import os
 print(os.environ["input"])
@@ -9,7 +10,7 @@ print(os.environ["Quix__Sdk__Token"])
 
 app = Application.Quix(consumer_group="sentiment-v1", auto_offset_reset="earliest")
 
-source_topic = app.topic(os.environ["input"], value_deserializer=QuixTimeseriesDeserializer())
+source_topic = app.topic(os.environ["input"], value_deserializer=JSONDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSerializer())
 
 sdf = app.dataframe([source_topic])
