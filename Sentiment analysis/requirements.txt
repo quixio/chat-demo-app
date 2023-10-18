@@ -1,3 +1,4 @@
 quixstreams==0.5.2
 transformers[torch]
 pandas==1.5.3
+../quix_streamingdataframes-0.0.1a1-py3-none-any.whl
