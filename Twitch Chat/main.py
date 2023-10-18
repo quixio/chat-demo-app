@@ -44,7 +44,7 @@ async def join_channels_in_batches():
         for channel in joined_channels:
             await update_stream_properties(channel, topic_producer)
 
-        # Disconnect from offline channels and close streams
+        # Disconnect from non-top channels and close their streams
         parted_channels = await bot.part_channels_except(joined_channels)
         await close_streams(parted_channels, topic_producer)
         
