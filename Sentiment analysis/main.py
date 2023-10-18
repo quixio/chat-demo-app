@@ -18,6 +18,11 @@ def expand(v):
     
     return list(ret)
 
+def call_model(row):
+    classification = classifier(list(row["chat-message"]))
+
+    if 
+
 app = Application.Quix(consumer_group="sentiment-v7", auto_offset_reset="earliest")
 
 source_topic = app.topic(os.environ["input"], value_deserializer=JSONDeserializer())
@@ -26,6 +31,7 @@ output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSe
 sdf = app.dataframe([source_topic])
 sdf = sdf.apply(expand, expand=True)
 sdf["Timestamp"] = sdf["__Q_Timestamp"]
+sdf["
 
 sdf.apply(lambda row: print(classifier(list(row["chat-message"]))))
 
