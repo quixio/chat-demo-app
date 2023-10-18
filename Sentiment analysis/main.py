@@ -7,7 +7,7 @@ import os
 print(os.environ["input"])
 print(os.environ["Quix__Sdk__Token"])
 
-app = Application.Quix(consumer_group="sentiment")
+app = Application.Quix(consumer_group="sentiment-v1", auto_offset_reset="earliest")
 
 source_topic = app.topic(os.environ["input"], value_deserializer=QuixTimeseriesDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSerializer())
