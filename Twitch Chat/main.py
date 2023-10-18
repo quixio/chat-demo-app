@@ -40,9 +40,9 @@ async def join_channels_in_batches():
         print(f"Connected channels: {len(bot.connected_channels)}")  
 
         # Join top twitch channels and update stream properties
-        async for joined_channels in bot.join_top_streams_in_batches(int(streams_to_join_count)):
-            for channel in joined_channels:
-                await update_stream_properties(channel, topic_producer)
+        joined_channels = bot.join_top_streams_in_batches(int(streams_to_join_count))
+        for channel in joined_channels:
+            await update_stream_properties(channel, topic_producer)
 
         # Disconnect from offline channels and close streams
         parted_channels = await bot.part_offline_channels()
