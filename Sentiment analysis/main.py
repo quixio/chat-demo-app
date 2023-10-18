@@ -25,9 +25,9 @@ def call_model(row):
 
     classification = classifications[0]
 
-    row["score"] = classification["score"] 
+    row["sentiment"] = classification["score"] 
     if classification["label"] == "NEGATIVE":
-        row["score"] = -row["score"] 
+        row["sentiment"] = -row["sentiment"] 
 
 app = Application.Quix(consumer_group="sentiment-v9", auto_offset_reset="earliest")
 
