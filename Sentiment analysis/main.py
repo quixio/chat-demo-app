@@ -1,3 +1,23 @@
+from streamingdataframes import Application
+from streamingdataframes.models import (
+    QuixTimeseriesDeserializer,
+    QuixTimeseriesSerializer,
+)
+
+app = Application.Quix(consumer_group="sentiment")
+
+source_topic = app.topic("input", value_deserializer=QuixTimeseriesDeserializer())
+output_topic = app.topic("output", value_serializer=QuixTimeseriesSerializer())
+
+sdf = app.dataframe([source_topic])
+sdf.apply(lambda row: print(row))
+
+app.run(sdf)
+
+
+
+
+
 import quixstreams as qx
 from quix_function import QuixFunction
 from transformers import pipeline
