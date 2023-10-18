@@ -54,6 +54,9 @@ class Bot(commands.Bot):
             
             await asyncio.sleep(15)  # Wait for 15 seconds between batches
 
+        print(f'Parting from {len(offline_channel_names)} channels: {offline_channel_names}')
+        await self.part_channels(offline_channel_names)
+
         return top_live_channel_dict.values()
 
 
