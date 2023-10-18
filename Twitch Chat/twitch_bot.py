@@ -41,6 +41,7 @@ class Bot(commands.Bot):
 
         joined_channel_names = [channel.name for channel in self.connected_channels]
         channels_to_join = list(set(top_live_channel_dict.keys()) - set(joined_channel_names))
+        channels_to_part = list(set(joined_channel_names) - set(top_live_channel_dict.keys()))
         
         max_channels_to_join = streams_to_join - len(joined_channel_names)
         print(f"Total channels to join: {max_channels_to_join}")
