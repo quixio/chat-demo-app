@@ -44,13 +44,11 @@ async def join_channels_in_batches():
             for channel in joined_channels:
                 await update_stream_properties(channel, topic_producer)
 
-        await asyncio.sleep(900)  # Wait for 15 minutes
-
         # Disconnect from offline channels and close streams
         parted_channels = await bot.part_offline_channels()
         await close_streams(parted_channels, topic_producer)
         
-        await asyncio.sleep(10)  # Wait for 10 seconds
+        await asyncio.sleep(900)  # Wait for 15 minutes
         
 twitch_token = os.environ["TwitchBotToken"]
 bot = Bot(token=twitch_token, on_ready_handler=join_channels_in_batches, on_message_handler=publish_chat_message)
