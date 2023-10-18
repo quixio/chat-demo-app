@@ -36,7 +36,7 @@ sdf = sdf.apply(expand, expand=True)
 sdf["Timestamp"] = sdf["__Q_Timestamp"]
 sdf = sdf.apply(call_model)
 
-sdf.apply(lambda row: print(classifier(list(row))))
+sdf.apply(lambda row: print(row))
 
 app.run(sdf)
 
