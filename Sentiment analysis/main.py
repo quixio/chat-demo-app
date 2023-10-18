@@ -8,12 +8,13 @@ import os
 print(os.environ["input"])
 print(os.environ["Quix__Sdk__Token"])
 
-app = Application.Quix(consumer_group="sentiment-v4", auto_offset_reset="earliest")
+app = Application.Quix(consumer_group="sentiment-v5", auto_offset_reset="earliest")
 
 source_topic = app.topic(os.environ["input"], value_deserializer=JSONDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSerializer())
 
 sdf = app.dataframe([source_topic])
+sdf = sdf[sdf["V"] is not None and sdf["V"]["Timestamps"] is not None]
 sdf.apply(lambda row: print(row["V"]["Timestamps"][0]))
 
 app.run(sdf)
