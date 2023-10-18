@@ -45,7 +45,6 @@ async def join_channels_in_batches():
             await update_stream_properties(channel, topic_producer)
 
         # Disconnect from offline channels and close streams
-        print(joined_channels)
         parted_channels = await bot.part_channels(joined_channels)
         await close_streams(parted_channels, topic_producer)
         
