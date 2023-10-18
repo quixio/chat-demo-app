@@ -21,7 +21,9 @@ def expand(v):
 def call_model(row):
     classification = classifier(list(row["chat-message"]))
 
-    if 
+    row["score"] = classification["score"] 
+    if classification["label"] == "NEGATIVE":
+        row["score"] = -row["score"] 
 
 app = Application.Quix(consumer_group="sentiment-v7", auto_offset_reset="earliest")
 
@@ -31,9 +33,9 @@ output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSe
 sdf = app.dataframe([source_topic])
 sdf = sdf.apply(expand, expand=True)
 sdf["Timestamp"] = sdf["__Q_Timestamp"]
-sdf["
+sdf = sdf.apply(call_model)
 
-sdf.apply(lambda row: print(classifier(list(row["chat-message"]))))
+sdf.apply(lambda row: print(classifier(list(row))))
 
 app.run(sdf)
 
