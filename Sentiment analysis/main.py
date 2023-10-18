@@ -19,7 +19,8 @@ def expand(v):
     return list(ret)
 
 def call_model(row):
-    classification = classifier(row["chat-message"])
+    classification = classifier(list(row["chat-message"]))
+    print(classification)
 
     row["score"] = classification["score"] 
     if classification["label"] == "NEGATIVE":
