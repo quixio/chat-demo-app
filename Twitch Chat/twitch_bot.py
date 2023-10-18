@@ -59,7 +59,7 @@ class Bot(commands.Bot):
 
     async def part_channels(self, top_streams: List[TwitchStream]) -> List[str]:
         joined_channel_names = [channel.name for channel in self.connected_channels]
-        live_channel_names = [stream.user_login for stream in top_streams]
+        top_stream_names = [stream.user_login for stream in top_streams]
         
         offline_channel_names = list(set(joined_channel_names) - set(live_channel_names))
         await self.part_channels(offline_channel_names)
