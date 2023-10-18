@@ -39,7 +39,7 @@ sdf = sdf.apply(expand, expand=True)
 sdf["Timestamp"] = sdf["__Q_Timestamp"]
 sdf.apply(lambda row: print(row))
 
-sdf = sdf.apply(call_model)
+#sdf = sdf.apply(call_model)
 
 
 app.run(sdf)
