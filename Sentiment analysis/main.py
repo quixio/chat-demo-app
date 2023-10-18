@@ -9,12 +9,10 @@ print(os.environ["input"])
 print(os.environ["Quix__Sdk__Token"])
 
 def expand(v):
-    timestamps = v['V']['Timestamps']
-    items = []
-    for field_name, values in v['V']['StringValues'].items():
-        for value, timestamp in zip(values, timestamps):
-            items.append({field_name: value, 'timestamp': timestamp})
-    return items
+    des = QuixTimeseriesDeserializer()
+    ret = des.deserialize(model_key='TimeseriesData', value=v['V'])
+    
+    return list(ret)
 
 app = Application.Quix(consumer_group="sentiment-v7", auto_offset_reset="earliest")
 
