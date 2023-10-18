@@ -40,8 +40,10 @@ class Bot(commands.Bot):
         top_live_channel_dict = {stream.user_login: stream for stream in get_top_streams(limit=streams_to_join)}
 
         joined_channel_names = [channel.name for channel in self.connected_channels]
+        
+        channels_already_joined = [v for k, v in top_live_channel_dict.items() if k in joined_channel_names]
         channels_to_join = list(set(top_live_channel_dict.keys()) - set(joined_channel_names))
-
+        
         max_channels_to_join = streams_to_join - len(joined_channel_names)
         print(f"Total channels to join: {max_channels_to_join}")
 
@@ -53,6 +55,9 @@ class Bot(commands.Bot):
             await self.join_channels(channels_names_batch)
             yield channels_dict_batch  # Yield joined channel names
             await asyncio.sleep(15)  # Wait for 15 seconds between batches
+
+        yield channels_already_joined
+
 
     async def part_offline_channels(self) -> List[str]:
         joined_channel_names = [channel.name for channel in self.connected_channels]
