@@ -62,7 +62,7 @@ class Bot(commands.Bot):
         top_stream_names = [stream.user_login for stream in top_streams]
         
         channels_to_part = list(set(joined_channel_names) - set(top_stream_names))
-        await self.part_channels(offline_channel_names)
+        await self.part_channels(channels_to_part)
 
         print(f'Parted from {len(channels_to_part)} channels: {channels_to_part}')
         return channels_to_part
