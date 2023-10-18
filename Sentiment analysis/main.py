@@ -5,8 +5,12 @@ from streamingdataframes.models import (
     JSONDeserializer
 )
 import os
-print(os.environ["input"])
-print(os.environ["Quix__Sdk__Token"])
+import quixstreams as qx
+from quix_function import QuixFunction
+from transformers import pipeline
+import os
+
+classifier = pipeline('sentiment-analysis')
 
 def expand(v):
     des = QuixTimeseriesDeserializer()
@@ -23,7 +27,7 @@ sdf = app.dataframe([source_topic])
 sdf = sdf.apply(expand, expand=True)
 sdf["Timestamp"] = sdf["__Q_Timestamp"]
 
-sdf.apply(lambda row: print(row))
+sdf.apply(lambda row: print(classifier(list(row["chat-message"]))))
 
 app.run(sdf)
 
@@ -31,12 +35,7 @@ app.run(sdf)
 
 
 
-import quixstreams as qx
-from quix_function import QuixFunction
-from transformers import pipeline
-import os
 
-classifier = pipeline('sentiment-analysis')
 
 buffer_delay = int(os.environ["buffer_delay"])
 
