@@ -2,7 +2,7 @@ import asyncio
 from typing import List, AsyncGenerator
 import twitchio
 from twitchio.ext import commands
-from twitch_api import get_top_streams, get_live_streams_by_users
+from twitch_api import get_top_streams, get_live_streams_by_users, TwitchStream
 
 
 class Bot(commands.Bot):
@@ -57,7 +57,7 @@ class Bot(commands.Bot):
         return top_live_channel_dict.values()
 
 
-    async def part_channels(self, top_streams: List[str]) -> List[str]:
+    async def part_channels(self, top_streams: List[TwitchStream]) -> List[str]:
         joined_channel_names = [channel.name for channel in self.connected_channels]
         live_channel_names = [stream.user_login for stream in top_streams]
         
