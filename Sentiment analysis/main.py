@@ -14,6 +14,7 @@ source_topic = app.topic(os.environ["input"], value_deserializer=JSONDeserialize
 output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSerializer())
 
 sdf = app.dataframe([source_topic])
+sdf = sdf[sdf["V"] is not None and sdf["V"]["Timestamps"] is not None]
 sdf.apply(lambda row: print(row))
 
 app.run(sdf)
