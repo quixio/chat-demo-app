@@ -1,8 +1,8 @@
 import asyncio
-from typing import List, AsyncGenerator
+from typing import List
 import twitchio
 from twitchio.ext import commands
-from twitch_api import get_top_streams, get_live_streams_by_users, TwitchStream
+from twitch_api import get_top_streams, TwitchStream
 
 
 class Bot(commands.Bot):
