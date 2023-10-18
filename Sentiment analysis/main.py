@@ -29,7 +29,7 @@ def call_model(row):
     if classification["label"] == "NEGATIVE":
         row["score"] = -row["score"] 
 
-app = Application.Quix(consumer_group="sentiment-v7", auto_offset_reset="earliest")
+app = Application.Quix(consumer_group="sentiment-v8", auto_offset_reset="earliest")
 
 source_topic = app.topic(os.environ["input"], value_deserializer=JSONDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSerializer())
