@@ -8,13 +8,11 @@ import { MessagePayload } from 'src/app/models/messagePayload';
   styleUrls: ['./message.component.scss']
 })
 export class MessageComponent implements OnInit {
-
   @Input() message: MessagePayload;
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   /**
    * Takes the sentiment value of a message and returns the
@@ -24,15 +22,14 @@ export class MessageComponent implements OnInit {
    * @returns The icon name.
    */
   public getSentimentIcon(sentiment: number): string | undefined {
-    if (sentiment > POSITIVE_THRESHOLD) {
-      return 'sentiment_satisfied';
-    } else if (sentiment < NEGATIVE_THRESHOLD) {
-      return 'sentiment_dissatisfied';
-    } else if (sentiment === 0) {
-      return 'sentiment_neutral';
+    switch (true) {
+      case sentiment > POSITIVE_THRESHOLD:
+        return 'sentiment_satisfied';
+      case sentiment < NEGATIVE_THRESHOLD:
+        return 'sentiment_dissatisfied';
+      default:
+        return 'sentiment_neutral';
     }
-      
-    return undefined;
   }
 
   /**
@@ -43,13 +40,14 @@ export class MessageComponent implements OnInit {
    * @returns The Html class.
    */
   public getColor(sentiment: number): string {
-    if (sentiment > POSITIVE_THRESHOLD) {
-      return 'text-success';
-    } else if (sentiment < NEGATIVE_THRESHOLD) {
-      return 'text-danger';
-    } 
-   
-    return 'text-grey-light';
+    switch (true) {
+      case sentiment > POSITIVE_THRESHOLD:
+        return 'text-success';
+      case sentiment < NEGATIVE_THRESHOLD:
+        return 'text-danger';
+      default:
+        return 'text-grey-light';
+    }
   }
 
   /**

@@ -1,15 +1,17 @@
-.dropdown::ng-deep {
-  .mat-menu-item {
-    line-height: unset !important;
-    height: unset !important;
-  }
-
-  .mat-menu-panel {
-    max-width: unset !important;
-  }
-
-  .mat-divider {
-    margin: 8px 0 !important;
+::ng-deep {
+  .dropdown {
+    .mat-menu-item {
+      line-height: unset !important;
+      height: unset !important;
+    }
+  
+    .mat-menu-panel {
+      max-width: unset !important;
+    }
+  
+    .mat-divider {
+      margin: 8px 0 !important;
+    }
   }
 }
 
