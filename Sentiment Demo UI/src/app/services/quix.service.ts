@@ -65,7 +65,7 @@ export class QuixService {
 
   constructor(private httpClient: HttpClient) {
 
-    if(this.workingLocally){
+    if(this.workingLocally || location.hostname === "localhost" || location.hostname === "127.0.0.1"){
       this.messagesTopic = this.workspaceId + '-' + this.messagesTopic;
       this.twitchMessagesTopic = this.workspaceId + '-' + this.twitchMessagesTopic;
       this.draftsTopic = this.workspaceId + '-' + this.draftsTopic;
