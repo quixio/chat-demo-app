@@ -6,31 +6,6 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: Chat Sentiment Analysis
-    application: Sentiment analysis
-    deploymentType: Service
-    version: 5c0c0186768787e172733b00dcc815a9c2625cce
-    resources:
-      cpu: 2000
-      memory: 4000
-      replicas: 2
-    desiredStatus: Running
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: This is the raw data input topic
-        required: true
-        value: chat-messages
-      - name: output
-        inputType: OutputTopic
-        description: This is the output for the Hugging Face model score
-        required: true
-        value: chat-with-sentiment
-      - name: buffer_delay
-        inputType: FreeText
-        description: ''
-        required: true
-        value: 0
   - name: Drafts Sentiment Analysis
     application: Drafts sentiment analysis
     deploymentType: Service
