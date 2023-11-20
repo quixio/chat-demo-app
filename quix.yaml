@@ -173,12 +173,12 @@ deployments:
         value: 0
   - name: Chat Sentiment Analysis
     application: Sentiment analysis
-    deploymentType: Job
-    version: 291c23136f6eab783d45897530be6ec1e6f9adb7
+    deploymentType: Service
+    version: 7d8b8d575c4e1c09be50c283124cd9968990c353
     resources:
       cpu: 2000
       memory: 4000
-      replicas: 1
+      replicas: 2
     variables:
       - name: input
         inputType: InputTopic
