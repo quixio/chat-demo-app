@@ -171,6 +171,30 @@ deployments:
         description: ''
         required: true
         value: 0
+  - name: Chat Sentiment Analysis
+    application: Sentiment analysis
+    deploymentType: Job
+    version: 291c23136f6eab783d45897530be6ec1e6f9adb7
+    resources:
+      cpu: 2000
+      memory: 4000
+      replicas: 1
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the raw data input topic
+        required: true
+        value: chat-messages
+      - name: output
+        inputType: OutputTopic
+        description: This is the output for the Hugging Face model score
+        required: true
+        value: chat-with-sentiment
+      - name: buffer_delay
+        inputType: FreeText
+        description: ''
+        required: true
+        value: 0
 
 # This section describes the Topics of the data pipeline
 topics:
