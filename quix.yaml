@@ -8,13 +8,12 @@ metadata:
 deployments:
   - name: Chat Sentiment Analysis
     application: Sentiment analysis
-    deploymentType: Service
+    deploymentType: Job
     version: 291c23136f6eab783d45897530be6ec1e6f9adb7
     resources:
       cpu: 2000
       memory: 4000
-      replicas: 2
-    desiredStatus: Running
+      replicas: 1
     variables:
       - name: input
         inputType: InputTopic
