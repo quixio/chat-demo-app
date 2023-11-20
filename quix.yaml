@@ -9,7 +9,7 @@ deployments:
   - name: Chat Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
-    version: 5c0c0186768787e172733b00dcc815a9c2625cce
+    version: 291c23136f6eab783d45897530be6ec1e6f9adb7
     resources:
       cpu: 2000
       memory: 4000
