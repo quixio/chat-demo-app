@@ -6,35 +6,10 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: Chat Sentiment Analysis
-    application: Sentiment analysis
-    deploymentType: Service
-    version: 5c0c0186768787e172733b00dcc815a9c2625cce
-    resources:
-      cpu: 2000
-      memory: 4000
-      replicas: 2
-    desiredStatus: Running
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: This is the raw data input topic
-        required: true
-        value: chat-messages
-      - name: output
-        inputType: OutputTopic
-        description: This is the output for the Hugging Face model score
-        required: true
-        value: chat-with-sentiment
-      - name: buffer_delay
-        inputType: FreeText
-        description: ''
-        required: true
-        value: 0
   - name: Drafts Sentiment Analysis
     application: Drafts sentiment analysis
     deploymentType: Service
-    version: 5c0c0186768787e172733b00dcc815a9c2625cce
+    version: 2e5bd014d0a281bfd6b43c610964ec016e2d35e2
     resources:
       cpu: 1000
       memory: 1000
@@ -96,7 +71,7 @@ deployments:
   - name: Twitch Chat
     application: Twitch Chat
     deploymentType: Service
-    version: 9166a1ba2f8c4ec6759a92c5efa4abdf669847ac
+    version: 291c23136f6eab783d45897530be6ec1e6f9adb7
     resources:
       cpu: 2000
       memory: 1000
@@ -117,17 +92,17 @@ deployments:
         inputType: Secret
         description: Twitch Bot token needed for reading messages from channels
         required: true
-        value: TwitchBotToken
+        secretKey: TwitchBotToken
       - name: TwitchAppClientId
         inputType: Secret
         description: Twitch App client id - needed for calling Twitch API
         required: true
-        value: TwitchAppClientId
+        secretKey: TwitchAppClientId
       - name: TwitchAppClientSecret
         inputType: Secret
         description: Twitch App client secret - needed for calling Twitch API
         required: true
-        value: TwitchAppClientSecret
+        secretKey: TwitchAppClientSecret
   - name: Project Front End
     application: Sentiment Demo UI
     deploymentType: Service
@@ -170,11 +145,11 @@ deployments:
         inputType: Secret
         description: ''
         required: true
-        value: bearerToken
+        secretKey: bearerToken
   - name: Twitch Sentiment Analysis
     application: Sentiment analysis
     deploymentType: Service
-    version: 5c0c0186768787e172733b00dcc815a9c2625cce
+    version: 7d8b8d575c4e1c09be50c283124cd9968990c353
     resources:
       cpu: 1500
       memory: 1500
@@ -186,6 +161,31 @@ deployments:
         description: This is the raw data input topic
         required: true
         value: twitch-messages
+      - name: output
+        inputType: OutputTopic
+        description: This is the output for the Hugging Face model score
+        required: true
+        value: chat-with-sentiment
+      - name: buffer_delay
+        inputType: FreeText
+        description: ''
+        required: true
+        value: 0
+  - name: Chat Sentiment Analysis
+    application: Sentiment analysis
+    deploymentType: Service
+    version: 7d8b8d575c4e1c09be50c283124cd9968990c353
+    resources:
+      cpu: 2000
+      memory: 4000
+      replicas: 2
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the raw data input topic
+        required: true
+        value: chat-messages
       - name: output
         inputType: OutputTopic
         description: This is the output for the Hugging Face model score
