@@ -8,7 +8,7 @@
 
 ## How to run
 
-Create a [Quix](https://portal.platform.quix.ai/self-sign-up?xlink=github) account or log-in and visit the Samples to use this project.
+Create a [Quix](https://portal.platform.quix.io/self-sign-up?xlink=github) account or log-in and visit the Samples to use this project.
 
 Clicking `Deploy` on the Sample, deploys a pre-built container in Quix. Complete the environment variables to configure the container.
 
@@ -24,7 +24,7 @@ This code sample uses the following environment variables:
 - **sentiment**: This is the input topic for sentiment score from ML model. Use Hugging Face model sample to analyze messages sentiment.
 
 ## Connection
-This app integrates with Quix via Quix WebSocket gateway. For more please refer to [Quix docs](https://documentation.platform.quix.ai/apis/streaming-reader-api/intro.html).
+This app integrates with Quix via Quix WebSocket gateway. For more please refer to [Quix docs](https://documentation.platform.quix.io/apis/streaming-reader-api/intro.html).
 
 ## Debug In Quix
 
