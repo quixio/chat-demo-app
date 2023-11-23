@@ -13,7 +13,7 @@ deployments:
     resources:
       cpu: 1000
       memory: 1000
-      replicas: 1
+      replicas: {{ drafts_sentiment_replicas }}
     state:
       enabled: true
       size: 1
@@ -36,7 +36,7 @@ deployments:
     resources:
       cpu: 1000
       memory: 1000
-      replicas: 1
+      replicas: {{ bigquery_journeys_replicas }}
     desiredStatus: Stopped
     variables:
       - name: input
@@ -75,7 +75,7 @@ deployments:
     resources:
       cpu: 2000
       memory: 1000
-      replicas: 1
+      replicas: {{ twitch_chat_replicas }}
     desiredStatus: Running
     variables:
       - name: output
@@ -110,7 +110,7 @@ deployments:
     resources:
       cpu: 1000
       memory: 500
-      replicas: 1
+      replicas: {{ project_frontend_replicas }}
     publicAccess:
       enabled: true
       urlPrefix: sentimentdemoui
@@ -153,7 +153,7 @@ deployments:
     resources:
       cpu: 1500
       memory: 1500
-      replicas: 4
+      replicas: {{ twitch_sentiment_analysis_replicas }}
     desiredStatus: Running
     variables:
       - name: input
@@ -178,7 +178,7 @@ deployments:
     resources:
       cpu: 2000
       memory: 4000
-      replicas: 2
+      replicas: {{ chat_sentiment_analysis_replicas }}
     desiredStatus: Running
     variables:
       - name: input
@@ -202,35 +202,35 @@ topics:
   - name: drafts
     persisted: false
     configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 262144000
+      partitions: {{ topic_drafts_partitions }}
+      replicationFactor: {{ topic_drafts_replicationfactor }}
+      retentionInMinutes: {{ topic_drafts_retentionminutes }}
+      retentionInBytes: {{ topic_drafts_retentionbytes }}
   - name: drafts_sentiment
     persisted: false
     configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 262144000
+      partitions: {{ topic_drafts_sentiment_partitions }}
+      replicationFactor: {{ topic_drafts_sentiment_replicationfactor }}
+      retentionInMinutes: {{ topic_drafts_sentiment_retentionminutes }}
+      retentionInBytes: {{ topic_drafts_sentiment_retentionbytes }}
   - name: chat-messages
     persisted: true
     configuration:
-      partitions: 8
-      replicationFactor: 2
-      retentionInMinutes: 120
-      retentionInBytes: 524288000
+      partitions: {{ topic_chat_messages_partitions }}
+      replicationFactor: {{ topic_chat_messages_replicationfactor }}
+      retentionInMinutes: {{ topic_chat_messages_retentionminutes }}
+      retentionInBytes: {{ topic_chat_messages_retentionbytes }}
   - name: chat-with-sentiment
     persisted: true
     configuration:
-      partitions: 8
-      replicationFactor: 2
-      retentionInMinutes: 120
-      retentionInBytes: 524288000
+      partitions: {{ topic_chat_with_sentiment_partitions }}
+      replicationFactor: {{ topic_chat_with_sentiment_replicationfactor }}
+      retentionInMinutes: {{ topic_chat_with_sentiment_retentionminutes }}
+      retentionInBytes: {{ topic_chat_with_sentiment_retentionbytes }}
   - name: twitch-messages
     persisted: false
     configuration:
-      partitions: 4
-      replicationFactor: 2
-      retentionInMinutes: 60
-      retentionInBytes: 52428800
+      partitions: {{ topic_twitch_messages_partitions }}
+      replicationFactor: {{ topic_twitch_messages_replicationfactor }}
+      retentionInMinutes: {{ topic_twitch_messages_retentionminutes }}
+      retentionInBytes: {{ topic_twitch_messages_retentionbytes }}
