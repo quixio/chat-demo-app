@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { MessagePayload } from '../models/messagePayload';
 import { ParameterData } from '../models/parameterData';
 import { EventData } from '../models/eventData';
-
+ 
 export enum ConnectionStatus {
   Connected = 'Connected',
   Reconnecting = 'Reconnecting',
