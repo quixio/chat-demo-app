@@ -7,4 +7,8 @@ echo "${messages}" > /usr/share/nginx/html/messages_topic
 echo "${twitch_messages}" > /usr/share/nginx/html/twitch_messages_topic
 echo "${drafts}" > /usr/share/nginx/html/drafts_topic
 echo "${drafts_sentiment}" > /usr/share/nginx/html/drafts_sentiment_topic
+
+echo "${Quix__Workspace__Id}"
+
+
 nginx -g "daemon off;"
