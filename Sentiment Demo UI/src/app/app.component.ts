@@ -1,18 +1,24 @@
-import { Component } from '@angular/core';
-import { QuixService } from './services/quix.service';
+import { Component, OnInit } from '@angular/core';
+import { ConnectionStatus, QuixService } from './services/quix.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent{
+export class AppComponent implements OnInit {
 
   workspaceId: string;
   ungatedToken: string;
 
   constructor(private quixService: QuixService) {
-    this.workspaceId = this.quixService.workspaceId;
+  }
+
+  ngOnInit(): void {
     this.ungatedToken = this.quixService.ungatedToken;
+    this.quixService.readerConnStatusChanged$.subscribe((status) => {
+      if (status !== ConnectionStatus.Connected) return;
+      this.workspaceId = this.quixService.workspaceId;
+    });
   }
 }

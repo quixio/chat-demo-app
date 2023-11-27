@@ -26,12 +26,12 @@ export class QuixService {
   /*WORKING LOCALLY? UPDATE THESE!*/
   private workingLocally = false; // set to true if working locally
   private token: string = ''; // Create a token in the Tokens menu and paste it here
-  public workspaceId: string = 'demo-chatappdemo-prod'; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
-  public messagesTopic: string = 'chat-messages'; // get topic name from the Topics page
-  public twitchMessagesTopic: string = 'twitch-messages'; // get topic name from the Topics page
-  public draftsTopic: string = 'drafts'; // get topic from the Topics page
-  public sentimentTopic: string = 'chat-with-sentiment'; // get topic name from the Topics page
-  public draftsSentimentTopic: string = 'drafts_sentiment'; // get topic name from the Topics page
+  public workspaceId: string = ''; // Look in the URL for the Quix Portal your workspace ID is after 'workspace='
+  public messagesTopic: string = ''; // get topic name from the Topics page
+  public twitchMessagesTopic: string = ''; // get topic name from the Topics page
+  public draftsTopic: string = ''; // get topic from the Topics page
+  public sentimentTopic: string = ''; // get topic name from the Topics page
+  public draftsSentimentTopic: string = ''; // get topic name from the Topics page
   /*~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-*/
   
   private subdomain = 'platform'; // leave as 'platform'
@@ -66,6 +66,7 @@ export class QuixService {
   constructor(private httpClient: HttpClient) {
 
     if(this.workingLocally || location.hostname === "localhost" || location.hostname === "127.0.0.1"){
+      console.log("Working locally. Using hardcoded values.")
       this.messagesTopic = this.workspaceId + '-' + this.messagesTopic;
       this.twitchMessagesTopic = this.workspaceId + '-' + this.twitchMessagesTopic;
       this.draftsTopic = this.workspaceId + '-' + this.draftsTopic;
@@ -74,6 +75,8 @@ export class QuixService {
       this.setUpHubConnections(this.workspaceId);
     }
     else {
+      console.log("Deployed to Quix. Using values from environment variables.")
+
       const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
       let bearerToken$ = this.httpClient.get(this.server + "bearer_token", {headers, responseType: 'text'});
       let workspaceId$ = this.httpClient.get(this.server + 'workspace_id', {headers, responseType: 'text'});
@@ -110,6 +113,8 @@ export class QuixService {
         this.draftsTopic = this.stripLineFeed(this.workspaceId + '-' + draftTopic);
         this.sentimentTopic = this.stripLineFeed(this.workspaceId + '-' + sentimentTopic);
         this.draftsSentimentTopic = this.stripLineFeed(this.workspaceId + '-' + draftsSentimentTopic);
+
+        console.log("WorkspaceId=" + this.workspaceId);
 
         portalApi = portalApi.replace("\n", "");
         let matches = portalApi.match(this.domainRegex);
