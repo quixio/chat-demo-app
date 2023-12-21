@@ -214,7 +214,7 @@ topics:
       retentionInMinutes: {{ topic_drafts_sentiment_retentionminutes }}
       retentionInBytes: {{ topic_drafts_sentiment_retentionbytes }}
   - name: chat-messages
-    persisted: true
+    persisted: false
     configuration:
       partitions: {{ topic_chat_messages_partitions }}
       replicationFactor: {{ topic_chat_messages_replicationfactor }}
