@@ -221,7 +221,7 @@ topics:
       retentionInMinutes: {{ topic_chat_messages_retentionminutes }}
       retentionInBytes: {{ topic_chat_messages_retentionbytes }}
   - name: chat-with-sentiment
-    persisted: true
+    persisted: false
     configuration:
       partitions: {{ topic_chat_with_sentiment_partitions }}
       replicationFactor: {{ topic_chat_with_sentiment_replicationfactor }}
